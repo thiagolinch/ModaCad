@@ -5,7 +5,7 @@
   "author": "thiago linchin",
   "license": "MIT",
   "scripts": {
-    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn scr/http/server.ts"
+    "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn scr/Shared/http/server.ts"
   },
   "devDependencies": {
     "@types/express": "^4.17.21",
