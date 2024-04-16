@@ -1,22 +1,16 @@
-import {DataSource, Repository,  } from "typeorm";
+import { Repository,  } from "typeorm";
+
 import { ITagsRepository } from "../repositories/ITagsRepository";
 import { Tags } from "../entities/Tags";
 
+import { AppDataSource } from "../../../Shared/TypeOm/data-source";
 
-const datasource = new DataSource({
-    type: "mysql",
-    host: "localhost",
-    port: 3306,
-    username: "test",
-    password: "test",
-    database: "test",
-});
 
 class TagRepository implements ITagsRepository {
     private repository: Repository<Tags>
 
     constructor() {
-        this.repository = datasource.getRepository(Tags)
+        this.repository = AppDataSource.getRepository(Tags)
     }
     
     findById(id: string): Promise<Tags> {

@@ -1,6 +1,18 @@
 version: "3.9"
 
 services:
+  database_modacad:
+    image: postgres
+    container_name: database_modacad
+    restart: always
+    ports:
+      - 5430:5430
+    environment:
+      - POSTGRES_USER=modacad_db
+      - POSTGRES_PASSWORD=moda_fashion_2024
+      - POSTGRES_DB=db_modacad
+    volumes:
+      - pgdata:/data/postgres
   app:
     build: .
     container_name: modacad
