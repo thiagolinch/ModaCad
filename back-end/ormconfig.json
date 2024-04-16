@@ -1,0 +1,12 @@
+{
+    "type": "postgres",
+    "port": 5430,
+    "host": "localhost",
+    "username": "modacad_db",
+    "password": "moda_fashion_2024",
+    "database": "db_modacad",
+    "migrations": ["./src/shared/typeorm/migrations/*.ts"],
+    "cli": {
+        "migrationsDir": "./src/shared/typeorm/migrations"
+    }
+}
