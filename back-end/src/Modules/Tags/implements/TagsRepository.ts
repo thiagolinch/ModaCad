@@ -3,7 +3,7 @@ import { Repository,  } from "typeorm";
 import { ITagsRepository } from "../repositories/ITagsRepository";
 import { Tags } from "../entities/Tags";
 
-import { AppDataSource } from "../../../Shared/TypeOm/data-source";
+import { AppDataSource } from "../../../Shared/TypeOrm/data-source";
 
 
 class TagRepository implements ITagsRepository {

@@ -1,25 +1,34 @@
 version: "3.9"
 
 services:
-  database_modacad:
+  database: #ESSE É O NOME DO SERVICE QUE DEVE ESTAR NO ARQUIVO DE CRIAÇÃO DE CONEXÃO
     image: postgres
     container_name: database_modacad
     restart: always
-    ports:
-      - 5430:5430
+    ports: 
+      - 5432:5432
     environment:
       - POSTGRES_USER=modacad_db
       - POSTGRES_PASSWORD=moda_fashion_2024
       - POSTGRES_DB=db_modacad
     volumes:
       - pgdata:/data/postgres
+
+
   app:
     build: .
-    container_name: modacad
-    ports:
+    container_name: app-modacad
+    restart: always
+    ports: 
       - 3333:3333
-    volumes:
-      - .:/app/modacad
+    volumes: 
+      - .:/usr/app/modacad
+    links: 
+      - database
+    depends_on:
+      - database
+
+
 
 volumes:
   pgdata:
