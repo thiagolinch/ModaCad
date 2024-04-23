@@ -1,19 +1,13 @@
-# Start your image with a node base image
-FROM node:18-alpine
+FROM node
 
-# The /app directory should act as the main application directory
-WORKDIR /app/modacad
+WORKDIR /usr/app
 
-# Copy the app package and package-lock.json file
-COPY package*.json ./
+COPY package.json ./
 
-# Copy local directories to the current local directory of our docker image (/app)
+RUN npm install 
+
 COPY . .
-
-# Install node packages, install serve, build the app, and remove dependencies at the end
-RUN 
 
 EXPOSE 3333
 
-# Start the app using serve command
-CMD [ "yarn", "-s", "dev" ]
+CMD ["npm", "run", "dev"]
