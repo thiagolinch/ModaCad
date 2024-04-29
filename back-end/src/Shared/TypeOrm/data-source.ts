@@ -1,20 +1,18 @@
 import "reflect-metadata"
-import { DataSource } from "typeorm"
+import { Connection, createConnection, getConnectionOptions } from "typeorm";
 
 import { Tags } from "../../Modules/Tags/entities/Tags"
 
-
-export const AppDataSource = new DataSource({
-    type: "postgres",
-    host: "localhost",
-    port: 5432,
-    username: "modacad_db",
-    password: "moda_fashion_2024",
-    database: "db_modacad",
-    synchronize: true,
-    logging: true,
-    entities: [
-        Tags
-    ],
-    migrations: ["src/Shared/TypeOrm/migrations/1713882148037-tags.ts"],
-})
+export default async (host = "database_modacad"): Promise<Connection> => {
+    const defaultOptions = await getConnectionOptions();
+    
+    return createConnection(
+      Object.assign(defaultOptions, {
+        host: process.env.NODE_ENV === "test" ? "localhost" : host,
+        database: process.env.NODE_ENV === "test" ? "db_modacad" : defaultOptions.database,
+        entities: [
+          Tags
+        ]
+      })
+    );
+  };

@@ -1,16 +1,13 @@
-import { Repository,  } from "typeorm";
+import { getRepository, Repository } from "typeorm";
 
-import { ITagsRepository } from "../repositories/ITagsRepository";
-import { Tags } from "../entities/Tags";
-
-import { AppDataSource } from "../../../Shared/TypeOrm/data-source";
-
+import { ITagsRepository } from "../ITagsRepository";
+import { Tags } from "../../entities/Tags";
 
 class TagRepository implements ITagsRepository {
     private repository: Repository<Tags>
 
     constructor() {
-        this.repository = AppDataSource.getRepository(Tags)
+        this.repository = getRepository(Tags)
     }
     
     findById(id: string): Promise<Tags> {
@@ -29,7 +26,7 @@ class TagRepository implements ITagsRepository {
         return await this.repository.findOne({id})
     } */
 
-    async updateBalance(id: string, name: string): Promise<void> {
+    async updateTag(id: string, name: string): Promise<void> {
         await this.repository
         .createQueryBuilder()
         .update()
