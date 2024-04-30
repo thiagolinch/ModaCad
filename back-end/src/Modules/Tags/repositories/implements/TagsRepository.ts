@@ -10,13 +10,16 @@ class TagRepository implements ITagsRepository {
     constructor() {
         this.repository = getRepository(Tags)
     }
+    async delete(name: string): Promise<void> {
+         await this.repository.delete({name})
+    }
     
     findById(id: string): Promise<Tags> {
         throw new Error("Method not implemented.");
     }
 
-    findByName(name: string): Promise<Tags> {
-        throw new Error("Method not implemented.");
+    async findByName(name: string): Promise<Tags> {
+        return await this.repository.findOne({name})
     }
 
     async create(name: string): Promise<Tags> {

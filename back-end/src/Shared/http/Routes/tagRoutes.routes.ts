@@ -1,17 +1,20 @@
 import { Router } from "express";
 
-import { CreateTagController } from "../../../Modules/Tags/useCases/createTag/createCarController";
+import { CreateTagController } from "../../../Modules/Tags/useCases/createTag/createTagController";
+import { DeleteTagController } from "../../../Modules/Tags/useCases/deleteTag/deleteTagController";
 
 const tagRoutes = Router()
 
-const createCarController = new CreateTagController()
+const createTagController = new CreateTagController()
+const deleteTagController = new DeleteTagController()
 
 
 tagRoutes.get("/", (request, response) => {
     return console.log("Tag router")
 })
 
-tagRoutes.post("/", createCarController.handle)
+tagRoutes.post("/", createTagController.handle)
+tagRoutes.delete("/", deleteTagController.handle)
 
 
 export  { tagRoutes }

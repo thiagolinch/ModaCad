@@ -9,6 +9,7 @@ interface ITagsRepositoryDTO {
 interface ITagsRepository {
 
     create(name: string): Promise<Tags>;
+    delete(name: string): Promise<void>;
     findById(id: string): Promise<Tags>;
     findByName(name: string): Promise<Tags>;
     updateTag(id: string, name: string): Promise<void>;

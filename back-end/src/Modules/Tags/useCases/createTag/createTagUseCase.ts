@@ -12,11 +12,11 @@ class CreateTagUseCase {
     ){}
 
     async execute ({ name }: ITagsRepositoryDTO): Promise<Tags> {
-        /* const tagExists = await this.TagsRepository.findByName(name) */
-/* 
+        const tagExists = await this.TagsRepository.findByName(name)
+
         if(tagExists) {
-            throw new Error("This tag already exists")
-        } */
+            throw new Error("This tag already exists").message
+        }
 
         const tag = await this.TagsRepository.create(name)
 
