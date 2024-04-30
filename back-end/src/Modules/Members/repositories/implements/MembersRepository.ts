@@ -1,0 +1,35 @@
+import { getRepository, Repository } from "typeorm";
+import { Members } from "../../entities/Members";
+
+import { IMembersRepository, IMembersRepositoryDTO } from "../IMembersRepository";
+
+
+class MembersRepository implements IMembersRepository {
+    private repository: Repository<Members>
+
+    constructor() {
+        this.repository = getRepository(Members);
+    }
+
+    async create({ name, email, password }: IMembersRepositoryDTO): Promise<Members> {
+        const member =  this.repository.create({
+            name,
+            email,
+            password
+        })
+
+        return member
+    }
+    async delete(id: string): Promise<void> {
+        await this.repository.delete({id})
+    }
+    findById(id: string): Promise<Members> {
+        throw new Error("Method not implemented.");
+    }
+    findByName(name: string): Promise<Members> {
+        throw new Error("Method not implemented.");
+    }
+
+}
+
+export { MembersRepository }
