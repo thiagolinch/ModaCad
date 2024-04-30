@@ -1,9 +1,10 @@
 import { getRepository, Repository } from "typeorm";
 
-import { ITagsRepository } from "../ITagsRepository";
+import { ITagsRepository, ITagsRepositoryDTO } from "../ITagsRepository";
 import { Tags } from "../../entities/Tags";
 
 class TagRepository implements ITagsRepository {
+
     private repository: Repository<Tags>
 
     constructor() {
@@ -14,12 +15,17 @@ class TagRepository implements ITagsRepository {
         throw new Error("Method not implemented.");
     }
 
-    async create(): Promise<Tags> {
-        const account = this.repository.create();
+    findByName(name: string): Promise<Tags> {
+        throw new Error("Method not implemented.");
+    }
 
-        await this.repository.save(account)
+    async create(name: string): Promise<Tags> {
+        const tag = this.repository.create({name});
+        
 
-        return account;
+        await this.repository.save(tag)
+
+        return tag;
     }
 
    /*  async findById(id: string): Promise<Tags> {
