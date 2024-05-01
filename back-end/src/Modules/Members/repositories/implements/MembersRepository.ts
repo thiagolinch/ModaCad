@@ -1,6 +1,6 @@
 import { getRepository, Repository } from "typeorm";
-import { Members } from "../../entities/Members";
 
+import { Members } from "../../entities/Members";
 import { IMembersRepository, IMembersRepositoryDTO } from "../IMembersRepository";
 
 
@@ -17,6 +17,8 @@ class MembersRepository implements IMembersRepository {
             email,
             password
         })
+
+        await this.repository.save(member)
 
         return member
     }
