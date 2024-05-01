@@ -17,7 +17,7 @@ interface IMembersRepository {
     }: IMembersRepositoryDTO): Promise<Members>;
     delete(id: string): Promise<void>;
     findById(id: string): Promise<Members>;
-    findByName(name: string): Promise<Members>;
+    findByEmail(email: string): Promise<Members>;
 }
 
 export { IMembersRepository, IMembersRepositoryDTO }

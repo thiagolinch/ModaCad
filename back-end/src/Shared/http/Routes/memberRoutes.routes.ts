@@ -6,6 +6,9 @@ const memberRoutes = Router()
 const createMemberController = new CreateMemberController()
 
 memberRoutes.post("/", createMemberController.handle)
+memberRoutes.delete("/:id", () => {
+    console.log("delete member route working")
+})
 
 
 export  { memberRoutes }

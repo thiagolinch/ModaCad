@@ -28,8 +28,8 @@ class MembersRepository implements IMembersRepository {
     findById(id: string): Promise<Members> {
         throw new Error("Method not implemented.");
     }
-    findByName(name: string): Promise<Members> {
-        throw new Error("Method not implemented.");
+    async findByEmail(email: string): Promise<Members> {
+        return await this.repository.findOne({email})
     }
 
 }
