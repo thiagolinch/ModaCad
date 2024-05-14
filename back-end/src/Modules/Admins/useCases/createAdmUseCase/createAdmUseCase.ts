@@ -29,7 +29,7 @@ class CreateAdmUseCase {
         const admin = await this.adminsRepository.create({
             name,
             email,
-            password,
+            password: passwordCrypt,
             cellphone
         })
 

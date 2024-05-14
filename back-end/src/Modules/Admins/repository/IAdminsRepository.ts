@@ -17,7 +17,7 @@ interface IAdminsRepository {
         email,
         password
     }: IAdminsRepositoryDTO): Promise<Admins>
-    findByName(name: string): Promise<Admins>
+    findById(id: string): Promise<Admins>
     upgradeToPro(id: string): Promise<void>
     findByEmail(email: string): Promise<Admins>
     delete(id: string): Promise<void>

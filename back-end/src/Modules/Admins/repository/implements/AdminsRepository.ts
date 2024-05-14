@@ -23,8 +23,8 @@ class AdminRepository implements IAdminsRepository {
 
         return admin
     }
-    async findByName(name: string): Promise<Admins> {
-        return await this.repository.findOne({name})
+    async findById(id: string): Promise<Admins> {
+        return await this.repository.findOne({id})
     }
     upgradeToPro(id: string): Promise<void> {
         throw new Error("Method not implemented.");
