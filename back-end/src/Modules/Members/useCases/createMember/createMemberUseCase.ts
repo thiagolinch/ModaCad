@@ -1,3 +1,5 @@
+import { hash } from "bcryptjs"
+
 import { inject, injectable } from "tsyringe";
 import { IMembersRepository, IMembersRepositoryDTO } from "../../repositories/IMembersRepository";
 import { Members } from "../../entities/Members";
@@ -21,11 +23,13 @@ class CreateMemberUseCase {
             throw new Error("This email already exists!").message
         }
 
+        const passwordB = await hash(password, 8)
+
 
         const member = await this.memberRepository.create({
             name,
             email,
-            password
+            password: passwordB
         })
 
         return member
