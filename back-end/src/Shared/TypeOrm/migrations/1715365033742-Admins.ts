@@ -1,12 +1,12 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class Members1714419837133 implements MigrationInterface {
+export class Admins1715365033742 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table(
                 {
-                    name: "members",
+                    name: "admins",
                     columns: [
                         {
                             name: "id",
@@ -18,8 +18,9 @@ export class Members1714419837133 implements MigrationInterface {
                             type: "varchar"
                         },
                         {
-                            name: "password",
-                            type: "varchar"
+                            name: "cellphone",
+                            type: "varchar",
+                            isUnique: true
                         },
                         {
                             name: "email",
@@ -27,14 +28,18 @@ export class Members1714419837133 implements MigrationInterface {
                             isUnique: true
                         },
                         {
-                            name: "isPro",
+                            name: "admin_pro",
                             type: "boolean"
+                        },
+                        {
+                            name: "password",
+                            type: "varchar"
                         },
                         {
                             name: "created_at",
                             type: "timestamp",
                             default: "now()"
-                        }
+                        },
                     ]
                 }
             )
@@ -42,7 +47,7 @@ export class Members1714419837133 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("members")
+        await queryRunner.dropTable("admins")
     }
 
 }

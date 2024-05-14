@@ -1,7 +1,6 @@
 import { Request, Response } from "express"
 import { container } from "tsyringe";
 import { CreateMemberUseCase } from "./createMemberUseCase";
-import { Members } from "../../entities/Members";
 
 
 class CreateMemberController {
