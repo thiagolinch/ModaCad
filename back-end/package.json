@@ -7,7 +7,7 @@
   "scripts": {
     "dev": "ts-node-dev --transpile-only --ignore-watch node_modules --respawn ./src/Shared/http/server.ts",
     "typeorm": "ts-node-dev node_modules/typeorm/cli",
-    "build": "tsup src/server.ts"
+    "vercel-build": "npx typeorm migration:run "
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
