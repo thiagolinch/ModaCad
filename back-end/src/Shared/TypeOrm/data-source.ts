@@ -5,7 +5,7 @@ import { Tags } from "../../Modules/Tags/entities/Tags"
 import { Members } from "../../Modules/Members/entities/Members";
 import { Admins } from "../../Modules/Admins/entity/Admins";
 
-export default async (host = "db-postgresql-nyc3-25286-do-user-16790195-0.c.db.ondigitalocean.com"): Promise<Connection> => {
+export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigitalocean.com"): Promise<Connection> => {
   const defaultOptions = await getConnectionOptions();
   
   return createConnection(
