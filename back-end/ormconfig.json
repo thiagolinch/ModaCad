@@ -8,6 +8,11 @@
     "password": "AVNS_KblIX78aqLwDgy0wBbg",
     "database": "defaultdb",
     "ssl": true,
+    "extra": {
+        "ssl": {
+          "rejectUnauthorized": false
+        }
+    },    
     "migrations": ["./src/Shared/TypeOrm/migrations/*.ts"],
     "cli": {
         "migrationsDir": "./src/Shared/TypeOrm/migrations/"
