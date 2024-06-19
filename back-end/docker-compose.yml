@@ -8,9 +8,9 @@ services:
     ports: 
       - 25060:25060
     environment:
-      - POSTGRES_USER=doadmin
-      - POSTGRES_PASSWORD=AVNS_GOJX4HPo4wqNqEcM7Fc
-      - POSTGRES_DB=defaultdb
+      - POSTGRES_USER=
+      - POSTGRES_PASSWORD=
+      - POSTGRES_DB=
     volumes:
       - pgdata:/data/postgres
 

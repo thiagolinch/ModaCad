@@ -2,11 +2,11 @@
 
 {
     "type": "postgres",
-    "port": 25060,
-    "host": "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigitalocean.com",
-    "username": "doadmin",
-    "password": "AVNS_GOJX4HPo4wqNqEcM7Fc",
-    "database": "defaultdb",
+    "port": "",
+    "host": "",
+    "username": "",
+    "password": "",
+    "database": "",
     "ssl": true,
     "extra": {
         "ssl": {
