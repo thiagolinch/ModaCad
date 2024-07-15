@@ -8,9 +8,9 @@ services:
     ports: 
       - 25060:25060
     environment:
-      - POSTGRES_USER=
-      - POSTGRES_PASSWORD=
-      - POSTGRES_DB=
+      - POSTGRES_USER=process.env.POSTGRES_USER
+      - POSTGRES_PASSWORD=process.env.POSTGRES_PASSWORD
+      - POSTGRES_DB=process.env.POSTGRES_DATABASE
     volumes:
       - pgdata:/data/postgres
 
