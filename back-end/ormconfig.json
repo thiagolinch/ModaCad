@@ -2,17 +2,11 @@
 
 {
     "type": "postgres",
-    "port": "",
-    "host": "",
-    "username": "",
-    "password": "",
-    "database": "",
-    "ssl": true,
-    "extra": {
-        "ssl": {
-          "rejectUnauthorized": false
-        }
-    },    
+    "port": "5432",
+    "host": "localhost",
+    "username": "modacad_db",
+    "password": "moda_fashion_2024",
+    "database": "db_modacad",
     "migrations": ["./src/Shared/TypeOrm/migrations/*.ts"],
     "cli": {
         "migrationsDir": "./src/Shared/TypeOrm/migrations/"

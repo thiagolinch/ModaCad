@@ -10,6 +10,11 @@ class TagRepository implements ITagsRepository {
     constructor() {
         this.repository = getRepository(Tags)
     }
+
+    async listTags(): Promise<Tags[]> {
+        return await this.repository.find()
+    }
+
     async delete(name: string): Promise<void> {
          await this.repository.delete({name})
     }

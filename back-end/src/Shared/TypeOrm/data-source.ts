@@ -5,7 +5,7 @@ import { Tags } from "../../Modules/Tags/entities/Tags"
 import { Members } from "../../Modules/Members/entities/Members";
 import { Admins } from "../../Modules/Admins/entity/Admins";
 
-export default async (host = ""): Promise<Connection> => {
+export default async (host = "database_modacad"): Promise<Connection> => {
   const defaultOptions = await getConnectionOptions();
   
   return createConnection(

@@ -13,6 +13,7 @@ interface ITagsRepository {
     findById(id: string): Promise<Tags>;
     findByName(name: string): Promise<Tags>;
     updateTag(id: string, name: string): Promise<void>;
+    listTags(): Promise<Tags[]>;
 }
 
 export { ITagsRepository, ITagsRepositoryDTO }

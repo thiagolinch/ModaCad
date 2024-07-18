@@ -6,11 +6,11 @@ services:
     container_name: database_modacad
     restart: always
     ports: 
-      - 25060:25060
+      - 5432:5432
     environment:
-      - POSTGRES_USER=process.env.POSTGRES_USER
-      - POSTGRES_PASSWORD=process.env.POSTGRES_PASSWORD
-      - POSTGRES_DB=process.env.POSTGRES_DATABASE
+      - POSTGRES_USER=modacad_db
+      - POSTGRES_PASSWORD=moda_fashion_2024
+      - POSTGRES_DB=db_modacad
     volumes:
       - pgdata:/data/postgres
 
