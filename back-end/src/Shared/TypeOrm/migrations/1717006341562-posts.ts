@@ -6,7 +6,7 @@ export class articles1717006341562 implements MigrationInterface {
         await queryRunner.createTable(
             new Table(
                 {
-                    name: "articles",
+                    name: "posts",
                     columns: [
                         {
                             name: "id",
@@ -18,11 +18,11 @@ export class articles1717006341562 implements MigrationInterface {
                             type: "varchar",
                         },
                         {
-                            name: "description",
+                            name: "slug",
                             type: "varchar",
                         },
                         {
-                            name: "text",
+                            name: "html",
                             type: "varchar",
                         },
                         {
@@ -34,7 +34,44 @@ export class articles1717006341562 implements MigrationInterface {
                             type: "uuid"
                         },
                         {
+                            name: "plaintext",
+                            type: "varchar"
+                        },
+                        {
+                            name: "feature_image",
+                            type: "uuid"
+                        },
+                        {
+                            name: "type",
+                            type: "varchar"
+                        },
+                        {
+                            name: "status",
+                            type: "varchar"
+                        },
+                        {
+                            name: "visibility",
+                            type: "varchar"
+                        },
+                        {
+                            name: "show_title_and_feature_image",
+                            type: "varchar"
+                        },
+                        {
+                            name: "markups",
+                            type: "Array"
+                        },
+                        {
+                            name: "plaintext",
+                            type: "varchar"
+                        },
+                        {
                             name: "created_at",
+                            type: "timestamp",
+                            default: "now()"
+                        },
+                        {
+                            name: "updated_at",
                             type: "timestamp",
                             default: "now()"
                         }
@@ -64,7 +101,7 @@ export class articles1717006341562 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("articles")
+        await queryRunner.dropTable("posts")
     }
 
 }

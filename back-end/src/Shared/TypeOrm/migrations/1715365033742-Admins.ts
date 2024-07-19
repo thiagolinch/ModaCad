@@ -28,8 +28,8 @@ export class Admins1715365033742 implements MigrationInterface {
                             isUnique: true
                         },
                         {
-                            name: "admin_pro",
-                            type: "boolean"
+                            name: "permission",
+                            type: "varchar"
                         },
                         {
                             name: "password",
@@ -37,6 +37,11 @@ export class Admins1715365033742 implements MigrationInterface {
                         },
                         {
                             name: "created_at",
+                            type: "timestamp",
+                            default: "now()"
+                        },
+                        {
+                            name: "updated_at",
                             type: "timestamp",
                             default: "now()"
                         },
