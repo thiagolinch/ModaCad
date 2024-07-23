@@ -1,4 +1,5 @@
 import 'reflect-metadata';
+import cors from "cors"
 
 import "../TypeOrm/data-source"
 
@@ -11,6 +12,14 @@ import { routes } from './Routes';
 
 createConnection();
 const app = express();
+
+const corsOption = {
+    origin: ['http://localhost:3000'],
+    credentials: true,
+    methods: ["GET", "POST", "PUT", "DELETE"],
+}
+app.use(cors(corsOption));
+
 
 app.use(express.json());
 
