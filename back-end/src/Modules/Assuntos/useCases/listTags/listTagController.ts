@@ -10,7 +10,7 @@ class ListTagController {
 
         try {
             const tags = await listSubjectsUseCase.execute()
-            return response.status(201).json(tags)
+            return response.status(201).json({tags})
         } catch (error) {
             return response.status(400).json(error)
         }
