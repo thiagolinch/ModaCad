@@ -1,7 +1,7 @@
 {
   "name": "modacadback",
   "version": "1.0.0",
-  "main": "index.js",
+  "main": "./src/Shared/http/server.js",
   "author": "thiago linchin",
   "license": "MIT",
   "scripts": {
@@ -31,6 +31,7 @@
     "tsyringe": "^4.8.0",
     "typeorm": "0.2.41",
     "uuid": "^9.0.1",
+    "vercel": "^35.1.0",
     "webpack": "^5.91.0"
   }
 }
