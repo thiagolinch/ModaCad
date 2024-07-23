@@ -1,7 +1,7 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
-import { IAdminsRepository } from "../../repository/IAdminsRepository";
+import { IAdminsRepository } from "../../repositories/IAdminsRepository";
 
 
 interface Iresponse {

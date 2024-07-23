@@ -22,7 +22,7 @@ export class Plans1714419903573 implements MigrationInterface {
                         },
                         {
                             name: "topics",
-                            type: "array"
+                            type: "varchar"
                         },
                         {
                             name: "price",

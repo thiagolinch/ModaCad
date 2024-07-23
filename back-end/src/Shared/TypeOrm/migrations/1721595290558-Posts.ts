@@ -26,11 +26,11 @@ export class articles1717006341562 implements MigrationInterface {
                             type: "varchar",
                         },
                         {
-                            name: "author",
+                            name: "author_id",
                             type: "uuid",
                         },
                         {
-                            name: "tags_id",
+                            name: "subjects_id",
                             type: "uuid"
                         },
                         {
@@ -58,12 +58,8 @@ export class articles1717006341562 implements MigrationInterface {
                             type: "varchar"
                         },
                         {
-                            name: "markups",
-                            type: "Array"
-                        },
-                        {
-                            name: "plaintext",
-                            type: "varchar"
+                            name: "comments_id",
+                            type: "uuid"
                         },
                         {
                             name: "created_at",
@@ -79,18 +75,18 @@ export class articles1717006341562 implements MigrationInterface {
 
                     foreignKeys: [
                         {
-                            name: "FKAuthorsArticle",
+                            name: "FKAuthorsPost",
                             referencedTableName: "admins",
                             referencedColumnNames: ["id"],
-                            columnNames: ["author"],
+                            columnNames: ["author_id"],
                             onDelete: "SET NULL",
                             onUpdate: "SET NULL"
                         },
                         {
-                            name: "FKTagsArticle",
-                            referencedTableName: "tags",
+                            name: "FKSubjectsPost",
+                            referencedTableName: "subjects",
                             referencedColumnNames: ["id"],
-                            columnNames: ["tags_id"],
+                            columnNames: ["subjects_id"],
                             onDelete: "SET NULL",
                             onUpdate: "SET NULL"
                         }

@@ -2,7 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { getRepository } from "typeorm";
 
-import { AdminRepository } from "../../Modules/Admins/repository/implements/AdminsRepository";
+import { AdminRepository } from "../../../Modules/Admins/repositories/implements/AdminsRepository";
+
 
 interface IPayload {
     sub: string;

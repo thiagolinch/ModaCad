@@ -19,15 +19,18 @@ class Members {
     password: string;
 
     @Column()
-    isPro: boolean;
+    member_ship: string;
 
     @CreateDateColumn()
     created_at: Date
 
+    @CreateDateColumn()
+    updated_at: Date
+
     constructor() {
         if(!this.id){
             this.id = uuidV4()
-            this.isPro = false
+            this.member_ship = "basic"
         }
     }
 }

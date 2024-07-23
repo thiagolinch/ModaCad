@@ -3,12 +3,16 @@
 {
     "type": "postgres",
     "port": "5432",
-    "host": "localhost",
-    "username": "modacad_db",
-    "password": "moda_fashion_2024",
-    "database": "db_modacad",
+    "host": "dpg-cqambfaju9rs739aokig-a.oregon-postgres.render.com",
+    "username": "programmer",
+    "password": "YUza5Ube8EDRk9al1ehgfuzwEuENgyXe",
+    "database": "modacad_database",
     "migrations": ["./src/Shared/TypeOrm/migrations/*.ts"],
     "cli": {
         "migrationsDir": "./src/Shared/TypeOrm/migrations/"
+    },
+    "url": "postgresql://programmer:YUza5Ube8EDRk9al1ehgfuzwEuENgyXe@dpg-cqambfaju9rs739aokig-a.oregon-postgres.render.com/modacad_database",
+    "extra": {
+        "ssl": true
     }
 }

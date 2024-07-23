@@ -3,7 +3,7 @@ import { hash } from "bcryptjs"
 
 import { Admins } from "../../entity/Admins";
 
-import { IAdminsRepository, IAdminsRepositoryDTO } from "../../repository/IAdminsRepository";
+import { IAdminsRepository, IAdminsRepositoryDTO } from "../../repositories/IAdminsRepository";
 
 @injectable()
 class CreateAdmUseCase {
@@ -15,7 +15,8 @@ class CreateAdmUseCase {
         name,
         email,
         password,
-        cellphone
+        cellphone,
+        adminPro
     }: IAdminsRepositoryDTO): Promise<Admins> {
         const adminExists = await this.adminsRepository.findByEmail(email)
 
@@ -30,7 +31,8 @@ class CreateAdmUseCase {
             name,
             email,
             password: passwordCrypt,
-            cellphone
+            cellphone,
+            adminPro
         })
 
         return admin

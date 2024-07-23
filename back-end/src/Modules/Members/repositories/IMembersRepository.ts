@@ -5,7 +5,7 @@ interface IMembersRepositoryDTO {
     name: string,
     email: string,
     password: string
-    isPro?: boolean
+    member_ship?: string
 }
 
 
@@ -15,7 +15,7 @@ interface IMembersRepository {
         name,
         email,
         password,
-        isPro
+        member_ship
     }: IMembersRepositoryDTO): Promise<Members>;
     delete(id: string): Promise<void>;
     findById(id: string): Promise<Members>;

@@ -8,9 +8,9 @@ services:
     ports: 
       - 5432:5432
     environment:
-      - POSTGRES_USER=modacad_db
-      - POSTGRES_PASSWORD=moda_fashion_2024
-      - POSTGRES_DB=db_modacad
+      - POSTGRES_USER=programmer
+      - POSTGRES_PASSWORD=YUza5Ube8EDRk9al1ehgfuzwEuENgyXe
+      - POSTGRES_DB=modacad_database
     volumes:
       - pgdata:/data/postgres
 

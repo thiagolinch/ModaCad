@@ -3,8 +3,8 @@ import { v4 as uuidV4 } from "uuid";
 
 
 
-@Entity("tags")//tags
-class Tags {
+@Entity("subjects")//subjects
+class Subjects {
 
     @PrimaryColumn()
     id?: string;
@@ -19,4 +19,4 @@ class Tags {
     }
 }
 
-export { Tags }
+export { Subjects }

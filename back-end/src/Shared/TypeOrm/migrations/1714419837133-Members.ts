@@ -10,7 +10,8 @@ export class Members1714419837133 implements MigrationInterface {
                     columns: [
                         {
                             name: "id",
-                            type: "uuid"
+                            type: "uuid",
+                            isPrimary: true
                         },
                         {
                             name: "name",
@@ -26,7 +27,7 @@ export class Members1714419837133 implements MigrationInterface {
                             isUnique: true
                         },
                         {
-                            name: "member-ship",
+                            name: "member_ship",
                             type: "varchar"
                         },
                         {

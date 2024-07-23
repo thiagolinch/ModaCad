@@ -1,19 +1,20 @@
 import { Router } from "express";
 
-import { CreateTagController } from "../../../Modules/Tags/useCases/createTag/createTagController";
-import { DeleteTagController } from "../../../Modules/Tags/useCases/deleteTag/deleteTagController";
-import { ensureAuhenticate } from "../../../middlewares/admins/ensureAuthenticate";
-import { ListTagController } from "../../../Modules/Tags/useCases/listTags/listTagController";
+import { CreateTagController } from "../../../Modules/Assuntos/useCases/createTag/createTagController";
+import { DeleteTagController } from "../../../Modules/Assuntos/useCases/deleteTag/deleteTagController";
+import { ensureAuhenticate } from "../middlewares/ensureAuthenticate";
+import { ListTagController } from "../../../Modules/Assuntos/useCases/listTags/listTagController";
+import { ensureAdmin } from "../middlewares/ensureAdmin";
 
-const tagRoutes = Router()
+const subjectsRoute = Router()
 
 const createTagController = new CreateTagController()
 const deleteTagController = new DeleteTagController()
 const listTagController = new ListTagController()
 
-tagRoutes.post("/", ensureAuhenticate, createTagController.handle)
-tagRoutes.delete("/",ensureAuhenticate, deleteTagController.handle)
-tagRoutes.get("/", listTagController.handle)
+subjectsRoute.post("/", ensureAuhenticate, ensureAdmin, createTagController.handle)
+subjectsRoute.delete("/",ensureAuhenticate, deleteTagController.handle)
+subjectsRoute.get("/", listTagController.handle)
 
 
-export  { tagRoutes }
+export  { subjectsRoute }

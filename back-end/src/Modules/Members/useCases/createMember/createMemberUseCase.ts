@@ -15,7 +15,8 @@ class CreateMemberUseCase {
     async execute({
         name,
         email,
-        password
+        password,
+        member_ship
     }: IMembersRepositoryDTO): Promise<Members>  {
         const memberExists = await this.memberRepository.findByEmail(email)
 

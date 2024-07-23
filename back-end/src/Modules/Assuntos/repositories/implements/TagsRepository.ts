@@ -1,17 +1,17 @@
 import { getRepository, Repository } from "typeorm";
 
 import { ITagsRepository, ITagsRepositoryDTO } from "../ITagsRepository";
-import { Tags } from "../../entities/Tags";
+import { Subjects } from "../../entities/Tags";
 
 class TagRepository implements ITagsRepository {
 
-    private repository: Repository<Tags>
+    private repository: Repository<Subjects>
 
     constructor() {
-        this.repository = getRepository(Tags)
+        this.repository = getRepository(Subjects)
     }
 
-    async listTags(): Promise<Tags[]> {
+    async listTags(): Promise<Subjects[]> {
         return await this.repository.find()
     }
 
@@ -19,15 +19,15 @@ class TagRepository implements ITagsRepository {
          await this.repository.delete({name})
     }
     
-    findById(id: string): Promise<Tags> {
+    findById(id: string): Promise<Subjects> {
         throw new Error("Method not implemented.");
     }
 
-    async findByName(name: string): Promise<Tags> {
+    async findByName(name: string): Promise<Subjects> {
         return await this.repository.findOne({name})
     }
 
-    async create(name: string): Promise<Tags> {
+    async create(name: string): Promise<Subjects> {
         const tag = this.repository.create({name});
         
 
@@ -36,7 +36,7 @@ class TagRepository implements ITagsRepository {
         return tag;
     }
 
-   /*  async findById(id: string): Promise<Tags> {
+   /*  async findById(id: string): Promise<Subjects> {
         return await this.repository.findOne({id})
     } */
 

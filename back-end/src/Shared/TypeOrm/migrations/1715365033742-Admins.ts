@@ -28,8 +28,8 @@ export class Admins1715365033742 implements MigrationInterface {
                             isUnique: true
                         },
                         {
-                            name: "permission",
-                            type: "varchar"
+                            name: "adminPro",
+                            type: "boolean"
                         },
                         {
                             name: "password",

@@ -20,15 +20,18 @@ class Admins {
     password: string;
 
     @Column()
-    admin_pro: boolean;
+    adminPro: boolean;
 
     @CreateDateColumn()
     created_at: Date
 
+    @CreateDateColumn()
+    updated_at: Date
+
     constructor() {
         if(!this.id){
             this.id = uuidV4()
-            this.admin_pro = false
+            this.adminPro = false
         }
     }
     
