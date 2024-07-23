@@ -1,12 +1,12 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { CreateSessionAdminUseCase } from "./createSessionAdminUseCase";
+import { CreateSessionMemberUseCase } from "./createSessionAdminUseCase";
 
 
 class CreateSessionAdminController {
     async handle(request: Request, response: Response): Promise<Response> {
         const { email, password } = request.body;
-        const sessionUserUseCase = container.resolve(CreateSessionAdminUseCase)
+        const sessionUserUseCase = container.resolve(CreateSessionMemberUseCase)
 
         try {
             const user =  await sessionUserUseCase.execute(email, password)

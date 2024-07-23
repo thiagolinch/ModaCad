@@ -30,7 +30,8 @@ class CreateMemberUseCase {
         const member = await this.memberRepository.create({
             name,
             email,
-            password: passwordB
+            password: passwordB,
+            member_ship
         })
 
         return member

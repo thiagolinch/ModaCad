@@ -1,7 +1,7 @@
 import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
-import { IAdminsRepository } from "../../repository/IAdminsRepository";
+import { IMembersRepository } from "../../repositories/IMembersRepository";
 
 
 interface Iresponse {
@@ -13,14 +13,14 @@ interface Iresponse {
 }
 
 @injectable()
-class CreateSessionAdminUseCase {
+class CreateSessionMemberUseCase {
     constructor(
-        @inject("AdminsRepository")
-        private adminRepo: IAdminsRepository
+        @inject("MembersRepository")
+        private memberRepo: IMembersRepository
     ) {}
 
     async execute(email: string, password:string): Promise<Iresponse> {
-        const user = await this.adminRepo.findByEmail(email)
+        const user = await this.memberRepo.findByEmail(email)
 
         if(!user){
             throw new Error("E-mail or password invalid").message
@@ -49,4 +49,4 @@ class CreateSessionAdminUseCase {
     }
 }
 
-export { CreateSessionAdminUseCase }
+export { CreateSessionMemberUseCase }
