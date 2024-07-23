@@ -1,16 +1,16 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { CreateTagUseCase } from "./createTagUseCase";
+import { CreateSubjectUseCase } from "./createTagUseCase";
 
 
 class CreateTagController {
     async handle(request: Request, response: Response): Promise<Response> {
         const {name} = request.body
-        const createTagUseCase =  container.resolve(CreateTagUseCase)
+        const createSubjectUseCase =  container.resolve(CreateSubjectUseCase)
 
         try {
-            const tag = await createTagUseCase.execute({
+            const tag = await createSubjectUseCase.execute({
                 name
             })
             return response.status(201).json(tag)

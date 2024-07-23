@@ -1,17 +1,17 @@
 import { inject, injectable } from "tsyringe";
 
-import { ITagsRepository, ITagsRepositoryDTO } from "../../repositories/ITagsRepository";
-import { Tags } from "../../entities/Tags";
+import { ISubjectsRepository, ISubjectsRepositoryDTO } from "../../repositories/ISubjectsRepository";
+import { Subjects } from "../../entities/Tags";
 
 
 @injectable()
-class CreateTagUseCase {
+class CreateSubjectUseCase {
     constructor(
-        @inject("TagRepository")
-        private TagsRepository: ITagsRepository
+        @inject("SubjectRepository")
+        private TagsRepository: ISubjectsRepository
     ){}
 
-    async execute ({ name }: ITagsRepositoryDTO): Promise<Tags> {
+    async execute ({ name }: ISubjectsRepositoryDTO): Promise<Subjects> {
         const tagExists = await this.TagsRepository.findByName(name)
 
         if(tagExists) {
@@ -25,4 +25,4 @@ class CreateTagUseCase {
 
 }
 
-export { CreateTagUseCase }
+export { CreateSubjectUseCase }

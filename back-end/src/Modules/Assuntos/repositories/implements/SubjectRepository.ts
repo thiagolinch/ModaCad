@@ -1,9 +1,9 @@
 import { getRepository, Repository } from "typeorm";
 
-import { ITagsRepository, ITagsRepositoryDTO } from "../ITagsRepository";
+import { ISubjectsRepository, ISubjectsRepositoryDTO } from "../ISubjectsRepository";
 import { Subjects } from "../../entities/Tags";
 
-class TagRepository implements ITagsRepository {
+class SubjectRepository implements ISubjectsRepository {
 
     private repository: Repository<Subjects>
 
@@ -52,4 +52,4 @@ class TagRepository implements ITagsRepository {
 
 }
 
-export { TagRepository }
+export { SubjectRepository }

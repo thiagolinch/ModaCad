@@ -1,7 +1,7 @@
 import { container } from 'tsyringe';
 
-import { ITagsRepository } from '../../Modules/Assuntos/repositories/ITagsRepository';
-import { TagRepository } from '../../Modules/Assuntos/repositories/implements/TagsRepository';
+import { ISubjectsRepository } from '../../Modules/Assuntos/repositories/ISubjectsRepository';
+import { SubjectRepository } from '../../Modules/Assuntos/repositories/implements/SubjectRepository';
 
 import { IMembersRepository } from '../../Modules/Members/repositories/IMembersRepository';
 import { MembersRepository } from '../../Modules/Members/repositories/implements/MembersRepository';
@@ -15,9 +15,9 @@ import { AdminAvatarRepository } from '../../Modules/Admins/repositories/impleme
 import { IStorageProvider } from './providers/StorageProvider/IStorageProvider';
 import { LocalStorageProvider } from './providers/StorageProvider/Implements/LocalStorageProvider';
 
-container.registerSingleton<ITagsRepository>(
-    "TagRepository",
-    TagRepository
+container.registerSingleton<ISubjectsRepository>(
+    "SubjectRepository",
+    SubjectRepository
 )
 
 container.registerSingleton<IMembersRepository>(

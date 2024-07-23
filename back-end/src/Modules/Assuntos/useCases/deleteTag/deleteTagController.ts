@@ -1,13 +1,13 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 
-import { DeleteTagUseCase } from "./deleteTagUseCase";
+import { DeleteSubjectUseCase } from "./deleteTagUseCase";
 
 
 class DeleteTagController {
     async handle(request: Request, response: Response): Promise<Response> {
         const {name} = request.body
-        const deleteTagUseCase = container.resolve(DeleteTagUseCase)
+        const deleteTagUseCase = container.resolve(DeleteSubjectUseCase)
 
         try {
             const tag = await deleteTagUseCase.execute({

@@ -1,23 +1,23 @@
 import { inject, injectable } from "tsyringe";
-import { ITagsRepository, ITagsRepositoryDTO } from "../../repositories/ITagsRepository";
+import { ISubjectsRepository, ISubjectsRepositoryDTO } from "../../repositories/ISubjectsRepository";
 
 
 @injectable()
-class DeleteTagUseCase {
+class DeleteSubjectUseCase {
     constructor(
-        @inject("TagRepository")
-        private tagRepository: ITagsRepository
+        @inject("SubjectRepository")
+        private SubjectRepository: ISubjectsRepository
     ){}
 
-    async execute({name}: ITagsRepositoryDTO): Promise<void> {
-        const tagExists = await this.tagRepository.findByName(name)
+    async execute({name}: ISubjectsRepositoryDTO): Promise<void> {
+        const tagExists = await this.SubjectRepository.findByName(name)
 
         if(!tagExists) {
             throw new Error("This tag does not exists").message
         }
 
-        await this.tagRepository.delete(name)
+        await this.SubjectRepository.delete(name)
     }
 }
 
-export { DeleteTagUseCase }
+export { DeleteSubjectUseCase }
