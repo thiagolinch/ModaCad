@@ -25,7 +25,7 @@ adminRoute.delete("/:id", () => {
     console.log("delete member route working")
 })
 // ADMIN PROFILE
-adminRoute.get("/:id", profileAdminController.handle)
+adminRoute.get("/:id", ensureAuhenticate, profileAdminController.handle)
 // UPLOAD ADMIN AVATAR
 
 export  { adminRoute }
