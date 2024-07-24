@@ -13,7 +13,6 @@ class ListSubjectsUseCase {
 
     async execute (): Promise<Subjects[]> {
         const subjects = await this.subjectsRepository.listTags()
-        console.log(subjects)
 
         return subjects;
     }
