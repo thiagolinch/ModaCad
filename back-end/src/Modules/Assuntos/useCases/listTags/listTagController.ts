@@ -9,10 +9,11 @@ class ListTagController {
         const listSubjectsUseCase =  container.resolve(ListSubjectsUseCase)
 
         try {
-            const tags = await listSubjectsUseCase.execute()
-            return response.status(201).json({tags})
+            const subjects = await listSubjectsUseCase.execute()
+            console.log(subjects + "hello")
+            return response.status(201).json(subjects)
         } catch (error) {
-            return response.status(400).json(error)
+            return response.status(400).json({error})
         }
 
     }

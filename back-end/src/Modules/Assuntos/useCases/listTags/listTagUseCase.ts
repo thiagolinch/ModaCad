@@ -8,13 +8,14 @@ import { Subjects } from "../../entities/Tags";
 class ListSubjectsUseCase {
     constructor(
         @inject("SubjectRepository")
-        private TagsRepository: ISubjectsRepository
+        private subjectsRepository: ISubjectsRepository
     ){}
 
     async execute (): Promise<Subjects[]> {
-        const tags = await this.TagsRepository.listTags()
+        const subjects = await this.subjectsRepository.listTags()
+        console.log(subjects)
 
-        return tags;
+        return subjects;
     }
 
 }
