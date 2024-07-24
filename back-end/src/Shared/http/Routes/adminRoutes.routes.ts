@@ -2,11 +2,12 @@ import { Router } from "express"
 
 import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmUseCase/createAdmController"
 import { CreateSessionAdminController } from "../../../Modules/Admins/useCases/authenticate/createSessionAdminController"
-import { ensureAuhenticate } from "../middlewares/ensureAdminAuthenticate"
-import { ensureAdmin } from "../middlewares/ensureAdmin"
+import { ProfileAdminController } from "../../../Modules/Admins/useCases/profileAdmin/profileAdminController"
+
+import { ensureAdminAuhenticate } from "../middlewares/ensureAdminAuthenticate"
+
 import upload from "../../../Config/upload/upload"
 import multer from "multer"
-import { ProfileAdminController } from "../../../Modules/Admins/useCases/profileAdmin/profileAdminController"
 
 const adminRoute = Router()
 
@@ -25,7 +26,7 @@ adminRoute.delete("/:id", () => {
     console.log("delete member route working")
 })
 // ADMIN PROFILE
-adminRoute.get("/profile", ensureAuhenticate, profileAdminController.handle)
+adminRoute.get("/profile", ensureAdminAuhenticate, profileAdminController.handle)
 // UPLOAD ADMIN AVATAR
 
 export  { adminRoute }
