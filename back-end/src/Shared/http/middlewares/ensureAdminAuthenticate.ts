@@ -9,7 +9,7 @@ interface IPayload {
     sub: string;
 }
 
-async function ensureAuhenticate(request: Request, response: Response, next: NextFunction) {
+async function ensureAdminAuhenticate(request: Request, response: Response, next: NextFunction) {
     const authHeader = request.headers.authorization;
 
     if(!authHeader){
@@ -20,17 +20,17 @@ async function ensureAuhenticate(request: Request, response: Response, next: Nex
 
 
     try {
-        const { sub: user_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
+        const { sub: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository()
-        const user = await adminRepo.findById(user_id)
+        const admin = await adminRepo.findById(admin_id)
 
-        if(!user){
+        if(!admin){
             throw new Error("User does not exists")
         }
 
-        request.user = {
-            id: user.id
+        request.admin = {
+            id: admin.id
         }
 
         next()
@@ -39,4 +39,4 @@ async function ensureAuhenticate(request: Request, response: Response, next: Nex
     }
 }
 
-export { ensureAuhenticate }
+export { ensureAdminAuhenticate }

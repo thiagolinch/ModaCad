@@ -2,7 +2,7 @@ import { Router } from "express"
 
 import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmUseCase/createAdmController"
 import { CreateSessionAdminController } from "../../../Modules/Admins/useCases/authenticate/createSessionAdminController"
-import { ensureAuhenticate } from "../middlewares/ensureAuthenticate"
+import { ensureAuhenticate } from "../middlewares/ensureAdminAuthenticate"
 import { ensureAdmin } from "../middlewares/ensureAdmin"
 import upload from "../../../Config/upload/upload"
 import multer from "multer"
