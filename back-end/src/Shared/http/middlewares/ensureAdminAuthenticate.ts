@@ -28,8 +28,9 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
         if(!admin){
             throw new Error("User does not exists")
         }
+        console.log(admin.id)
 
-        request.admin = {
+        request.user = {
             id: admin.id
         }
 
