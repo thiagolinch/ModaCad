@@ -6,11 +6,13 @@ import { ensureAuhenticate } from "../middlewares/ensureAuthenticate"
 import { ensureAdmin } from "../middlewares/ensureAdmin"
 import upload from "../../../Config/upload/upload"
 import multer from "multer"
+import { ProfileAdminController } from "../../../Modules/Admins/useCases/profileAdmin/profileAdminController"
 
 const adminRoute = Router()
 
 const createAdmController = new CreateAdmController()
 const createSessionsAdmController = new CreateSessionAdminController()
+const profileAdminController = new ProfileAdminController()
 
 const uploadAdminAvatar = multer(upload)
 
@@ -22,6 +24,8 @@ adminRoute.post("/authenticate", createSessionsAdmController.handle);
 adminRoute.delete("/:id", () => {
     console.log("delete member route working")
 })
+// ADMIN PROFILE
+adminRoute.get("/:id", profileAdminController.handle)
 // UPLOAD ADMIN AVATAR
 
 export  { adminRoute }

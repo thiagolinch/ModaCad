@@ -16,3 +16,5 @@ class ProfileAdminController {
         }
     }
 }
+
+export { ProfileAdminController }
