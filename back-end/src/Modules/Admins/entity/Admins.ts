@@ -25,7 +25,7 @@ class Admins {
 
     @ManyToOne(() => AdminRole)
     @JoinColumn({name: "admin_role_id"})
-    category: AdminRole;
+    admin: AdminRole;
 
     @CreateDateColumn()
     created_at: Date
