@@ -1,11 +1,11 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class AdminAvatar1721333805735 implements MigrationInterface {
+export class CreateAdminsToken1721854376303 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "admin_avatar",
+                name: "admins_tokens",
                 columns: [
                     {
                         name: "id",
@@ -13,18 +13,31 @@ export class AdminAvatar1721333805735 implements MigrationInterface {
                         isPrimary: true
                     },
                     {
+                        name: "refresh_token",
+                        type: "varchar"
+                    },
+                    {
                         name: "admin_id",
                         type: "uuid"
                     },
                     {
-                        name: "admin_avatar_name",
-                        type: "varchar",
-                        isUnique: true
+                        name: "expires_date",
+                        type: "timestamp"
                     },
                     {
                         name: "created_at",
                         type: "timestamp",
                         default: "now()"
+                    }
+                ],
+                foreignKeys: [
+                    {
+                        name: "FK_Admin_Token",
+                        referencedTableName: "admins",
+                        referencedColumnNames: ["id"],
+                        columnNames: ["admin_id"],
+                        onDelete: "CASCADE",
+                        onUpdate: "CASCADE"
                     }
                 ]
             })
@@ -32,7 +45,7 @@ export class AdminAvatar1721333805735 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("admin_avatar")
+        await queryRunner.dropTable("admins_tokens")
     }
 
 }

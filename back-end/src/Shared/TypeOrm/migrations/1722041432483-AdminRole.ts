@@ -1,12 +1,12 @@
 import {MigrationInterface, QueryRunner, Table} from "typeorm";
 
-export class Plans1714419903573 implements MigrationInterface {
+export class AdminRole1722041432483 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table(
                 {
-                    name: "plans",
+                    name: "admin_role",
                     columns: [
                         {
                             name: "id",
@@ -14,23 +14,19 @@ export class Plans1714419903573 implements MigrationInterface {
                             isPrimary: true
                         },
                         {
-                            name: "title",
-                            type: "varchar"
+                            name: "name",
+                            type: "varchar",
+                            isUnique: true
                         },
                         {
                             name: "description",
                             type: "varchar"
                         },
                         {
-                            name: "topics",
-                            type: "varchar"
-                        },
-                        {
-                            name: "price",
-                            type: "varchar"
-                        },
-                        { name: "created_at", type: "timestamp", default: "now()" },
-                        { name: "updated_at", type: "timestamp", default: "now()" }
+                            name: "created_at",
+                            type: "timestamp",
+                            default: "now()"
+                        }
                     ]
                 }
             )
@@ -38,7 +34,7 @@ export class Plans1714419903573 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("plans")
+        await queryRunner.dropTable("admin_role")
     }
 
 }

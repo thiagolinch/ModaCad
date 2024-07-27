@@ -10,7 +10,7 @@ class ProfileAdminController {
 
         try {
             const admin = await profileAdmUseCase.execute(id)
-            return response.status(201).json(admin)
+            return response.status(200).json(admin)
         } catch (error) {
             return response.status(400).json(error)
         }

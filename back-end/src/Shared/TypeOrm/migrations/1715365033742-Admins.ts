@@ -28,8 +28,8 @@ export class Admins1715365033742 implements MigrationInterface {
                             isUnique: true
                         },
                         {
-                            name: "adminPro",
-                            type: "boolean"
+                            name: "admin_role_id",
+                            type: "uuid"
                         },
                         {
                             name: "password",
@@ -45,6 +45,16 @@ export class Admins1715365033742 implements MigrationInterface {
                             type: "timestamp",
                             default: "now()"
                         },
+                    ],
+                    foreignKeys: [
+                        {
+                            name: "FK_ADMIN_ROLE",
+                            referencedTableName: "admin_role",
+                            referencedColumnNames: ["id"],
+                            columnNames: ["admin_role_id"],
+                            onDelete: "SET NULL",
+                            onUpdate: "CASCADE"
+                        }
                     ]
                 }
             )

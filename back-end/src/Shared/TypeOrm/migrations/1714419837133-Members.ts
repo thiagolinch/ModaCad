@@ -27,8 +27,8 @@ export class Members1714419837133 implements MigrationInterface {
                             isUnique: true
                         },
                         {
-                            name: "member_ship",
-                            type: "varchar"
+                            name: "plan_id",
+                            type: "uuid"
                         },
                         {
                             name: "created_at",
@@ -39,6 +39,17 @@ export class Members1714419837133 implements MigrationInterface {
                             name: "updated_at",
                             type: "timestamp",
                             default: "now()"
+                        }
+                    ],
+
+                    foreignKeys: [
+                        {
+                            name: "FK_Plan_Member",
+                            referencedTableName: "plans",
+                            referencedColumnNames: ["id"],
+                            columnNames: ["plan_id"],
+                            onDelete: "SET NULL",
+                            onUpdate: "SET NULL"
                         }
                     ]
                 }

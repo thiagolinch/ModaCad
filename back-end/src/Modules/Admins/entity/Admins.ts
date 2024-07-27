@@ -1,5 +1,6 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
+import { AdminRole } from "./AdminRole";
 
 @Entity("admins")//admins
 class Admins {
@@ -20,7 +21,11 @@ class Admins {
     password: string;
 
     @Column()
-    adminPro: boolean;
+    admin_role_id: string;
+
+    @ManyToOne(() => AdminRole)
+    @JoinColumn({name: "admin_role_id"})
+    category: AdminRole;
 
     @CreateDateColumn()
     created_at: Date
@@ -31,7 +36,6 @@ class Admins {
     constructor() {
         if(!this.id){
             this.id = uuidV4()
-            this.adminPro = false
         }
     }
     
