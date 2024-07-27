@@ -16,7 +16,7 @@ class CreateAdmUseCase {
         email,
         password,
         cellphone,
-        adminPro
+        admin_role_id
     }: IAdminsRepositoryDTO): Promise<Admins> {
         const adminExists = await this.adminsRepository.findByEmail(email)
 
@@ -32,7 +32,7 @@ class CreateAdmUseCase {
             email,
             password: passwordCrypt,
             cellphone,
-            adminPro
+            admin_role_id
         })
 
         return admin

@@ -11,13 +11,13 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
-    async create({ name, cellphone, email, password, adminPro }: IAdminsRepositoryDTO): Promise<Admins> {
+    async create({ name, cellphone, email, password, admin_role_id }: IAdminsRepositoryDTO): Promise<Admins> {
         const admin =  this.repository.create({
             name,
             email,
             password,
             cellphone,
-            adminPro
+            admin_role_id
         })
 
         await this.repository.save(admin)
