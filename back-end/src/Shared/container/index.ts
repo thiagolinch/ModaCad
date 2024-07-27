@@ -14,6 +14,10 @@ import { AdminAvatarRepository } from '../../Modules/Admins/repositories/impleme
 
 import { IStorageProvider } from './providers/StorageProvider/IStorageProvider';
 import { LocalStorageProvider } from './providers/StorageProvider/Implements/LocalStorageProvider';
+import { IDateProvider } from './providers/DateProvider/IDateProvider';
+import { DaysJSDateProvider } from './providers/DateProvider/implementations/DayJsDateProvider';
+import { IAdminTokensRepository } from '../../Modules/Admins/repositories/IAdminTokenRepository';
+import { AdminTokenRepository } from '../../Modules/Admins/repositories/implements/AdminTokenRepository';
 
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
@@ -38,4 +42,14 @@ container.registerSingleton<IAdminAvatarRepository>(
 container.registerSingleton<IStorageProvider>(
     "StorageProvider",
     LocalStorageProvider
+)
+
+container.registerSingleton<IDateProvider>(
+    "DaysJSDateProvider",
+    DaysJSDateProvider
+)
+
+container.registerSingleton<IAdminTokensRepository>(
+    "AdminTokenRepository",
+    AdminTokenRepository
 )

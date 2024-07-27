@@ -6,6 +6,7 @@ import { Members } from "../../Modules/Members/entities/Members";
 import { Admins } from "../../Modules/Admins/entity/Admins";
 import { AdminAvatar } from "../../Modules/Admins/entity/AdminAvatar";
 import { AdminRole } from "../../Modules/Admins/entity/AdminRole";
+import { AdminTokens } from "../../Modules/Admins/entity/AdminToken";
 
 export default async (host = "localhost"): Promise<Connection> => {
   const defaultOptions = await getConnectionOptions();
@@ -18,7 +19,8 @@ export default async (host = "localhost"): Promise<Connection> => {
         Members,
         Admins,
         AdminAvatar,
-        AdminRole
+        AdminRole,
+        AdminTokens
       ]
     })
   );

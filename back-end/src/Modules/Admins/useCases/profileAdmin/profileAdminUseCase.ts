@@ -1,24 +1,20 @@
-import { inject, injectable } from "tsyringe";
-import { IAdminsRepository } from "../../repositories/IAdminsRepository";
-import { Admins } from "../../entity/Admins";
-
+import { inject, injectable } from "tsyringe"
+import { IAdminsRepository } from "../../repositories/IAdminsRepository"
+import { IStorageProvider } from "../../../../Shared/container/providers/StorageProvider/IStorageProvider"
+import { Admins } from "../../entity/Admins"
 
 @injectable()
-class ProfileAdminUseCase {
+class AdminProfileUseCase {
     constructor(
         @inject("AdminsRepository")
         private adminRepo: IAdminsRepository
-    ) {}
+    ){};
 
-    async execute({id}): Promise<Admins> {
-        const admin = await this.adminRepo.findById(id)
-
-        if(!admin) {
-            throw new Error("This admin does not exist!")
-        }
-
+    async execute(admin_id: string): Promise<Admins> {
+        const admin = await this.adminRepo.findById(admin_id)
         return admin
     }
+
 }
 
-export { ProfileAdminUseCase }
+export { AdminProfileUseCase }
