@@ -7,6 +7,7 @@ const authenticateAdminRoutes = Router();
 const authenticateAdminController = new CreateSessionAdminController();
 const refreshTokenAdminController= new RefreshTokenAdminController();
 
+// CRIAR AUTENTICATION
 authenticateAdminRoutes.post("/sessions", authenticateAdminController.handle)
 authenticateAdminRoutes.post("/refresh-token", refreshTokenAdminController.handle)
 
