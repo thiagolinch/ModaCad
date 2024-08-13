@@ -18,7 +18,7 @@ export class Comments1721594072082 implements MigrationInterface {
                     },
                     {
                         name: "member_id",
-                        type: "uuid"
+                        type: "varchar"
                     },
                     {
                         name: "post_id",

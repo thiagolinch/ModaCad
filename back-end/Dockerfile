@@ -1,13 +1,13 @@
-FROM node
+FROM node:latest
 
-WORKDIR /usr/app/modacad
-
-COPY package.json ./
-
-RUN npm install 
+WORKDIR /api
 
 COPY . .
 
-EXPOSE 3333
+RUN rm -rf node_modules
+
+RUN npm i 
 
 CMD ["npm", "run", "dev"]
+
+EXPOSE 5002

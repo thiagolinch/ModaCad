@@ -9,7 +9,6 @@ class AdminProfileController {
         const adminProfileUC = container.resolve(AdminProfileUseCase)
 
         const admin = await adminProfileUC.execute(id)
-        console.log(admin)
 
         return response.status(200).json(admin)
     }

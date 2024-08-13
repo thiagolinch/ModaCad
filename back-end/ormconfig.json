@@ -1,21 +1,25 @@
-
-
 {    
     "type": "postgres",
     "port": "25060",
-    "host": "",
+    "host": "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigitalocean.com",
     "username": "doadmin",
-    "password": "",
+    "password": "AVNS_GOJX4HPo4wqNqEcM7Fc",
     "database": "defaultdb",
     "migrations": ["./src/Shared/TypeOrm/migrations/*.ts"],
     "cli": {
         "migrationsDir": "./src/Shared/TypeOrm/migrations/"
     },
-    "options": {"trustServerCertificate": true},
+    "url": "postgresql://doadmin:AVNS_GOJX4HPo4wqNqEcM7Fc@db-pg-modacad-lws-do-user-1617328-0.c.db.ondigitalocean.com:25060/defaultdb",
     "ssl": true,
-    "extra": {
-        "ssl": {
-          "rejectUnauthorized": false
-        }
+  "extra": {
+    "ssl": {
+      "rejectUnauthorized": false,
+      "trustServerCertificate": true
+
     }
+  },
+  "options": { "encrypt": false },
+  "synchronize": "true",
+  "logging": "true"
+    
 }

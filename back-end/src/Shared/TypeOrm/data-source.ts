@@ -8,7 +8,7 @@ import { AdminAvatar } from "../../Modules/Admins/entity/AdminAvatar";
 import { AdminRole } from "../../Modules/Admins/entity/AdminRole";
 import { AdminTokens } from "../../Modules/Admins/entity/AdminToken";
 
-export default async (host = process.env.POSTGRES_HOST): Promise<Connection> => {
+export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigitalocean.com"): Promise<Connection> => {
   const defaultOptions = await getConnectionOptions();
   
   return createConnection(

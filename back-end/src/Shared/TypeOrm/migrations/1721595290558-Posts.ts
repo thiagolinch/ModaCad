@@ -26,12 +26,12 @@ export class articles1717006341562 implements MigrationInterface {
                             type: "varchar",
                         },
                         {
-                            name: "author_id",
-                            type: "uuid",
+                            name: "admin_id",
+                            type: "varchar",
                         },
                         {
                             name: "subjects_id",
-                            type: "uuid"
+                            type: "varchar"
                         },
                         {
                             name: "plaintext",
@@ -78,7 +78,7 @@ export class articles1717006341562 implements MigrationInterface {
                             name: "FKAuthorsPost",
                             referencedTableName: "admins",
                             referencedColumnNames: ["id"],
-                            columnNames: ["author_id"],
+                            columnNames: ["admin_id"],
                             onDelete: "SET NULL",
                             onUpdate: "SET NULL"
                         },

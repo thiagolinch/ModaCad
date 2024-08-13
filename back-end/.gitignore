@@ -2,7 +2,7 @@ node_modules/
 dist/
 .vercel
 .env
-src\Modules\Admins\useCases\uploadAdminAvatar
+src/Modules\Admins\useCases\uploadAdminAvatar
 src/utils/certs
 
 ## url route to modacad database
