@@ -1,11 +1,11 @@
-import {MigrationInterface, QueryRunner, Table} from "typeorm";
+import {MigrationInterface, QueryBuilder, QueryRunner, Table} from "typeorm";
 
-export class CreateAdminsToken1722042588508 implements MigrationInterface {
+export class CreateUsersToken1654735996540 implements MigrationInterface {
 
     public async up(queryRunner: QueryRunner): Promise<void> {
         await queryRunner.createTable(
             new Table({
-                name: "admins_tokens",
+                name: "users_tokens",
                 columns: [
                     {
                         name: "id",
@@ -17,8 +17,9 @@ export class CreateAdminsToken1722042588508 implements MigrationInterface {
                         type: "varchar"
                     },
                     {
-                        name: "admin_id",
-                        type: "uuid"
+                        name: "member_id",
+                        type: "varchar",
+                        isPrimary: true
                     },
                     {
                         name: "expires_date",
@@ -32,12 +33,12 @@ export class CreateAdminsToken1722042588508 implements MigrationInterface {
                 ],
                 foreignKeys: [
                     {
-                        name: "FK_Admin_Token",
-                        referencedTableName: "admins",
+                        name: "FKMembersTokens",
+                        referencedTableName: "members",
                         referencedColumnNames: ["id"],
-                        columnNames: ["admin_id"],
-                        onDelete: "CASCADE",
-                        onUpdate: "CASCADE"
+                        columnNames: ["member_id"],
+                        onDelete: "SET NULL",
+                        onUpdate: "SET NULL"
                     }
                 ]
             })
@@ -45,7 +46,7 @@ export class CreateAdminsToken1722042588508 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("admins_tokens")
+        await queryRunner.dropTable("users_tokens")
     }
 
 }

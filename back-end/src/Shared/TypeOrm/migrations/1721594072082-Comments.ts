@@ -21,7 +21,7 @@ export class Comments1721594072082 implements MigrationInterface {
                         type: "varchar"
                     },
                     {
-                        name: "post_id",
+                        name: "article_id",
                         type: "uuid"
                     },
                     {
@@ -41,18 +41,18 @@ export class Comments1721594072082 implements MigrationInterface {
                 ],
                 foreignKeys: [
                     {
-                        name: "FKPost",
-                        referencedTableName: "posts",
-                        referencedColumnNames: ["id"],
-                        columnNames: ["post_id"],
-                        onUpdate: "SET NULL",
-                        onDelete: "SET NULL"
-                    },
-                    {
                         name: "FKMemberComment",
                         referencedTableName: "members",
                         referencedColumnNames: ["id"],
                         columnNames: ["member_id"],
+                        onDelete: "SET NULL",
+                        onUpdate: "SET NULL"
+                    },
+                    {
+                        name: "FKArticleComment",
+                        referencedTableName: "articles",
+                        referencedColumnNames: ["id"],
+                        columnNames: ["article_id"],
                         onDelete: "SET NULL",
                         onUpdate: "SET NULL"
                     }

@@ -15,8 +15,7 @@ export class AdminRole1722041432483 implements MigrationInterface {
                         },
                         {
                             name: "name",
-                            type: "varchar",
-                            isUnique: true
+                            type: "varchar"
                         },
                         {
                             name: "description",

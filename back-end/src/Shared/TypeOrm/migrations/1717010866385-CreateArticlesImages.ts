@@ -13,8 +13,8 @@ export class CreateArticlesImages1717010866385 implements MigrationInterface {
                             isPrimary: true
                         },
                         {
-                            name: "posts_id",
-                            type: "uuid"
+                            name: "post_id",
+                            type: "varchar"
                         },
                         {
                             name: "image_name",
@@ -29,12 +29,12 @@ export class CreateArticlesImages1717010866385 implements MigrationInterface {
                     ],
                     foreignKeys: [
                         {
-                            name: "FKImagesCar",
-                            referencedTableName: "posts",
+                            name: "FKImagesPost",
+                            referencedTableName: "articles",
                             referencedColumnNames: ["id"],
-                            columnNames: ["posts_id"],
-                            onUpdate: "SET NULL",
-                            onDelete: "SET NULL"
+                            columnNames: ["post_id"],
+                            onUpdate: "CASCADE",
+                            onDelete: "CASCADE"
                         }
                     ]
                 })

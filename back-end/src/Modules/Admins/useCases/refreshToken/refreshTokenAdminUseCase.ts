@@ -22,7 +22,7 @@ class RefreshTokenAdminUseCase {
     constructor(
         @inject("AdminTokenRepository")
         private adminsTokenRep: IAdminTokensRepository,
-        @inject("AdminsRepository")
+        @inject("AdminRepository")
         private adminRepository: IAdminsRepository,
         @inject("DaysJSDateProvider")
         private dateProvider: IDateProvider

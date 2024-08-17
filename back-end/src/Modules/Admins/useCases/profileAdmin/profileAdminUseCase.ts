@@ -6,7 +6,7 @@ import { Admins } from "../../entity/Admins"
 @injectable()
 class AdminProfileUseCase {
     constructor(
-        @inject("AdminsRepository")
+        @inject("AdminRepository")
         private adminRepo: IAdminsRepository
     ){};
 

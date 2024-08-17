@@ -23,6 +23,8 @@ adminRoute.delete("/:id", () => {
 })
 // ADMIN PROFILE
 adminRoute.get("/profile", ensureAdminAuhenticate, profileAdminController.handle)
+
 // UPLOAD ADMIN AVATAR
 
-export  { adminRoute }
+
+export  { adminRoute };

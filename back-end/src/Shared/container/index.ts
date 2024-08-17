@@ -18,10 +18,17 @@ import { IDateProvider } from './providers/DateProvider/IDateProvider';
 import { DaysJSDateProvider } from './providers/DateProvider/implementations/DayJsDateProvider';
 import { IAdminTokensRepository } from '../../Modules/Admins/repositories/IAdminTokenRepository';
 import { AdminTokenRepository } from '../../Modules/Admins/repositories/implements/AdminTokenRepository';
+import { IArticlesRepository } from '../../Modules/Posts/repository/IArticlesRepository';
+import { ArticleRepository } from '../../Modules/Posts/repository/implements/ArticlesRepository';
 
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
     SubjectRepository
+)
+
+container.registerSingleton<IArticlesRepository>(
+    "ArticleRepository",
+    ArticleRepository
 )
 
 container.registerSingleton<IMembersRepository>(
@@ -30,7 +37,7 @@ container.registerSingleton<IMembersRepository>(
 )
 
 container.registerSingleton<IAdminsRepository>(
-    "AdminsRepository",
+    "AdminRepository",
     AdminRepository
 )
 

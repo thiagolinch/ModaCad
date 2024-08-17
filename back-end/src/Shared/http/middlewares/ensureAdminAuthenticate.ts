@@ -7,7 +7,7 @@ import { AdminRepository } from "../../../Modules/Admins/repositories/implements
 
 interface IPayload {
     sub: string;
-}
+};
 
 async function ensureAdminAuhenticate(request: Request, response: Response, next: NextFunction) {
     const authHeader = request.headers.authorization;

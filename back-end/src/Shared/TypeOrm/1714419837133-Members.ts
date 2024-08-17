@@ -23,8 +23,7 @@ export class Members1714419837133 implements MigrationInterface {
                         },
                         {
                             name: "email",
-                            type: "varchar",
-                            isUnique: true
+                            type: "varchar"
                         },
                         {
                             name: "plan_id",
@@ -44,7 +43,7 @@ export class Members1714419837133 implements MigrationInterface {
 
                     foreignKeys: [
                         {
-                            name: "FK_Plan_Member",
+                            name: "FKPlanMember",
                             referencedTableName: "plans",
                             referencedColumnNames: ["id"],
                             columnNames: ["plan_id"],
@@ -57,8 +56,6 @@ export class Members1714419837133 implements MigrationInterface {
         )
     }
 
-    public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("members")
-    }
+    public async down(queryRunner: QueryRunner): Promise<void> {}
 
 }

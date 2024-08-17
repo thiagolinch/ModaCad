@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from 'uuid';
 
 import { Admins } from "../../Admins/entity/Admins";
@@ -14,20 +14,44 @@ class Articles {
     title: string;
 
     @Column()
-    description: string;
+    slug: string;
 
     @Column()
-    author: string;
+    type: string;
 
-    @ManyToOne(() => Admins)
+    @Column()
+    html: string;
+
+    @Column()
+    comments_id: string;
+
+    @Column()
+    admin_id: string;
+
+    @ManyToMany(() => Admins)
     @JoinColumn({name: "author"})
     author_id: Admins;
 
-    tag_id: string;
+    subjects_id: string[];
 
-    @ManyToOne(() => Subjects)
+    @ManyToMany(() => Subjects)
     @JoinColumn({name: "tag_id"})
     tags: Subjects;
+
+    @Column()
+    plaintext: string;
+
+    @Column()
+    feature_image: string;
+
+    @Column()
+    status: string;
+
+    @Column()
+    visibility: string;
+
+    @Column()
+    show_title_and_feature_image: string;
 
     constructor() {
         if (!this.id) {

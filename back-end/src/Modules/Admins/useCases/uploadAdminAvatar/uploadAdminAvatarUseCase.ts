@@ -12,7 +12,7 @@ interface IRequest {
 @injectable()
 class UploadAdminAvatarUseCase {
     constructor(
-        @inject("AdminsRepository")
+        @inject("AdminRepository")
         private adminsRepository: IAdminsRepository,
 
         @inject("AdminAvatarRepository")

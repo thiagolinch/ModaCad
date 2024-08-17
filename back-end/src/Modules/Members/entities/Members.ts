@@ -1,11 +1,11 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, OneToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
+import { Plans } from "../../Posts/entity/Plans";
 
 
 
 @Entity("members")//members
 class Members {
-
     @PrimaryColumn()
     id?: string;
 
@@ -21,6 +21,10 @@ class Members {
     @Column()
     member_ship: string;
 
+    @OneToOne(() => Plans)
+    @JoinColumn({name: "member_ship"})
+    plan: Plans
+
     @CreateDateColumn()
     created_at: Date
 
@@ -30,7 +34,6 @@ class Members {
     constructor() {
         if(!this.id){
             this.id = uuidV4()
-            this.member_ship = "basic"
         }
     }
 }

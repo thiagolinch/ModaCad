@@ -6,7 +6,7 @@ export class articles1717006341562 implements MigrationInterface {
         await queryRunner.createTable(
             new Table(
                 {
-                    name: "posts",
+                    name: "articles",
                     columns: [
                         {
                             name: "id",
@@ -39,7 +39,7 @@ export class articles1717006341562 implements MigrationInterface {
                         },
                         {
                             name: "feature_image",
-                            type: "uuid"
+                            type: "varchar"
                         },
                         {
                             name: "type",
@@ -56,10 +56,6 @@ export class articles1717006341562 implements MigrationInterface {
                         {
                             name: "show_title_and_feature_image",
                             type: "varchar"
-                        },
-                        {
-                            name: "comments_id",
-                            type: "uuid"
                         },
                         {
                             name: "created_at",
@@ -79,16 +75,16 @@ export class articles1717006341562 implements MigrationInterface {
                             referencedTableName: "admins",
                             referencedColumnNames: ["id"],
                             columnNames: ["admin_id"],
-                            onDelete: "SET NULL",
-                            onUpdate: "SET NULL"
+                            onDelete: "CASCADE",
+                            onUpdate: "CASCADE"
                         },
                         {
                             name: "FKSubjectsPost",
                             referencedTableName: "subjects",
                             referencedColumnNames: ["id"],
                             columnNames: ["subjects_id"],
-                            onDelete: "SET NULL",
-                            onUpdate: "SET NULL"
+                            onDelete: "CASCADE",
+                            onUpdate: "CASCADE"
                         }
                     ]
                 }
@@ -97,7 +93,7 @@ export class articles1717006341562 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("posts")
+        await queryRunner.dropTable("articles")
     }
 
 }

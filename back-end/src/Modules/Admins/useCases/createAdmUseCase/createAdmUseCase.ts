@@ -8,8 +8,8 @@ import { IAdminsRepository, IAdminsRepositoryDTO } from "../../repositories/IAdm
 @injectable()
 class CreateAdmUseCase {
     constructor(
-        @inject("AdminsRepository")
-        private adminsRepository: IAdminsRepository
+        @inject("AdminRepository")
+        private adminRepository: IAdminsRepository
     ) {}
     async execute({
         name,
@@ -18,7 +18,7 @@ class CreateAdmUseCase {
         cellphone,
         admin_role_id
     }: IAdminsRepositoryDTO): Promise<Admins> {
-        const adminExists = await this.adminsRepository.findByEmail(email)
+        const adminExists = await this.adminRepository.findByEmail(email)
 
         if(adminExists) {
             throw new Error("This admin account already exists!").message
@@ -27,7 +27,7 @@ class CreateAdmUseCase {
 
         const passwordCrypt = await hash(password, 8)
 
-        const admin = await this.adminsRepository.create({
+        const admin = await this.adminRepository.create({
             name,
             email,
             password: passwordCrypt,

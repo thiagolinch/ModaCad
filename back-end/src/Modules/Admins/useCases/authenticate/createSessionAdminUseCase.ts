@@ -15,7 +15,7 @@ interface Iresponse {
 @injectable()
 class CreateSessionAdminUseCase {
     constructor(
-        @inject("AdminsRepository")
+        @inject("AdminRepository")
         private adminRepo: IAdminsRepository
     ) {}
 

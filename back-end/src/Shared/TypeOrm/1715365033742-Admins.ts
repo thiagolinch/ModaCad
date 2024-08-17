@@ -52,7 +52,7 @@ export class Admins1715365033742 implements MigrationInterface {
                             referencedTableName: "admin_role",
                             referencedColumnNames: ["id"],
                             columnNames: ["admin_role_id"],
-                            onDelete: "SET NULL",
+                            onDelete: "CASCADE",
                             onUpdate: "CASCADE"
                         }
                     ]
