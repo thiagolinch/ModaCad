@@ -5,7 +5,7 @@ import { AdminProfileUseCase } from "./profileAdminUseCase";
 class AdminProfileController {
     
     async handle(request: Request, response: Response): Promise<Response> {
-        const { id } = request.user;
+        const { id } = request.admin;
         const adminProfileUC = container.resolve(AdminProfileUseCase)
 
         const admin = await adminProfileUC.execute(id)

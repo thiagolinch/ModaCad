@@ -22,12 +22,12 @@ class MembersRepository implements IMembersRepository {
         await this.repository.save(member)
 
         return member
-    }
+    };
     async delete(id: string): Promise<void> {
         await this.repository.delete({id})
     }
-    findById(id: string): Promise<Members> {
-        throw new Error("Method not implemented.");
+    async findById(id: string): Promise<Members> {
+        return await this.repository.findOne({id})
     }
     async findByEmail(email: string): Promise<Members> {
         return await this.repository.findOne({email})

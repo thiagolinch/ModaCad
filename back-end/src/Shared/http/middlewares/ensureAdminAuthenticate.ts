@@ -22,14 +22,14 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
     try {
         const { sub: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
-        const adminRepo = new AdminRepository()
+        const adminRepo = new AdminRepository();
         const admin = await adminRepo.findById(admin_id)
 
         if(!admin){
-            throw new Error("User does not exists")
+            throw new Error("Admin does not exists")
         }
 
-        request.user = {
+        request.admin = {
             id: admin.id
         }
 
