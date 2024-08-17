@@ -10,5 +10,4 @@ memberRoutes.delete("/:id", () => {
     console.log("delete member route working")
 })
 
-
 export  { memberRoutes }

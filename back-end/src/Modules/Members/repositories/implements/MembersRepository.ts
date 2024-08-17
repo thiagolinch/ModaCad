@@ -11,11 +11,12 @@ class MembersRepository implements IMembersRepository {
         this.repository = getRepository(Members);
     }
 
-    async create({ name, email, password }: IMembersRepositoryDTO): Promise<Members> {
+    async create({ name, email, password, member_ship }: IMembersRepositoryDTO): Promise<Members> {
         const member =  this.repository.create({
             name,
             email,
-            password
+            password,
+            member_ship
         })
 
         await this.repository.save(member)

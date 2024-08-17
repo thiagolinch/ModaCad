@@ -3,7 +3,7 @@ import { container } from "tsyringe";
 import { CreateSessionMemberUseCase } from "./createSessionAdminUseCase";
 
 
-class CreateSessionAdminController {
+class CreateSessionUserController {
     async handle(request: Request, response: Response): Promise<Response> {
         const { email, password } = request.body;
         const sessionUserUseCase = container.resolve(CreateSessionMemberUseCase)
@@ -17,4 +17,4 @@ class CreateSessionAdminController {
     }
 }
 
-export { CreateSessionAdminController }
+export { CreateSessionUserController }

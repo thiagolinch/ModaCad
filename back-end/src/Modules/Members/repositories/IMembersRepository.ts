@@ -5,7 +5,7 @@ interface IMembersRepositoryDTO {
     name: string,
     email: string,
     password: string
-    member_ship?: string
+    member_ship: string
 }
 
 

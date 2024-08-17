@@ -10,7 +10,7 @@ class CreateMemberController {
             email,
             password,
             member_ship
-        } = request.body;
+        } = request.body
         const createMemberUseCase = container.resolve(CreateMemberUseCase)
 
         try {

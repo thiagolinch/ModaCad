@@ -18,7 +18,7 @@ class CreateMemberUseCase {
         password,
         member_ship
     }: IMembersRepositoryDTO): Promise<Members>  {
-        const memberExists = await this.memberRepository.findByEmail(email)
+        const memberExists = await this.memberRepository.findByEmail(email);
 
         if(memberExists) {
             throw new Error("This email already exists!").message
@@ -26,13 +26,12 @@ class CreateMemberUseCase {
 
         const passwordB = await hash(password, 8)
 
-
         const member = await this.memberRepository.create({
             name,
             email,
             password: passwordB,
             member_ship
-        })
+        });
 
         return member
     }
