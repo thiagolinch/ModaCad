@@ -10,7 +10,7 @@ class ListMembersController {
 
         try {
             const members = await listUseCase.execute()
-            return response.status(200).json({members})
+            return response.status(200).json(members)
         } catch (error) {
             return response.status(404).json(error)
         }

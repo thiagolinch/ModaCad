@@ -10,9 +10,9 @@ class ListMembersUseCase {
     ) {}
 
     async execute(): Promise<Members[]> {
-        const members = this.memberRepo.listAll()
+        const members = await this.memberRepo.listAll();
 
-        return members
+        return members;
     }
 }
 
