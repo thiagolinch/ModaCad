@@ -10,6 +10,9 @@ class MembersRepository implements IMembersRepository {
     constructor() {
         this.repository = getRepository(Members);
     }
+    async listAll(): Promise<Members[]> {
+        return await this.repository.find();
+    }
 
     async create({ name, email, password, member_ship }: IMembersRepositoryDTO): Promise<Members> {
         const member =  this.repository.create({

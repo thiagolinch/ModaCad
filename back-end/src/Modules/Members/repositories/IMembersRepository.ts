@@ -20,6 +20,7 @@ interface IMembersRepository {
     delete(id: string): Promise<void>;
     findById(id: string): Promise<Members>;
     findByEmail(email: string): Promise<Members>;
+    listAll(): Promise<Members[]>;
 }
 
 export { IMembersRepository, IMembersRepositoryDTO }
