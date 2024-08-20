@@ -34,7 +34,8 @@ interface IArticlesRepository {
     list(): Promise<Articles[]>;
     listPilulas(): Promise<Articles[]>;
     listTextos(): Promise<Articles[]>;
-    delete(id: string): Promise<void>
+    delete(id: string): Promise<void>;
+    findById(id: string): Promise<Articles>;
 
     findByName(name: string): Promise<Articles>
 }

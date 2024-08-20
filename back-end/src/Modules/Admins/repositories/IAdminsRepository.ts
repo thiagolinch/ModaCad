@@ -21,6 +21,7 @@ interface IAdminsRepository {
     upgradeToPro(id: string): Promise<void>
     findByEmail(email: string): Promise<Admins>
     delete(id: string): Promise<void>
+    listAll(): Promise<Admins[]>
 }
 
 export { IAdminsRepository, IAdminsRepositoryDTO }

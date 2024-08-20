@@ -11,6 +11,9 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
+    async listAll(): Promise<Admins[]> {
+        return await this.repository.find()
+    }
     async create({ name, cellphone, email, password, admin_role_id }: IAdminsRepositoryDTO): Promise<Admins> {
         const admin =  this.repository.create({
             name,

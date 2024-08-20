@@ -5,7 +5,7 @@ export class CreateArticlesImages1717010866385 implements MigrationInterface {
         public async up(queryRunner: QueryRunner): Promise<void> {
             await queryRunner.createTable(
                 new Table({
-                    name: "posts_images_banner",
+                    name: "article_image",
                     columns: [
                         {
                             name: "id",
@@ -13,7 +13,7 @@ export class CreateArticlesImages1717010866385 implements MigrationInterface {
                             isPrimary: true
                         },
                         {
-                            name: "post_id",
+                            name: "article_id",
                             type: "varchar"
                         },
                         {
@@ -32,9 +32,9 @@ export class CreateArticlesImages1717010866385 implements MigrationInterface {
                             name: "FKImagesPost",
                             referencedTableName: "articles",
                             referencedColumnNames: ["id"],
-                            columnNames: ["post_id"],
-                            onUpdate: "CASCADE",
-                            onDelete: "CASCADE"
+                            columnNames: ["article_id"],
+                            onUpdate: "SET NULL",
+                            onDelete: "SET NULL"
                         }
                     ]
                 })
@@ -43,7 +43,7 @@ export class CreateArticlesImages1717010866385 implements MigrationInterface {
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {
-        await queryRunner.dropTable("posts_images_banner")
+        await queryRunner.dropTable("article_image")
     }
 
 }

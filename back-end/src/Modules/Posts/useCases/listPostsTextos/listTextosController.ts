@@ -11,7 +11,7 @@ class ListTextosController{
 
         try {
             const textos = await listTextUseCase.execute()
-            return response.status(201).json(textos)
+            return response.status(200).json(textos)
         } catch (error) {
             return response.status(404).json({error})
         }

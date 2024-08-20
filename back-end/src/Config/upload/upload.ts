@@ -1,11 +1,10 @@
 import multer from "multer"
 import crypto from "crypto"
-import { resolve } from "path"
+import path, { resolve } from "path"
 
-const tmpFolder = resolve(__dirname, "..", "..", "tmp")
+const tmpFolder = resolve("tmp")
 
 export default {
-    tmpFolder,
 
     storage: multer.diskStorage({
         destination:  tmpFolder,
@@ -16,4 +15,4 @@ export default {
             return callBack(null, fileName)
         }
     })
-}
+};

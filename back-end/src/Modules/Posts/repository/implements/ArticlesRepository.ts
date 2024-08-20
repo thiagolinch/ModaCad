@@ -10,6 +10,9 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
+    async findById(id: string): Promise<Articles> {
+        return await this.repository.findOne({id})
+    }
     async listPilulas(): Promise<Articles[]> {
         const pilulas = await this.repository.find({type: "Pilulas"})
 

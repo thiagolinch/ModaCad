@@ -9,6 +9,7 @@ import { AdminRole } from "../../Modules/Admins/entity/AdminRole";
 import { AdminTokens } from "../../Modules/Admins/entity/AdminToken";
 import { Articles } from "../../Modules/Posts/entity/Articles";
 import { Plans } from "../../Modules/Posts/entity/Plans";
+import { ArticleImage } from "../../Modules/Posts/entity/ArticleImage";
 
 export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigitalocean.com"): Promise<Connection> => {
   const defaultOptions = await getConnectionOptions();
@@ -24,7 +25,8 @@ export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigital
         AdminRole,
         AdminTokens,
         Articles,
-        Plans
+        Plans,
+        ArticleImage
       ]
     })
   );

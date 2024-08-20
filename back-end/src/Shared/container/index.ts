@@ -3,6 +3,8 @@ import { container } from 'tsyringe';
 import { ISubjectsRepository } from '../../Modules/Assuntos/repositories/ISubjectsRepository';
 import { SubjectRepository } from '../../Modules/Assuntos/repositories/implements/SubjectRepository';
 
+import "./providers"
+
 import { IMembersRepository } from '../../Modules/Members/repositories/IMembersRepository';
 import { MembersRepository } from '../../Modules/Members/repositories/implements/MembersRepository';
 
@@ -20,6 +22,8 @@ import { IAdminTokensRepository } from '../../Modules/Admins/repositories/IAdmin
 import { AdminTokenRepository } from '../../Modules/Admins/repositories/implements/AdminTokenRepository';
 import { IArticlesRepository } from '../../Modules/Posts/repository/IArticlesRepository';
 import { ArticleRepository } from '../../Modules/Posts/repository/implements/ArticlesRepository';
+import { IArticleImageRepository } from '../../Modules/Posts/repository/IArticlesImage';
+import { ArticleImageRepository } from '../../Modules/Posts/repository/implements/ArticleImage';
 
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
@@ -59,4 +63,9 @@ container.registerSingleton<IDateProvider>(
 container.registerSingleton<IAdminTokensRepository>(
     "AdminTokenRepository",
     AdminTokenRepository
+)
+
+container.registerSingleton<IArticleImageRepository>(
+    "ArticleImageRepository",
+    ArticleImageRepository
 )

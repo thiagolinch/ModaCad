@@ -10,7 +10,7 @@ class ListPilulasController {
 
         try {
             const pilulas = await listPilulasUseCase.execute()
-            return response.status(201).json(pilulas)
+            return response.status(200).json(pilulas)
         } catch (error) {
             return response.status(400).json({error})
         }
