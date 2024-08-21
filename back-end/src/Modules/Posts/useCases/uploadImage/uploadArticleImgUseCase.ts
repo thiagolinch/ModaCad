@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import { IArticlesRepository } from "../../repository/IArticlesRepository";
 import { IArticleImageRepository } from "../../repository/IArticlesImage";
-import { DgOceantorageProvider } from "../../../../Shared/container/providers/StorageProvider/Implements/dgOcenaProvider";
+import { LocalStorageProvider } from "../../../../Shared/container/providers/StorageProvider/Implements/LocalStorageProvider";
 
 interface IRequest {
     article_id: string;
@@ -19,7 +19,7 @@ class UploadArticleImageUseCase {
         private articleImageRepo: IArticleImageRepository,
 
         @inject("StorageProvider")
-        private storageProvider: DgOceantorageProvider
+        private storageProvider: LocalStorageProvider
     ){}
 
     async execute({image_name, article_id}: IRequest): Promise<void> {
@@ -35,7 +35,6 @@ class UploadArticleImageUseCase {
                 image,
                 article_id
             );
-            console.log(image, "useCase")
             await this.storageProvider.save(image, "images")
         })
     }

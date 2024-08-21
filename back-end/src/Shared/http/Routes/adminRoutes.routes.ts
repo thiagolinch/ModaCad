@@ -11,13 +11,17 @@ import { ListMembersController } from "../../../Modules/Members/useCases/listMem
 import { ListAdminsController } from "../../../Modules/Admins/useCases/listAdms/listAdminsController"
 import { postRoute } from "./postsRoutes.routes"
 import { TextoMdcController } from "../../../Modules/Posts/useCases/textoMDC/textoMdcController"
+import { UploadAdminAvatarController } from "../../../Modules/Admins/useCases/uploadAdminAvatar/uploadAdminAvatarController"
 
 const adminRoute = Router()
+
+const uploadAvatar = multer(upload)
 
 const createAdmController = new CreateAdmController()
 const profileAdminController = new AdminProfileController()
 const listMembers = new ListMembersController();
 const listAdms = new ListAdminsController();
+const updateAdminAvatar = new UploadAdminAvatarController()
 const getTexto = new TextoMdcController();
 
 const uploadAdminAvatar = multer(upload)
@@ -30,6 +34,9 @@ adminRoute.delete("/:id", () => {
 })
 // ADMIN PROFILE
 adminRoute.get("/profile", ensureAdminAuhenticate, profileAdminController.handle);
+
+// ADD AVATAR TO ADMIN
+adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAdminAuhenticate, updateAdminAvatar.handle);
 
 // UPLOAD ADMIN AVATAR
 

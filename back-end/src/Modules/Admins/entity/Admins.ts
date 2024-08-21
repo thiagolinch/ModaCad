@@ -13,6 +13,9 @@ class Admins {
 
     @Column()
     cellphone: string;
+    
+    @Column()
+    avatar: string;
 
     @Column()
     email: string;

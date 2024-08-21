@@ -11,9 +11,6 @@ import { MembersRepository } from '../../Modules/Members/repositories/implements
 import { IAdminsRepository } from '../../Modules/Admins/repositories/IAdminsRepository';
 import { AdminRepository } from '../../Modules/Admins/repositories/implements/AdminsRepository';
 
-import { IAdminAvatarRepository } from '../../Modules/Admins/repositories/IAdminAvatarRepository';
-import { AdminAvatarRepository } from '../../Modules/Admins/repositories/implements/AdminAvatarRepository';
-
 import { IStorageProvider } from './providers/StorageProvider/IStorageProvider';
 import { LocalStorageProvider } from './providers/StorageProvider/Implements/LocalStorageProvider';
 import { IDateProvider } from './providers/DateProvider/IDateProvider';
@@ -28,7 +25,7 @@ import { ArticleImageRepository } from '../../Modules/Posts/repository/implement
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
     SubjectRepository
-)
+);
 
 container.registerSingleton<IArticlesRepository>(
     "ArticleRepository",
@@ -45,10 +42,6 @@ container.registerSingleton<IAdminsRepository>(
     AdminRepository
 )
 
-container.registerSingleton<IAdminAvatarRepository>(
-    "AdminAvatarRepository",
-    AdminAvatarRepository
-)
 
 container.registerSingleton<IStorageProvider>(
     "StorageProvider",

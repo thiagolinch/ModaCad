@@ -11,19 +11,31 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
+    async updateAvatar({ id, name, cellphone, email, password, admin_role_id, avatar }: IAdminsRepositoryDTO): Promise<void> {
+        await this.repository
+        .createQueryBuilder()
+        .update()
+        .set({avatar})
+        .where("id = :id")
+        .setParameters({id})
+        .execute();
+    }
+
+    
     async listAll(): Promise<Admins[]> {
         return await this.repository.find()
     }
-    async create({ name, cellphone, email, password, admin_role_id }: IAdminsRepositoryDTO): Promise<Admins> {
+    async create({ name, cellphone, email, password, admin_role_id, avatar }: IAdminsRepositoryDTO): Promise<Admins> {
         const admin =  this.repository.create({
             name,
             email,
             password,
             cellphone,
-            admin_role_id
-        })
+            admin_role_id,
+            avatar
+        });
 
-        await this.repository.save(admin)
+        await this.repository.save(admin);
 
         return admin
     }

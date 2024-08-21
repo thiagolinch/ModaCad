@@ -1,12 +1,11 @@
 import { inject, injectable } from "tsyringe";
 
 import { IAdminsRepository } from "../../repositories/IAdminsRepository";
-import { IAdminAvatarRepository } from "../../repositories/IAdminAvatarRepository";
 import { IStorageProvider } from "../../../../Shared/container/providers/StorageProvider/IStorageProvider";
 
 interface IRequest {
     admin_id: string;
-    admin_avatar_name: string[];
+    admin_avatar_file: string;
 }
 
 @injectable()
@@ -15,29 +14,24 @@ class UploadAdminAvatarUseCase {
         @inject("AdminRepository")
         private adminsRepository: IAdminsRepository,
 
-        @inject("AdminAvatarRepository")
-        private adminAvatarRepository: IAdminAvatarRepository,
-
         @inject("StorageProvider")
         private storageProvider: IStorageProvider
     ){}
 
-    async execute({admin_avatar_name, admin_id}: IRequest): Promise<void> {
-        const adminExists = await this.adminsRepository.findById(admin_id)
+    async execute({admin_id, admin_avatar_file}: IRequest): Promise<void> {
+        const admin = await this.adminsRepository.findById(admin_id);
 
-        if(!adminExists) {
-            throw new Error("This admin does not exists")
+        if(admin.avatar){
+            await this.storageProvider.delete(admin.avatar, "avatar");
         }
 
-        admin_avatar_name.map(async (image) => {
-            await this.adminAvatarRepository.create(
-                image,
-                admin_id
-            );
-            await this.storageProvider.save(image, "articles")
-        })
+        await this.storageProvider.save(admin_avatar_file, "avatar");
+
+        admin.avatar = admin_avatar_file;
+
+        await this.adminsRepository.updateAvatar(admin);
     }
 
-}
+};
 
 export { UploadAdminAvatarUseCase }
