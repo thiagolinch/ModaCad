@@ -24,6 +24,7 @@ class UploadArticleImageUseCase {
 
     async execute({image_name, article_id}: IRequest): Promise<void> {
         const articleExists = await this.articleRepo.findById(article_id)
+        
 
         if(!articleExists) {
             throw new Error("This article does not exists")
@@ -34,7 +35,8 @@ class UploadArticleImageUseCase {
                 image,
                 article_id
             );
-            await this.storageProvider.save(image, "cars")
+            console.log(image, "useCase")
+            await this.storageProvider.save(image, "images")
         })
     }
 

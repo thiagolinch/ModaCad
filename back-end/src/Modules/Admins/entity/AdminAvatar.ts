@@ -18,7 +18,7 @@ class AdminAvatar {
 
     @ManyToOne(() => Admins)
     @JoinColumn({name: "admin_id"})
-    car: Admins
+    admin: Admins
 
     @CreateDateColumn()
     created_at: Date;

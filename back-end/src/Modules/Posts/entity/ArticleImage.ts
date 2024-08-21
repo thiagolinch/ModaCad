@@ -2,7 +2,7 @@ import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn 
 import {v4 as uuidV4} from "uuid";
 import { Articles } from "./Articles";
 
-@Entity("posts_images_banner")//posts_images_banner
+@Entity("article_image")//article_image
 class ArticleImage {
 
     @PrimaryColumn()

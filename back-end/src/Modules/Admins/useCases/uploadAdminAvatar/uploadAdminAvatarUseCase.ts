@@ -23,10 +23,10 @@ class UploadAdminAvatarUseCase {
     ){}
 
     async execute({admin_avatar_name, admin_id}: IRequest): Promise<void> {
-        const carExists = await this.adminsRepository.findById(admin_id)
+        const adminExists = await this.adminsRepository.findById(admin_id)
 
-        if(!carExists) {
-            throw new Error("This car does not exists")
+        if(!adminExists) {
+            throw new Error("This admin does not exists")
         }
 
         admin_avatar_name.map(async (image) => {
@@ -34,7 +34,7 @@ class UploadAdminAvatarUseCase {
                 image,
                 admin_id
             );
-            await this.storageProvider.save(image, "cars")
+            await this.storageProvider.save(image, "articles")
         })
     }
 
