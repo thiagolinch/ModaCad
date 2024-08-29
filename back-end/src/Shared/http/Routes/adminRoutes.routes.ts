@@ -5,7 +5,7 @@ import { AdminProfileController } from "../../../Modules/Admins/useCases/profile
 
 import { ensureAdminAuhenticate } from "../middlewares/ensureAdminAuthenticate"
 
-import upload from "../../../Config/upload/upload"
+import upload from "../../../Config/upload"
 import multer from "multer"
 import { ListMembersController } from "../../../Modules/Members/useCases/listMembers/listMembersController"
 import { ListAdminsController } from "../../../Modules/Admins/useCases/listAdms/listAdminsController"

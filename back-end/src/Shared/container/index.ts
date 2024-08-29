@@ -12,7 +12,6 @@ import { IAdminsRepository } from '../../Modules/Admins/repositories/IAdminsRepo
 import { AdminRepository } from '../../Modules/Admins/repositories/implements/AdminsRepository';
 
 import { IStorageProvider } from './providers/StorageProvider/IStorageProvider';
-import { LocalStorageProvider } from './providers/StorageProvider/Implements/LocalStorageProvider';
 import { IDateProvider } from './providers/DateProvider/IDateProvider';
 import { DaysJSDateProvider } from './providers/DateProvider/implementations/DayJsDateProvider';
 import { IAdminTokensRepository } from '../../Modules/Admins/repositories/IAdminTokenRepository';
@@ -21,6 +20,7 @@ import { IArticlesRepository } from '../../Modules/Posts/repository/IArticlesRep
 import { ArticleRepository } from '../../Modules/Posts/repository/implements/ArticlesRepository';
 import { IArticleImageRepository } from '../../Modules/Posts/repository/IArticlesImage';
 import { ArticleImageRepository } from '../../Modules/Posts/repository/implements/ArticleImage';
+import { S3StorageProvider } from './providers/StorageProvider/Implements/S3StorageProvider';
 
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
@@ -45,7 +45,7 @@ container.registerSingleton<IAdminsRepository>(
 
 container.registerSingleton<IStorageProvider>(
     "StorageProvider",
-    LocalStorageProvider
+    S3StorageProvider
 )
 
 container.registerSingleton<IDateProvider>(

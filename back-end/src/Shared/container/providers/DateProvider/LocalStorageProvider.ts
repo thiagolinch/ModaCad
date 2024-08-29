@@ -1,8 +1,8 @@
-import { IStorageProvider } from "../IStorageProvider";
+import { IStorageProvider } from "../StorageProvider/IStorageProvider";
 import fs from "fs";
 import { resolve } from "path";
 
-import upload from "../../../../../Config/upload/upload";
+import upload from "../../../../Config/upload";
 
 
 

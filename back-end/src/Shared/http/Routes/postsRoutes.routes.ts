@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { CreatePostController } from "../../../Modules/Posts/useCases/createPost/createPostController";
 
-import upload from "../../../Config/upload/upload"
+import upload from "../../../Config/upload"
 
 import { ensureAdminAuhenticate } from "../middlewares/ensureAdminAuthenticate";
 import { ListAllTextController } from "../../../Modules/Posts/useCases/listAll/listAllTextController";

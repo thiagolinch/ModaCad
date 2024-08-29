@@ -2,12 +2,13 @@ import { inject, injectable } from "tsyringe";
 
 import { IArticlesRepository } from "../../repository/IArticlesRepository";
 import { IArticleImageRepository } from "../../repository/IArticlesImage";
+
 import { S3StorageProvider } from "../../../../Shared/container/providers/StorageProvider/Implements/S3StorageProvider";
 
 interface IRequest {
     article_id: string;
     image_name: string[];
-}
+};
 
 @injectable()
 class UploadArticleImageUseCase {
@@ -34,7 +35,7 @@ class UploadArticleImageUseCase {
             await this.articleImageRepo.create(
                 image,
                 article_id
-            );
+            );            
             await this.storageProvider.save(image, "images")
         })
     }

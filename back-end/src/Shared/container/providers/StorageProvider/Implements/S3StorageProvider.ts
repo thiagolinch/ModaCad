@@ -1,0 +1,44 @@
+import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
+import AWS from "aws-sdk"
+import fs from "fs";
+import mime from "mime";
+import { resolve } from "path";
+
+import upload from "../../../../../Config/upload";
+
+import { IStorageProvider } from "../IStorageProvider";
+
+class S3StorageProvider implements IStorageProvider {
+  private client: S3Client;
+
+  constructor() {
+    this.client = new S3Client({
+      region: process.env.AWS_BUCKET_REGION,
+      credentials: {
+        accessKeyId: process.env.AWS_ACCESS_KEY_ID,
+        secretAccessKey: process.env.AWS_SECRET_ACCESS_KEY
+      }
+    });
+  }
+
+  async save(file: string, folder: string): Promise<string> {
+    const originalName = resolve(upload.tmpFolder, file);
+    const fileContent = await fs.promises.readFile(originalName);
+    const contentType = mime.getType(originalName);
+
+    const params = new PutObjectCommand({
+      Bucket: process.env.AWS_BUCKET,
+      Key: file,
+      Body: fileContent,
+      ContentType: contentType
+    })
+
+    await this.client.send(params)
+
+    return file;
+  };
+
+  async delete(file: string, folder: string): Promise<void> {}
+}
+
+export { S3StorageProvider };
