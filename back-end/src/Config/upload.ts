@@ -10,14 +10,15 @@ if (month.length === 1) {
     month = `0${month}`;
 }
 
-const tmpFolder = resolve(`/tmp/content/images/${year}/${month}`)
+const tmpFolder = resolve(`tmp/content/images/${year}/${month}`)
 
 export default {
     tmpFolder,
     storage: multer.diskStorage({
-        destination:  tmpFolder,
+        destination:  tmpFolder.toString(),
         filename: (request, file, callBack) => {
-            const fileName = `${file.originalname}`
+            const fileHash = crypto.randomBytes(16).toString("hex");
+            const fileName = `${fileHash}-${file.originalname}`
 
             return callBack(null, fileName)
         }

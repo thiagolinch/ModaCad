@@ -1,5 +1,5 @@
 import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
-import AWS from "aws-sdk"
+import AWS, { S3 } from "aws-sdk"
 import fs from "fs";
 import mime from "mime";
 import { resolve } from "path";
@@ -26,14 +26,31 @@ class S3StorageProvider implements IStorageProvider {
     const fileContent = await fs.promises.readFile(originalName);
     const contentType = mime.getType(originalName);
 
+    let now = new Date();
+    let year = now.getFullYear();
+    let month = `${now.getMonth() +1 }`;
+
+    if (month.length === 1) {
+        month = `0${month}`;
+}
+
     const params = new PutObjectCommand({
       Bucket: process.env.AWS_BUCKET,
-      Key: file,
+      Key: `content/images/${year}/${month}/${folder}/${file}`,
       Body: fileContent,
       ContentType: contentType
     })
 
     await this.client.send(params)
+
+    /* await this.client
+      .putObject({
+        Bucket: `${process.env.AWS_BUCKET}/content/images/${year}/${month}/${folder}`,
+        Key: file,
+        Body: fileContent,
+        ContentType: contentType,
+      })
+      .promise(); */
 
     return file;
   };
