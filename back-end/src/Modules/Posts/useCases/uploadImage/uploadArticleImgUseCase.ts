@@ -2,7 +2,7 @@ import { inject, injectable } from "tsyringe";
 
 import { IArticlesRepository } from "../../repository/IArticlesRepository";
 import { IArticleImageRepository } from "../../repository/IArticlesImage";
-import { LocalStorageProvider } from "../../../../Shared/container/providers/StorageProvider/Implements/LocalStorageProvider";
+import { S3StorageProvider } from "../../../../Shared/container/providers/StorageProvider/Implements/S3StorageProvider";
 
 interface IRequest {
     article_id: string;
@@ -19,7 +19,7 @@ class UploadArticleImageUseCase {
         private articleImageRepo: IArticleImageRepository,
 
         @inject("StorageProvider")
-        private storageProvider: LocalStorageProvider
+        private storageProvider: S3StorageProvider
     ){}
 
     async execute({image_name, article_id}: IRequest): Promise<void> {
