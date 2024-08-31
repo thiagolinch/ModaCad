@@ -21,6 +21,7 @@
   },
   "dependencies": {
     "@aws-sdk/client-s3": "^3.637.0",
+    "@aws-sdk/s3-request-presigner": "^3.637.0",
     "@types/cors": "^2.8.17",
     "@types/mime": "^3.0.1",
     "@types/multer": "^1.4.11",

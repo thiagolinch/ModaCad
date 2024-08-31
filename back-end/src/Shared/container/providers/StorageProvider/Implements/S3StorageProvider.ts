@@ -1,5 +1,4 @@
-import { S3Client, PutObjectCommand } from "@aws-sdk/client-s3"
-import AWS, { S3 } from "aws-sdk"
+import { S3Client, PutObjectCommand, GetObjectCommand } from "@aws-sdk/client-s3"
 import fs from "fs";
 import mime from "mime";
 import { resolve } from "path";
@@ -7,6 +6,7 @@ import { resolve } from "path";
 import upload from "../../../../../Config/upload";
 
 import { IStorageProvider } from "../IStorageProvider";
+import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 class S3StorageProvider implements IStorageProvider {
   private client: S3Client;
@@ -31,31 +31,39 @@ class S3StorageProvider implements IStorageProvider {
     let month = `${now.getMonth() +1 }`;
 
     if (month.length === 1) {
-        month = `0${month}`;
-}
+      month = `0${month}`;
+    }
 
     const params = new PutObjectCommand({
       Bucket: process.env.AWS_BUCKET,
       Key: `content/images/${year}/${month}/${folder}/${file}`,
       Body: fileContent,
       ContentType: contentType
-    })
+    });
 
     await this.client.send(params)
-
-    /* await this.client
-      .putObject({
-        Bucket: `${process.env.AWS_BUCKET}/content/images/${year}/${month}/${folder}`,
-        Key: file,
-        Body: fileContent,
-        ContentType: contentType,
-      })
-      .promise(); */
 
     return file;
   };
 
-  async delete(file: string, folder: string): Promise<void> {}
+  
+  async get(image_name: string): Promise<string> {
+    
+    const getObjectParams = {
+      Bucket: process.env.AWS_BUCKET,
+      Key: `content/images/2024/08/images/${image_name}`
+    }
+
+    const command = new GetObjectCommand(getObjectParams)
+ 
+    const url = await getSignedUrl(this.client, command);
+
+    return url
+  };
+
+  async delete(file: string, folder: string): Promise<void> {
+    throw new Error("Method not implemented.");
+  };
 }
 
 export { S3StorageProvider };

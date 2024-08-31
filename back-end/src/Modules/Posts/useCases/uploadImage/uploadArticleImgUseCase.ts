@@ -32,11 +32,13 @@ class UploadArticleImageUseCase {
         }
 
         image_name.map(async (image) => {
+            await this.storageProvider.save(image, "images")
+            const url  = await this.storageProvider.get(image)
             await this.articleImageRepo.create(
                 image,
                 article_id
             );            
-            await this.storageProvider.save(image, "images")
+            
         })
     }
 

@@ -3,6 +3,7 @@
         "codepaths",
         "createpost",
         "modacadback",
-        "POSTGRESS"
+        "POSTGRESS",
+        "presigner"
     ]
 }
