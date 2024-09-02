@@ -10,7 +10,7 @@ import multer from "multer"
 import { ListMembersController } from "../../../Modules/Members/useCases/listMembers/listMembersController"
 import { ListAdminsController } from "../../../Modules/Admins/useCases/listAdms/listAdminsController"
 import { postRoute } from "./postsRoutes.routes"
-import { TextoMdcController } from "../../../Modules/Posts/useCases/textoMDC/textoMdcController"
+import { TextoMdcController } from "../../../Modules/Posts/useCases/getTexto/textoMdcController"
 import { UploadAdminAvatarController } from "../../../Modules/Admins/useCases/uploadAdminAvatar/uploadAdminAvatarController"
 
 const adminRoute = Router()

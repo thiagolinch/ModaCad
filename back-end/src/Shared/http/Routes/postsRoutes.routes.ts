@@ -12,6 +12,7 @@ import { ListTextosController } from "../../../Modules/Posts/useCases/listPostsT
 import multer from "multer";
 import { UploadArticleImageController } from "../../../Modules/Posts/useCases/uploadImage/uploadArticleImageController";
 import { GetImagesController } from "../../../Modules/Posts/useCases/getImages/getImagesController";
+import { CreateArticleSubjectsController } from "../../../Modules/Posts/useCases/createPostSubjects/createPostSubjectsController";
 
 
 const postRoute = Router()
@@ -24,9 +25,13 @@ const listPilulas = new ListPilulasController();
 const listTextos = new ListTextosController();
 const uploadArticleImage = new UploadArticleImageController();
 const getArticleImage = new GetImagesController();
+const createArticleSubject = new CreateArticleSubjectsController();
 
 // CREATE POST
 postRoute.post("/", createPost.handle)
+
+// CREATE POST SUBJECTS
+postRoute.post("/subjects/:id", ensureAdminAuhenticate, createArticleSubject.handle)
 
 // LIST ALL
 postRoute.get("/", listAll.handle)

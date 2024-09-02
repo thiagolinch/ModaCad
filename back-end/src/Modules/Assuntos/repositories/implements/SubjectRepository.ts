@@ -10,6 +10,10 @@ class SubjectRepository implements ISubjectsRepository {
     constructor() {
         this.repository = getRepository(Subjects)
     }
+    async findByIds(ids: string[]): Promise<Subjects[]> {
+        const subjects = await this.repository.findByIds(ids)
+        return subjects
+    }
 
     async listTags(): Promise<Subjects[]> {
         return await this.repository.find()

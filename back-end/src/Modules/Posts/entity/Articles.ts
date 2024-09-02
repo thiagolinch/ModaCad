@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from 'uuid';
 
 import { Admins } from "../../Admins/entity/Admins";
@@ -32,11 +32,13 @@ class Articles {
     @JoinColumn({name: "author"})
     author_id: Admins;
 
-    subjects_id: string[];
-
     @ManyToMany(() => Subjects)
-    @JoinColumn({name: "tag_id"})
-    tags: Subjects;
+    @JoinTable({
+        name: "subjects",
+        joinColumns: [{ name: "article_id" }],
+        inverseJoinColumns: [{ name: "subjects_id" }]
+    })
+    subjects: Subjects[];
 
     @Column()
     plaintext: string;
