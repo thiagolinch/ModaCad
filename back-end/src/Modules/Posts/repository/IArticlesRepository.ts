@@ -13,8 +13,6 @@ interface IArticlesRepositoryDTO {
     show_title_and_feature_image: string;
     plaintext: string;
     admin_id: string;
-    comments_id?: string;
-    subjects_id: string
 }
 
 interface IArticlesRepository {
@@ -28,8 +26,8 @@ interface IArticlesRepository {
         status,
         type,
         plaintext,
-        admin_id,
-        comments_id}: IArticlesRepositoryDTO): Promise<Articles>
+        admin_id
+    }: IArticlesRepositoryDTO): Promise<Articles>
     list(): Promise<Articles[]>;
     listPilulas(): Promise<Articles[]>;
     listTextos(): Promise<Articles[]>;

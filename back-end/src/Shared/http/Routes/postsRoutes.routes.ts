@@ -13,6 +13,7 @@ import multer from "multer";
 import { UploadArticleImageController } from "../../../Modules/Posts/useCases/uploadImage/uploadArticleImageController";
 import { GetImagesController } from "../../../Modules/Posts/useCases/getImages/getImagesController";
 import { CreateArticleSubjectsController } from "../../../Modules/Posts/useCases/createPostSubjects/createPostSubjectsController";
+import { DeletePostController } from "../../../Modules/Posts/useCases/deletepost/deletePostController";
 
 
 const postRoute = Router()
@@ -20,6 +21,7 @@ const postRoute = Router()
 const uploadArticleImageMulter = multer(upload)
 
 const createPost = new CreatePostController();
+const deletepost = new DeletePostController()
 const listAll = new ListAllTextController();
 const listPilulas = new ListPilulasController();
 const listTextos = new ListTextosController();
@@ -29,6 +31,9 @@ const createArticleSubject = new CreateArticleSubjectsController();
 
 // CREATE POST
 postRoute.post("/", createPost.handle)
+
+// DELETE POST
+postRoute.delete("/:id", ensureAdminAuhenticate, deletepost.handle)
 
 // CREATE POST SUBJECTS
 postRoute.post("/subjects/:id", ensureAdminAuhenticate, createArticleSubject.handle)

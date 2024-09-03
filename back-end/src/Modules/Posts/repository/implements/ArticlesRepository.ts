@@ -33,21 +33,18 @@ class ArticleRepository implements IArticlesRepository {
         type,
         plaintext,
         admin_id,
-        subjects_id,
-        comments_id }: IArticlesRepositoryDTO): Promise<Articles> {
+        }: IArticlesRepositoryDTO): Promise<Articles> {
             const post = this.repository.create({
                 title,
                 slug,
                 html,
                 feature_image,
-                subjects_id,
                 visibility,
                 show_title_and_feature_image,
                 status,
                 type,
                 plaintext,
-                admin_id,
-                comments_id
+                admin_id
             })
 
             await this.repository.save(post)
@@ -57,8 +54,8 @@ class ArticleRepository implements IArticlesRepository {
     async list(): Promise<Articles[]> {
         return await this.repository.find()
     }
-    delete(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
+    async delete(id: string): Promise<void> {
+        await this.repository.delete({id})
     }
     findByName(name: string): Promise<Articles> {
         throw new Error("Method not implemented.");
