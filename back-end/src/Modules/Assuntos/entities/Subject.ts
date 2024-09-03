@@ -1,8 +1,8 @@
-import { Column, Entity, PrimaryColumn } from "typeorm";
+import { Column, Entity, Index, PrimaryColumn, Unique } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 
-
-
+@Unique(["id"])
+@Index(["id"], {unique: true})
 @Entity("subjects")//subjects
 class Subjects {
 

@@ -26,6 +26,7 @@ class CreateArticleSubjectUseCase {
         }
 
         const subjects = await this.subjectsRepo.findByIds(subjects_id)
+        console.log(subjects)
         articleExists.subjects = subjects
 
         return articleExists

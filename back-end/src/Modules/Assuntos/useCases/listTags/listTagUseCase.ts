@@ -1,7 +1,7 @@
 import { inject, injectable } from "tsyringe";
 
 import { ISubjectsRepository, ISubjectsRepositoryDTO } from "../../repositories/ISubjectsRepository";
-import { Subjects } from "../../entities/Tags";
+import { Subjects } from "../../entities/Subject";
 
 
 @injectable()

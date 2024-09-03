@@ -8,7 +8,7 @@ class CreateArticleSubjectsController {
     async handle(request: Request, response: Response): Promise<Response> {
         const {id} = request.params;
         const {subjects_id} = request.body;
-        const useCase = container.resolve(CreateArticleSubjectUseCase)
+        const useCase = container.resolve(CreateArticleSubjectUseCase);
 
         try {
             const article = useCase.execute({article_id: id, subjects_id})

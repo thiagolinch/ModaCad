@@ -2,7 +2,8 @@ import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryCo
 import { v4 as uuidV4 } from 'uuid';
 
 import { Admins } from "../../Admins/entity/Admins";
-import { Subjects } from "../../Assuntos/entities/Tags";
+import { Subjects } from "../../Assuntos/entities/Subject";
+import { ArticleImage } from "./ArticleImage";
 
 
 @Entity("articles")//articles
@@ -32,13 +33,11 @@ class Articles {
     @JoinColumn({name: "author"})
     author_id: Admins;
 
+    /* @Column()
+    subjects_id: string; */
+
     @ManyToMany(() => Subjects)
-    @JoinTable({
-        name: "subjects",
-        joinColumns: [{ name: "article_id" }],
-        inverseJoinColumns: [{ name: "subjects_id" }]
-    })
-    subjects: Subjects[];
+    @JoinTable()
 
     @Column()
     plaintext: string;

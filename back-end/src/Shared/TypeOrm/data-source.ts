@@ -1,7 +1,7 @@
 import "reflect-metadata"
 import { Connection, createConnection, getConnectionOptions } from "typeorm";
 
-import { Subjects } from "../../Modules/Assuntos/entities/Tags"
+import { Subjects } from "../../Modules/Assuntos/entities/Subject"
 import { Members } from "../../Modules/Members/entities/Members";
 import { Admins } from "../../Modules/Admins/entity/Admins";
 import { AdminRole } from "../../Modules/Admins/entity/AdminRole";

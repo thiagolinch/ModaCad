@@ -6,7 +6,6 @@ interface IArticlesRepositoryDTO {
     title: string;
     slug: string;
     html: string;
-    subjects_id: string[];
     feature_image: string;
     visibility: string;
     type: string;
@@ -15,13 +14,13 @@ interface IArticlesRepositoryDTO {
     plaintext: string;
     admin_id: string;
     comments_id?: string;
+    subjects_id: string
 }
 
 interface IArticlesRepository {
     create({
         title,
         slug,
-        subjects_id ,
         html,
         feature_image,
         visibility,

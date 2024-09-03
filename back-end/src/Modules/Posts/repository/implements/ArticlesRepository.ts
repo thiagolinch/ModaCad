@@ -25,7 +25,6 @@ class ArticleRepository implements IArticlesRepository {
     async create({
         title,
         slug,
-        subjects_id,
         html,
         feature_image,
         visibility,
@@ -34,13 +33,14 @@ class ArticleRepository implements IArticlesRepository {
         type,
         plaintext,
         admin_id,
+        subjects_id,
         comments_id }: IArticlesRepositoryDTO): Promise<Articles> {
             const post = this.repository.create({
                 title,
                 slug,
-                subjects_id,
                 html,
                 feature_image,
+                subjects_id,
                 visibility,
                 show_title_and_feature_image,
                 status,

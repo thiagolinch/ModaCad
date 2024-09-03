@@ -1,4 +1,4 @@
-import { Subjects } from "../entities/Tags"
+import { Subjects } from "../entities/Subject"
 
 interface ISubjectsRepositoryDTO {
     id?: string,

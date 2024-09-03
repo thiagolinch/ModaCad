@@ -51,7 +51,7 @@ class S3StorageProvider implements IStorageProvider {
     
     const getObjectParams = {
       Bucket: process.env.AWS_BUCKET,
-      Key: `content/images/2024/08/images/${image_name}`
+      Key: `content/images/2024/09/images/${image_name}`
     }
 
     const command = new GetObjectCommand(getObjectParams)

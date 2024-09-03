@@ -1,7 +1,7 @@
 import { getRepository, Repository } from "typeorm";
 
 import { ISubjectsRepository, ISubjectsRepositoryDTO } from "../ISubjectsRepository";
-import { Subjects } from "../../entities/Tags";
+import { Subjects } from "../../entities/Subject";
 
 class SubjectRepository implements ISubjectsRepository {
 
