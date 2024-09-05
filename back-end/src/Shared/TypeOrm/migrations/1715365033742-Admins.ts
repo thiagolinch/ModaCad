@@ -52,8 +52,8 @@ export class Admins1715365033742 implements MigrationInterface {
                             referencedTableName: "admin_role",
                             referencedColumnNames: ["id"],
                             columnNames: ["admin_role_id"],
-                            onDelete: "CASCADE",
-                            onUpdate: "CASCADE"
+                            onDelete: "SET NULL",
+                            onUpdate: "SET NULL"
                         }
                     ]
                 }

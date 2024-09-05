@@ -14,12 +14,17 @@ export class CreateArticleImages1724243525096 implements MigrationInterface {
                     },
                     {
                         name: "article_id",
-                        type: "varchar"
+                        type: "uuid"
                     },
                     {
                         name: "image_name",
                         type: "varchar",
                         isUnique: true
+                    },
+                    {
+                        name: "image_folder",
+                        type: "varchar",
+                        isNullable: true
                     },
                     {
                         name: "created_at",

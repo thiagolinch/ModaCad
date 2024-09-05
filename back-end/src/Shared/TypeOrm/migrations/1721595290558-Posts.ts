@@ -27,18 +27,10 @@ export class articles1717006341562 implements MigrationInterface {
                         },
                         {
                             name: "admin_id",
-                            type: "varchar",
-                        },
-                        {
-                            name: "subjects_id",
-                            type: "varchar"
+                            type: "uuid",
                         },
                         {
                             name: "plaintext",
-                            type: "varchar"
-                        },
-                        {
-                            name: "feature_image",
                             type: "varchar"
                         },
                         {
@@ -51,10 +43,6 @@ export class articles1717006341562 implements MigrationInterface {
                         },
                         {
                             name: "visibility",
-                            type: "varchar"
-                        },
-                        {
-                            name: "show_title_and_feature_image",
                             type: "varchar"
                         },
                         {
@@ -75,16 +63,8 @@ export class articles1717006341562 implements MigrationInterface {
                             referencedTableName: "admins",
                             referencedColumnNames: ["id"],
                             columnNames: ["admin_id"],
-                            onDelete: "CASCADE",
-                            onUpdate: "CASCADE"
-                        },
-                        {
-                            name: "FKSubjectsPost",
-                            referencedTableName: "subjects",
-                            referencedColumnNames: ["id"],
-                            columnNames: ["subjects_id"],
-                            onDelete: "CASCADE",
-                            onUpdate: "CASCADE"
+                            onDelete: "SET NULL",
+                            onUpdate: "SET NULL"
                         }
                     ]
                 }
