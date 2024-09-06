@@ -24,11 +24,11 @@ class Admins {
     password: string;
 
     @Column()
-    admin_role_id: string;
+    role: string;
 
     @ManyToOne(() => AdminRole)
-    @JoinColumn({name: "admin_role_id"})
-    admins: AdminRole;
+    @JoinColumn({name: "role"})
+    roleAdmin: AdminRole;
 
     @CreateDateColumn()
     created_at: Date

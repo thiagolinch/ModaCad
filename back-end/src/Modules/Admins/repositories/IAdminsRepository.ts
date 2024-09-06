@@ -7,7 +7,7 @@ interface IAdminsRepositoryDTO {
     cellphone: string,
     email: string,
     password: string,
-    admin_role_id: string;
+    role: string;
     avatar?: string;
 }
 

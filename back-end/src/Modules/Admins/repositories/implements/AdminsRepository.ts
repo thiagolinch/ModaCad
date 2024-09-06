@@ -11,7 +11,7 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
-    async updateAvatar({ id, name, cellphone, email, password, admin_role_id, avatar }: IAdminsRepositoryDTO): Promise<void> {
+    async updateAvatar({ id, name, cellphone, email, password, role, avatar }: IAdminsRepositoryDTO): Promise<void> {
         await this.repository
         .createQueryBuilder()
         .update()
@@ -25,13 +25,13 @@ class AdminRepository implements IAdminsRepository {
     async listAll(): Promise<Admins[]> {
         return await this.repository.find()
     }
-    async create({ name, cellphone, email, password, admin_role_id, avatar }: IAdminsRepositoryDTO): Promise<Admins> {
+    async create({ name, cellphone, email, password, role, avatar }: IAdminsRepositoryDTO): Promise<Admins> {
         const admin =  this.repository.create({
             name,
             email,
             password,
             cellphone,
-            admin_role_id,
+            role,
             avatar
         });
 

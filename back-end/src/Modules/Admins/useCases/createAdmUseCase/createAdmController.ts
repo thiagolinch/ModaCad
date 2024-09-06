@@ -12,12 +12,12 @@ class CreateAdmController {
             email,
             password,
             cellphone,
-            admin_role_id
+            role
         } = request.body
         const createAdminUseCase = container.resolve(CreateAdmUseCase)
 
         try {
-            const admin = await createAdminUseCase.execute({name, email, password, cellphone, admin_role_id})
+            const admin = await createAdminUseCase.execute({name, email, password, cellphone, role})
             return response.status(201).json(admin)
         } catch (error) {
             return response.status(400).json(error)
