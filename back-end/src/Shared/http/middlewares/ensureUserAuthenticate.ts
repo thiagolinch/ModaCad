@@ -13,7 +13,7 @@ async function ensureUserAuthenticate(request: Request, response: Response, next
     const authHeader = request.headers.authorization;
 
     if(!authHeader){
-        throw new Error("Token missing")
+        throw new Error("Token missing").message
     }
 
     const [, token] = authHeader.split(" ");
@@ -26,7 +26,7 @@ async function ensureUserAuthenticate(request: Request, response: Response, next
         const user = await userRepo.findById(user_id)
 
         if(!user){
-            throw new Error("User does not exists")
+            throw new Error("User does not exists").message
         }
 
         request.user = {
@@ -35,7 +35,7 @@ async function ensureUserAuthenticate(request: Request, response: Response, next
 
         next()
     } catch {
-        throw new Error("Invalid token")
+        throw new Error("Invalid token").message
     }
 }
 

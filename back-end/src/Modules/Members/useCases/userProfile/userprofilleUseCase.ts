@@ -13,7 +13,7 @@ class UserProfileUseCase {
         const user = await this.memberRepository.findById(id)
 
         if(!user) {
-            throw new Error("This account was not found");
+            throw new Error("This account was not found").message
         };
 
         return user

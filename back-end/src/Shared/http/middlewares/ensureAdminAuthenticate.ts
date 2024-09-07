@@ -13,7 +13,7 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
     const authHeader = request.headers.authorization;
 
     if(!authHeader){
-        throw new Error("Token missing")
+        throw new Error("Token missing").message
     }
 
     const [, token] = authHeader.split(" ");
@@ -23,10 +23,10 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
         const { sub: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
-        const admin = await adminRepo.findById(admin_id)
+        const admin = await adminRepo.findById(admin_id);
 
         if(!admin){
-            throw new Error("Admin does not exists")
+            throw new Error("Admin does not exists").message
         }
 
         request.admin = {
@@ -35,7 +35,7 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
 
         next()
     } catch {
-        throw new Error("Invalid token")
+        throw new Error("Invalid token").message
     }
 }
 

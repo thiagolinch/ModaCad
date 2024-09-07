@@ -12,7 +12,7 @@ class AdminRoleRepository implements IAdminRoleRepository {
 
 
     create({ name, description }: IAdminRoleDTO): Promise<AdminRole> {
-        throw new Error("Method not implemented.");
+        throw new Error("Method not implemented.").message
     }
     async findByName(name: string): Promise<AdminRole> {
         return await this.repository.findOne({name})

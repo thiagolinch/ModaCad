@@ -11,8 +11,8 @@ export async function ensureAdmin(request: Request, response: Response, next: Ne
 
     const admin = await adminRepository.findById(id)
 
-    if(admin.admin_role_id != admin_role) {
-        throw new Error("You are not an admin!")
+    if(admin.role != admin_role) {
+        throw new Error("You are not an admin!").message
     }
 
     next();

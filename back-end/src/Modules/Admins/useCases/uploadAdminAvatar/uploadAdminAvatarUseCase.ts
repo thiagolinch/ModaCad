@@ -22,7 +22,7 @@ class UploadAdminAvatarUseCase {
         const admin = await this.adminsRepository.findById(admin_id);
 
         if(admin.avatar){
-            await this.storageProvider.delete(admin.avatar, "avatar");
+            await this.storageProvider.delete(admin.avatar, "avatar")
         }
 
         await this.storageProvider.save(admin_avatar_file, "avatar");
