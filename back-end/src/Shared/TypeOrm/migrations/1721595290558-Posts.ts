@@ -18,20 +18,16 @@ export class articles1717006341562 implements MigrationInterface {
                             type: "varchar",
                         },
                         {
-                            name: "slug",
+                            name: "description",
                             type: "varchar",
                         },
                         {
-                            name: "html",
+                            name: "content",
                             type: "varchar",
                         },
                         {
-                            name: "admin_id",
-                            type: "uuid",
-                        },
-                        {
-                            name: "plaintext",
-                            type: "varchar"
+                            name: "admin",
+                            type: "varchar",
                         },
                         {
                             name: "type",
@@ -43,6 +39,10 @@ export class articles1717006341562 implements MigrationInterface {
                         },
                         {
                             name: "visibility",
+                            type: "varchar"
+                        },
+                        {
+                            name: "tags",
                             type: "varchar"
                         },
                         {
@@ -62,9 +62,9 @@ export class articles1717006341562 implements MigrationInterface {
                             name: "FKAuthorsPost",
                             referencedTableName: "admins",
                             referencedColumnNames: ["id"],
-                            columnNames: ["admin_id"],
-                            onDelete: "SET NULL",
-                            onUpdate: "SET NULL"
+                            columnNames: ["admin"],
+                            onDelete: "CASCADE",
+                            onUpdate: "CASCADE"
                         }
                     ]
                 }
