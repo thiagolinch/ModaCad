@@ -32,11 +32,11 @@ class CreateSessionAdminUseCase {
         if(!passwordMatch){
             throw new Error("E-mail or password invalid").message
         }
-
-        const token = sign({}, "88f1c14bd2a14b42fad21d64739889e9", {
+        const token = sign({
             subject: admin.id,
+            role: admin.role,
             expiresIn: "1d"
-        })
+        }, "88f1c14bd2a14b42fad21d64739889e9")
 
         const tokenResponse: Iresponse = {
             admin: {
