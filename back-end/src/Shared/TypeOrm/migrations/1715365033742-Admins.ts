@@ -28,8 +28,8 @@ export class Admins1715365033742 implements MigrationInterface {
                             isUnique: true
                         },
                         {
-                            name: "admin_role_id",
-                            type: "uuid"
+                            name: "role",
+                            type: "varchar"
                         },
                         {
                             name: "password",
@@ -48,12 +48,12 @@ export class Admins1715365033742 implements MigrationInterface {
                     ],
                     foreignKeys: [
                         {
-                            name: "FK_ADMIN_ROLE",
+                            name: "FKADMINROLE",
                             referencedTableName: "admin_role",
-                            referencedColumnNames: ["id"],
-                            columnNames: ["admin_role_id"],
-                            onDelete: "SET NULL",
-                            onUpdate: "SET NULL"
+                            referencedColumnNames: ["name"],
+                            columnNames: ["role"],
+                            onDelete: "CASCADE",
+                            onUpdate: "CASCADE"
                         }
                     ]
                 }
