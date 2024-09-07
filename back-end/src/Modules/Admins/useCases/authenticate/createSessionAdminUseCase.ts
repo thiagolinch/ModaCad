@@ -7,8 +7,8 @@ import { IAdminsRepository } from "../../repositories/IAdminsRepository";
 interface Iresponse {
     admin: {
         name: string;
-        id: string;
-        role: string
+        subject: string;
+        role: string;
     }
     token: string;
 }
@@ -34,14 +34,15 @@ class CreateSessionAdminUseCase {
         }
         const token = sign({
             subject: admin.id,
-            role: admin.role,
+            role: admin.role.toString,
             expiresIn: "1d"
         }, "88f1c14bd2a14b42fad21d64739889e9")
+        console.log(admin.role)
 
         const tokenResponse: Iresponse = {
             admin: {
                 name: admin.name,
-                id: admin.id,
+                subject: admin.id,
                 role: admin.role
             },
             token
