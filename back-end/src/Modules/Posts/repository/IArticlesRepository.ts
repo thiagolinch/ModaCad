@@ -4,37 +4,53 @@ import { Articles } from "../entity/Articles"
 interface IArticlesRepositoryDTO {
     id?: string;
     title: string;
-    slug: string;
-    html: string;
-    feature_image: string;
+    description: string;
+    content: string;
     visibility: string;
     type: string;
     status: string;
-    show_title_and_feature_image: string;
-    plaintext: string;
-    admin_id: string;
+    admin: string;
+    tags?: string[];
+    subjects?: string[]
 }
 
 interface IArticlesRepository {
     create({
         title,
-        slug,
-        html,
-        feature_image,
+        description,
+        content,
         visibility,
-        show_title_and_feature_image,
         status,
         type,
-        plaintext,
-        admin_id
-    }: IArticlesRepositoryDTO): Promise<Articles>
+        admin,
+        tags,
+        subjects
+    }: IArticlesRepositoryDTO): Promise<Articles>;
+
+    update({
+        title,
+        description,
+        content,
+        visibility,
+        type,
+        admin,
+        tags,
+        subjects 
+    }: IArticlesRepositoryDTO): Promise<Articles>;
+
+    updateStatus(admin: string, post: string): Promise<void>;
+
     list(): Promise<Articles[]>;
     listPilulas(): Promise<Articles[]>;
     listTextos(): Promise<Articles[]>;
-    delete(id: string): Promise<void>;
-    findById(id: string): Promise<Articles>;
 
+    findTextByStatus(status_id: string): Promise<Articles[]>
+    findPilulasByStatus(status_id: string): Promise<Articles[]>
+    findById(id: string): Promise<Articles>;
     findByName(name: string): Promise<Articles>
+
+    delete(id: string): Promise<void>;
+
 }
 
 export {IArticlesRepository, IArticlesRepositoryDTO}

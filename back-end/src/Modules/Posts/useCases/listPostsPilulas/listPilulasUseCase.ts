@@ -11,8 +11,9 @@ class ListPilulasUseCase {
         private articleRepository: IArticlesRepository
     ){}
 
-    async execute (): Promise<Articles[]> {
-        const pilulas = await this.articleRepository.listPilulas()
+    async execute (status_id: string): Promise<Articles[]> {
+        console.log(status_id)
+        const pilulas = await this.articleRepository.findPilulasByStatus(status_id)
 
         return pilulas;
     }

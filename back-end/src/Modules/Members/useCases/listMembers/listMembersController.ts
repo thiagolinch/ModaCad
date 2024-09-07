@@ -8,7 +8,7 @@ class ListMembersController {
     async handle(request: Request, response: Response): Promise<Response> {
         const status_id = request.query.status
         const plan_id = request.query.plan
-        console.log(status_id, plan_id)
+        
         const listUseCase = container.resolve(ListMembersUseCase)
 
         try {

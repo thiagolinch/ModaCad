@@ -9,6 +9,8 @@ interface IAdminsRepositoryDTO {
     password: string,
     role: string;
     avatar?: string;
+    status_id?: string;
+    plan_id?: string;
 }
 
 interface IAdminsRepository {
@@ -16,6 +18,8 @@ interface IAdminsRepository {
     findById(id: string): Promise<Admins>
     upgradeToPro(id: string): Promise<void>
     findByEmail(email: string): Promise<Admins>
+    listUsers(role: string, plan_id?: string, status_id?: string): Promise<Admins[]>
+
     delete(id: string): Promise<void>
     listAll(): Promise<Admins[]>
     updateAvatar(data: IAdminsRepositoryDTO): Promise<void>;

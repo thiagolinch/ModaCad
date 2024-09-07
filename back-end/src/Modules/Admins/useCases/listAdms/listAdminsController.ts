@@ -1,15 +1,18 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
-import { ListAdminsUseCase } from "./listAdminsUseCase";
+import { ListUsersUseCase } from "./listAdminsUseCase";
 
 
-class ListAdminsController {
+class ListUsersController {
 
     async handle(request: Request, response: Response): Promise<Response> {
-        const listAdm = container.resolve(ListAdminsUseCase)
+        const status_id = request.query.status
+        const plan_id = request.query.plan
+        const role = request.query.role
+        const listAdm = container.resolve(ListUsersUseCase)
 
         try {
-            const admins = await listAdm.execute()
+            const admins = await listAdm.execute(role.toString(), status_id.toString(), plan_id.toString())
             return response.status(200).json(admins)
         } catch (error) {
             return response.status(404).json(error)
@@ -17,4 +20,4 @@ class ListAdminsController {
     }
 }
 
-export { ListAdminsController }
+export { ListUsersController }

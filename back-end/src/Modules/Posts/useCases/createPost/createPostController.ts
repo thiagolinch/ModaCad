@@ -5,36 +5,30 @@ import { CreatePostUseCase } from "./createpostUseCase";
 
 class CreatePostController {
     async handle(request: Request, response: Response): Promise<Response> {
+        const { id } = request.admin;
         const {
             title,
-            slug,
-            subjects_id,
-            html,
-            feature_image,
+            description,
+            content,
             visibility,
-            show_title_and_feature_image,
             status,
             type,
-            plaintext,
-            admin_id,
-            comments_id
+            tags,
+            subjects
         } = request.body;
         const createPostUseCase = container.resolve(CreatePostUseCase);
 
         try {
             const post = await createPostUseCase.execute({
                 title,
-                slug,
-                subjects_id,
-                html,
-                feature_image,
+                description,                
+                content,
                 visibility,
-                show_title_and_feature_image,
                 status,
                 type,
-                plaintext,
-                admin_id,
-                comments_id
+                tags,
+                admin: id,
+                subjects
             })
             return response.status(200).json(post)
         } catch (error) {
