@@ -21,6 +21,8 @@ import { ArticleRepository } from '../../Modules/Posts/repository/implements/Art
 import { IArticleImageRepository } from '../../Modules/Posts/repository/IArticlesImage';
 import { ArticleImageRepository } from '../../Modules/Posts/repository/implements/ArticleImage';
 import { S3StorageProvider } from './providers/StorageProvider/Implements/S3StorageProvider';
+import { AdminRoleRepository } from '../../Modules/Admins/repositories/implements/AdminRoleRepository';
+import { IAdminRoleRepository } from '../../Modules/Admins/repositories/IAdminRole';
 
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
@@ -42,6 +44,10 @@ container.registerSingleton<IAdminsRepository>(
     AdminRepository
 )
 
+container.registerSingleton<IAdminRoleRepository>(
+    "AdminRoleRepository",
+    AdminRoleRepository
+)
 
 container.registerSingleton<IStorageProvider>(
     "StorageProvider",
