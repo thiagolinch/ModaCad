@@ -10,7 +10,7 @@ interface IPayload {
     role: string;
 };
 
-export async function ensureEditor(request: Request, response: Response, next: NextFunction) {
+export async function ensureAdminCanPost(request: Request, response: Response, next: NextFunction) {
     const authHeader = request.headers.authorization;
 
     const [, token] = authHeader.split(" ");
@@ -21,18 +21,13 @@ export async function ensureEditor(request: Request, response: Response, next: N
         const adminRepo = new AdminRepository();
         const roleRepo = new AdminRoleRepository();
         
-        const role = await  roleRepo.findByName("editor")
+        const role = "editor"
         const admin = await adminRepo.findById(admin_id);
 
-        if(admin.role != role.name){
-           throw new Error("Administrador nao encontrado").message
+        if(admin.role == "colaborador"){
+            throw new Error("Administrador nao autorizado").message           
         }
-
-        request.admin = {
-            id: admin.id,
-            role: admin.role
-        }
-
+        
         next()
     } catch(error) {
         console.error("Erro no middleware de autenticação:", error);

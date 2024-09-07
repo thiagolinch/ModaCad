@@ -14,6 +14,8 @@ import { UploadArticleImageController } from "../../../Modules/Posts/useCases/up
 import { GetImagesController } from "../../../Modules/Posts/useCases/getImages/getImagesController";
 import { CreateArticleSubjectsController } from "../../../Modules/Posts/useCases/createPostSubjects/createPostSubjectsController";
 import { DeletePostController } from "../../../Modules/Posts/useCases/deletepost/deletePostController";
+import { ensureAdminCanPost } from "../middlewares/ensureEditor";
+import { ensureAuthor } from "../middlewares/ensureAuthor";
 
 
 const postRoute = Router()
@@ -29,26 +31,34 @@ const uploadArticleImage = new UploadArticleImageController();
 const getArticleImage = new GetImagesController();
 const createArticleSubject = new CreateArticleSubjectsController();
 
+
 // CREATE POST
-postRoute.post("/", createPost.handle)
+postRoute.post("/", ensureAdminAuhenticate, ensureAdminCanPost, createPost.handle)
 
 // DELETE POST
-postRoute.delete("/:id", ensureAdminAuhenticate, deletepost.handle)
+postRoute.delete("/:id", ensureAdminAuhenticate, ensureAuthor, deletepost.handle)
 
 // CREATE POST SUBJECTS
-postRoute.post("/subjects/:id", ensureAdminAuhenticate, createArticleSubject.handle)
+postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAuthor, createArticleSubject.handle)
+
+// UPDATE POST
+postRoute.patch("/:id", ensureAdminAuhenticate,)
+
+// PUBLISH POST
 
 // LIST ALL
 postRoute.get("/", listAll.handle)
 
-// LIST TEXTOS
+// LIST TEXTOS BY STATUS
+// postRoute.get("/textos", listTextos.handle)
 postRoute.get("/textos", listTextos.handle)
 
-// LIST PILULAS
+// LIST PILULAS BY STATUS
+// postRoute.get("/pilulas", listPilulas.handle)
 postRoute.get("/pilulas", listPilulas.handle)
 
 // UPLOAD IMAGE TO ARTICLE
-postRoute.post("/images/:id", uploadArticleImageMulter.array("images"), uploadArticleImage.handle)
+postRoute.post("/images/:id", ensureAdminAuhenticate, uploadArticleImageMulter.array("images"), uploadArticleImage.handle)
 
 // GET IMAGE FROM S3
 postRoute.get("/images/:image_name", getArticleImage.handle)

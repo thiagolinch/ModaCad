@@ -10,28 +10,27 @@ class CreatePostUseCase {
     ){}
     async execute ({
         title,
-        slug,
-        html,
-        feature_image,
+        description,
+        content,
         visibility,
-        show_title_and_feature_image,
         status,
         type,
-        plaintext,
-        admin_id}: IArticlesRepositoryDTO): Promise<Articles> {
+        admin,
+        tags,
+        subjects
+        }: IArticlesRepositoryDTO): Promise<Articles> {
 
        
          const post = await this.articleRepository.create({
             title,
-            slug,
-            html,
-            feature_image,
+            description,
+            content,
             visibility,
-            show_title_and_feature_image,
             status,
             type,
-            plaintext,
-            admin_id
+            admin,
+            tags,
+            subjects
          })
 
          return post

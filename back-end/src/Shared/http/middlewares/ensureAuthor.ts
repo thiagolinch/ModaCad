@@ -10,7 +10,7 @@ interface IPayload {
     role: string;
 };
 
-export async function ensureAdmin(request: Request, response: Response, next: NextFunction) {
+export async function ensureAuthor(request: Request, response: Response, next: NextFunction) {
     const authHeader = request.headers.authorization;
 
     const [, token] = authHeader.split(" ");
@@ -21,11 +21,11 @@ export async function ensureAdmin(request: Request, response: Response, next: Ne
         const adminRepo = new AdminRepository();
         const roleRepo = new AdminRoleRepository();
         
-        const role = await  roleRepo.findByName("autor")
+        const role = "autor"
         const admin = await adminRepo.findById(admin_id);
 
-        if(admin.role != role.name){
-           throw new Error("Administrador nao encontrado").message
+        if(admin.role != role){
+           throw new Error("Administrador não autorizado.").message
         }
 
         request.admin = {
@@ -36,6 +36,6 @@ export async function ensureAdmin(request: Request, response: Response, next: Ne
         next()
     } catch(error) {
         console.error("Erro no middleware de autenticação:", error);
-        return response.status(401).json({ message: error instanceof Error ? error.message : "Token inválido" });
+        return response.status(401).json({ message: error instanceof Error ? error.message : "Administrador não autorizado." });
     }
 }
