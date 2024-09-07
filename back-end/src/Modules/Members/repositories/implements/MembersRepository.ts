@@ -10,16 +10,19 @@ class MembersRepository implements IMembersRepository {
     constructor() {
         this.repository = getRepository(Members);
     }
-    async listAll(): Promise<Members[]> {
-        return await this.repository.find();
+    async list( status_id: string, plan_id: string ): Promise<Members[]> {
+        const memberQuery = this.repository.createQueryBuilder("m").where("m.plan = :plan", { plan: plan_id }).andWhere("m.status = :status", { status: status_id })
+        const members = memberQuery.getMany()
+
+        return members
     }
 
-    async create({ name, email, password, member_ship }: IMembersRepositoryDTO): Promise<Members> {
+    async create({ name, email, password, plan }: IMembersRepositoryDTO): Promise<Members> {
         const member =  this.repository.create({
             name,
             email,
             password,
-            member_ship
+            plan
         })
 
         await this.repository.save(member)

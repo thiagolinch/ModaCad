@@ -16,7 +16,7 @@ class CreateMemberUseCase {
         name,
         email,
         password,
-        member_ship
+        plan
     }: IMembersRepositoryDTO): Promise<Members>  {
         const memberExists = await this.memberRepository.findByEmail(email);
 
@@ -30,7 +30,7 @@ class CreateMemberUseCase {
             name,
             email,
             password: passwordB,
-            member_ship
+            plan
         });
 
         return member
