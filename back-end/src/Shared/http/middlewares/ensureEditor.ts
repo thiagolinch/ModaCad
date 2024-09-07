@@ -6,7 +6,7 @@ import { AdminRoleRepository } from "../../../Modules/Admins/repositories/implem
 import { AdminRole } from "../../../Modules/Admins/entity/AdminRole";
 
 interface IPayload {
-    sub: string;
+    subject: string;
     role: string;
 };
 
@@ -16,13 +16,13 @@ export async function ensureAdminCanPost(request: Request, response: Response, n
     const [, token] = authHeader.split(" ");
 
     try {
-        const { sub: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
+        const { subject: adminId } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
         const roleRepo = new AdminRoleRepository();
         
-        const role = "editor"
-        const admin = await adminRepo.findById(admin_id);
+        const admin = await adminRepo.findById(adminId);
+        console.log(admin)
 
         if(admin.role == "colaborador"){
             throw new Error("Administrador nao autorizado").message           
