@@ -28,7 +28,7 @@ class UploadArticleImageUseCase {
         
 
         if(!articleExists) {
-            throw new Error("This article does not exists")
+            throw new Error("This article does not exists").message
         }
 
         image_name.map(async (image) => {

@@ -2,19 +2,16 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
 import { AdminRepository } from "../../../Modules/Admins/repositories/implements/AdminsRepository";
-
+import { AdminRoleRepository } from "../../../Modules/Admins/repositories/implements/AdminRoleRepository";
+import { AdminRole } from "../../../Modules/Admins/entity/AdminRole";
 
 interface IPayload {
     sub: string;
     role: string;
 };
 
-async function ensureAdminAuhenticate(request: Request, response: Response, next: NextFunction) {
+export async function ensureAdmin(request: Request, response: Response, next: NextFunction) {
     const authHeader = request.headers.authorization;
-
-    if(!authHeader){
-        throw new Error("Token missing").message
-    }
 
     const [, token] = authHeader.split(" ");
 
@@ -22,10 +19,13 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
         const { sub: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
+        const roleRepo = new AdminRoleRepository();
+        
+        const role = await  roleRepo.findByName("autor")
         const admin = await adminRepo.findById(admin_id);
 
-        if(!admin){
-           throw new Error("Administrador nao encontrado")
+        if(admin.role != role.name){
+           throw new Error("Administrador nao encontrado").message
         }
 
         request.admin = {
@@ -39,5 +39,3 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
         return response.status(401).json({ message: error instanceof Error ? error.message : "Token inválido" });
     }
 }
-
-export { ensureAdminAuhenticate }

@@ -13,7 +13,7 @@ class DeletePostUseCase {
         const articleExist = await this.articleRepo.findById(id)
 
         if(!articleExist) {
-            throw new Error("This article does not exist.")
+            throw new Error("This article does not exist.").message
         }
 
         await this.articleRepo.delete(id);

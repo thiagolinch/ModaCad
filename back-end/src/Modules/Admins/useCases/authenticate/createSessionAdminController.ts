@@ -9,8 +9,8 @@ class CreateSessionAdminController {
         const sessionUserUseCase = container.resolve(CreateSessionAdminUseCase)
 
         try {
-            const user =  await sessionUserUseCase.execute(email, password)
-            return response.status(201).json(user);
+            const admin =  await sessionUserUseCase.execute(email, password)
+            return response.status(201).json(admin)
         } catch (error) {
             return response.status(404).json(error)
         }
