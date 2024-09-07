@@ -34,8 +34,9 @@ async function ensureUserAuthenticate(request: Request, response: Response, next
         }
 
         next()
-    } catch {
-        throw new Error("Invalid token").message
+    } catch(error) {
+        console.error("Erro no middleware de autenticação:", error);
+        return response.status(401).json({ message: error instanceof Error ? error.message : "Token inválido" });
     }
 }
 
