@@ -9,17 +9,14 @@ export class AdminRole1722041432483 implements MigrationInterface {
                     name: "admin_role",
                     columns: [
                         {
-                            name: "id",
-                            type: "uuid",
+                            name: "name",
+                            type: "varchar",
                             isPrimary: true
                         },
                         {
-                            name: "name",
-                            type: "varchar"
-                        },
-                        {
                             name: "description",
-                            type: "varchar"
+                            type: "varchar",
+                            isNullable: true
                         },
                         {
                             name: "created_at",

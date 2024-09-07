@@ -18,8 +18,6 @@
 
     }
   },
-  "options": { "encrypt": false },
-  "synchronize": "true",
-  "logging": "true"
+  "options": { "encrypt": false }
     
 }

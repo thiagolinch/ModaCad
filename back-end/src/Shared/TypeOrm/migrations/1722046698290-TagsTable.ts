@@ -8,8 +8,8 @@ export class TagsTable1722046698290 implements MigrationInterface {
                 {
                     name: "tags",
                     columns: [
-                        { name: "id", type: "uuid", isPrimary: true },
-                        { name: "name", type: "varchar" },
+                        { name: "id", type: "uuid", isPrimary: true, },
+                        { name: "name", type: "varchar"},
                         { name: "create_at", type: "timestamp", default: "now()" },
                         { name: "updated_at", type: "timestamp", default: "now()" }
                     ]
