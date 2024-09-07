@@ -5,7 +5,7 @@ import { AdminRepository } from "../../../Modules/Admins/repositories/implements
 
 
 interface IPayload {
-    sub: string;
+    id: string;
     role: string;
 };
 
@@ -19,7 +19,7 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
     const [, token] = authHeader.split(" ");
 
     try {
-        const { sub: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
+        const { id: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
         const admin = await adminRepo.findById(admin_id);
