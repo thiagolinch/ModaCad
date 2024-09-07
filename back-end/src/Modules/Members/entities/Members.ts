@@ -19,11 +19,13 @@ class Members {
     password: string;
 
     @Column()
-    member_ship: string;
+    status?: string
+
+    plan?: string;
 
     @ManyToOne(() => Plans)
-    @JoinColumn({name: "member_ship"})
-    plan: Plans
+    @JoinColumn({name: "plan"})
+    plans: Plans
 
     @CreateDateColumn()
     created_at: Date

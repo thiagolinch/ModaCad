@@ -9,12 +9,12 @@ class CreateMemberController {
             name,
             email,
             password,
-            member_ship
+            plan
         } = request.body
         const createMemberUseCase = container.resolve(CreateMemberUseCase)
 
         try {
-            const member = await createMemberUseCase.execute({name, email, password, member_ship})
+            const member = await createMemberUseCase.execute({name, email, password, plan})
             return response.status(201).json(member)
         } catch (error) {
             return response.json(error)
