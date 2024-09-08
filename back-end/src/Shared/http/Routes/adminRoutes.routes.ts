@@ -1,6 +1,6 @@
 import { Router } from "express"
 
-import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmUseCase/createAdmController"
+import { CreateAdmController } from "../../../Modules/Admins/useCases/createUser/createAdmController"
 import { AdminProfileController } from "../../../Modules/Admins/useCases/profileAdmin/profileAdminController"
 
 import { ensureAdminAuhenticate } from "../middlewares/ensureAdminAuthenticate"

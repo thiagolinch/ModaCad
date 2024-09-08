@@ -22,15 +22,17 @@ class CreateAdmUseCase {
         role
     }: IAdminsRepositoryDTO): Promise<Admins> {
         const adminExists = await this.adminRepository.findByEmail(email)
-        const adminrole = await this.roleRepo.findByName(role)
-
-        if(!adminrole){
-            throw new Error("Role not found.").message
-        }
 
         if(adminExists) {
             throw new Error("This admin account already exists!").message
 
+        }
+        
+        if(role) {
+            const adminrole = await this.roleRepo.findByName(role)
+            if(!adminrole){
+                throw new Error("Role not found.").message
+            }
         }
 
         const passwordCrypt = await hash(password, 8)
