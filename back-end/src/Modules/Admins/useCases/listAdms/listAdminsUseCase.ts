@@ -11,7 +11,6 @@ class ListUsersUseCase {
     ) {}
 
     async execute(role: string, plan_id?: string, status_id?: string): Promise<Admins[]> {
-        console.log(role)
         const admins = await this.adminRepo.listUsers(role, plan_id, status_id)
         
         return admins;

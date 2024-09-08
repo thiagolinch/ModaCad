@@ -1,6 +1,7 @@
 import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 import { AdminRole } from "./AdminRole";
+import { Plans } from "../../Posts/entity/Plans";
 
 @Entity("admins")//admins
 class Admins {
@@ -29,6 +30,16 @@ class Admins {
     @ManyToOne(() => AdminRole)
     @JoinColumn({name: "role"})
     roleAdmin: AdminRole;
+
+    @Column()
+    status: string;
+
+    @Column()
+    plan: string
+
+    @ManyToOne(() => Plans)
+    @JoinColumn({name: "plan"})
+    plans: Plans;
 
     @CreateDateColumn()
     created_at: Date
