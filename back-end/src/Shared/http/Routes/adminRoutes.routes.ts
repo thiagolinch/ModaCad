@@ -12,12 +12,16 @@ import { ListUsersController } from "../../../Modules/Admins/useCases/listAdms/l
 //import { postRoute } from "./postsRoutes.routes"
 import { TextoMdcController } from "../../../Modules/Posts/useCases/getTexto/textoMdcController"
 import { UploadAdminAvatarController } from "../../../Modules/Admins/useCases/uploadAdminAvatar/uploadAdminAvatarController"
+import { UpdateUserController } from "../../../Modules/Admins/useCases/updateUser/updateUserController"
+import { ensureAdministrador } from "../middlewares/ensureAdministrador"
 
 const adminRoute = Router()
 
 const uploadAvatar = multer(upload)
 
 const createAdmController = new CreateAdmController()
+const updateControler = new UpdateUserController()
+
 const profileAdminController = new AdminProfileController()
 const listUsers = new ListUsersController();
 const updateAdminAvatar = new UploadAdminAvatarController()
@@ -27,6 +31,10 @@ const uploadAdminAvatar = multer(upload)
 
 // CREATE ADMIN
 adminRoute.post("/", createAdmController.handle)
+
+// UPDATE USER 
+adminRoute.put("/:id", ensureAdminAuhenticate, ensureAdministrador, updateControler.handle)
+
 // DELETE ADMIN
 adminRoute.delete("/:id", () => {
     console.log("delete member route working")

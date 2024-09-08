@@ -12,6 +12,43 @@ class AdminRepository implements IAdminsRepository {
         this.repository = getRepository(Admins);
     }
 
+    async update(
+        id: string,
+        name: string,
+        cellphone: string,
+        email: string,
+        role: string,
+        status_id: string,
+        plan_id: string
+    ): Promise<void> {
+        const user = await this.repository.findOne({id})
+
+        if(name) {
+            user.name = name
+        }
+        if(cellphone) {
+            user.cellphone = cellphone
+        }
+        if(email){
+            const emailExist = await this.repository.findOne({email})
+            if(emailExist){
+                throw new Error("E-mail ja cadastrado.").message
+            }   
+            user.email = email
+        }
+        if(role){
+            user.role = role
+        }       
+        if(status_id) {
+            user.status = status_id
+        }
+        if(plan_id){
+            user.plan = plan_id
+        }
+
+        await this.repository.save(user)
+    }
+
     async listUsers(role: string, status_id?: string, plan_id?: string): Promise<Admins[]> {
         const userQuery = this.repository.createQueryBuilder("u").where("u.role = :role", {role})
 
@@ -36,11 +73,6 @@ class AdminRepository implements IAdminsRepository {
         .setParameters({id})
         .execute();
     }
-
-    
-    async listAll(): Promise<Admins[]> {
-        return await this.repository.find()
-    }
     async create({ name, cellphone, email, password, role, avatar }: IAdminsRepositoryDTO): Promise<Admins> {
         const admin =  this.repository.create({
             name,
@@ -55,15 +87,15 @@ class AdminRepository implements IAdminsRepository {
 
         return admin
     }
+
     async findById(id: string): Promise<Admins> {
         return await this.repository.findOne({id})
     }
-    upgradeToPro(id: string): Promise<void> {
-        throw new Error("Method not implemented.");
-    }
+
     async findByEmail(email: string): Promise<Admins> {
         return await this.repository.findOne({email})
     }
+
     async delete(id: string): Promise<void> {
         await this.repository.delete({id})
     }
