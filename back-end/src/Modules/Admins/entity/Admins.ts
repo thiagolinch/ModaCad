@@ -24,7 +24,7 @@ class Admins {
     password: string;
 
     @Column()
-    role: string;
+    role?: string;
 
     @ManyToOne(() => AdminRole)
     @JoinColumn({name: "role"})
@@ -39,6 +39,7 @@ class Admins {
     constructor() {
         if(!this.id){
             this.id = uuidV4()
+            this.role = "membro"
         }
     }
     
