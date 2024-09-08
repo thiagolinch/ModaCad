@@ -19,7 +19,6 @@ const uploadAvatar = multer(upload)
 
 const createAdmController = new CreateAdmController()
 const profileAdminController = new AdminProfileController()
-const listMembers = new ListMembersController();
 const listUsers = new ListUsersController();
 const updateAdminAvatar = new UploadAdminAvatarController()
 const getTexto = new TextoMdcController();

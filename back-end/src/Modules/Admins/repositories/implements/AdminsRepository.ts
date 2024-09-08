@@ -12,15 +12,15 @@ class AdminRepository implements IAdminsRepository {
         this.repository = getRepository(Admins);
     }
 
-    listUsers(role: string, plan_id?: string, status_id?: string): Promise<Admins[]> {
+    async listUsers(role: string, status_id?: string, plan_id?: string): Promise<Admins[]> {
         const userQuery = this.repository.createQueryBuilder("u").where("u.role = :role", {role})
 
-        if(plan_id) {
-            userQuery.where("u.plan = :plan_id", { plan_id })
+        if(status_id) {
+            userQuery.andWhere("u.status = :status_id", {status_id})
         }
 
-        if(status_id) {
-            userQuery.where("u.status = :status_id", {status_id})
+        if(plan_id) {
+            userQuery.andWhere("u.plan = :plan_id", { plan_id })
         }
 
         const users = userQuery.getMany()
