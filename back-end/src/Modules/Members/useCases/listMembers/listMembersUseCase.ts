@@ -9,8 +9,8 @@ class ListMembersUseCase {
         private memberRepo: IMembersRepository
     ) {}
 
-    async execute(): Promise<Members[]> {
-        const members = await this.memberRepo.listAll();
+    async execute(status_id: string, plan_id: string): Promise<Members[]> {
+        const members = await this.memberRepo.list(status_id, plan_id);
 
         return members;
     }

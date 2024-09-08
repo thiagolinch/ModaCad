@@ -15,44 +15,36 @@ class Articles {
     title: string;
 
     @Column()
-    slug: string;
+    description: string;
 
     @Column()
     type: string;
 
     @Column()
-    html: string;
+    content: string;
 
     @Column()
-    comments_id: string;
-
-    @Column()
-    admin_id: string;
+    admin: string;
 
     @ManyToMany(() => Admins)
-    @JoinColumn({name: "author"})
-    author_id: Admins;
+    @JoinColumn({name: "admin"})
+    admins: Admins;
 
-    /* @Column()
-    subjects_id: string; */
+    @Column("text", {array: true})
+    tags: string[];
+    
+    @Column("uuid", {array: true})
+    subjects: string[];
 
     @ManyToMany(() => Subjects)
-    @JoinTable()
-
-    @Column()
-    plaintext: string;
-
-    @Column()
-    feature_image: string;
+    @JoinColumn({name: "subjects"})
+    subject: Subjects;
 
     @Column()
     status: string;
 
     @Column()
     visibility: string;
-
-    @Column()
-    show_title_and_feature_image: string;
 
     constructor() {
         if (!this.id) {

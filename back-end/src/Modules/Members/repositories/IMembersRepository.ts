@@ -5,7 +5,8 @@ interface IMembersRepositoryDTO {
     name: string,
     email: string,
     password: string
-    member_ship: string
+    plan: string,
+    status?: string
 }
 
 
@@ -15,12 +16,12 @@ interface IMembersRepository {
         name,
         email,
         password,
-        member_ship
+        plan
     }: IMembersRepositoryDTO): Promise<Members>;
     delete(id: string): Promise<void>;
     findById(id: string): Promise<Members>;
     findByEmail(email: string): Promise<Members>;
-    listAll(): Promise<Members[]>;
+    list(status: string, plan: string): Promise<Members[]>;
 }
 
 export { IMembersRepository, IMembersRepositoryDTO }

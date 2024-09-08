@@ -22,12 +22,8 @@ class CreateArticleSubjectUseCase {
         const articleExists = await this.articleRepo.findById(article_id)
 
         if (!articleExists) {
-            throw new Error("This Article does not exists")
+            throw new Error("This Article does not exists").message
         }
-
-        const subjects = await this.subjectsRepo.findByIds(subjects_id)
-        console.log(subjects)
-        articleExists.subjects = subjects
 
         return articleExists
     }

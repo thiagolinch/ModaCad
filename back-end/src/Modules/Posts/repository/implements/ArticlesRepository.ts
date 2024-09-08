@@ -10,6 +10,14 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
+    async findTextByStatus(status_id: string): Promise<Articles[]> {
+        const texts = await this.repository.find({ status: status_id})
+        return texts
+    }
+    async findPilulasByStatus(status_id: string): Promise<Articles[]> {
+        const pilulas = await this.repository.find({ status: status_id })
+        return pilulas
+    }
     async findById(id: string): Promise<Articles> {
         return await this.repository.findOne({id})
     }
@@ -24,27 +32,25 @@ class ArticleRepository implements IArticlesRepository {
 
     async create({
         title,
-        slug,
-        html,
-        feature_image,
+        description,
+        content,
         visibility,
-        show_title_and_feature_image,
         status,
         type,
-        plaintext,
-        admin_id,
+        admin,
+        tags,
+        subjects
         }: IArticlesRepositoryDTO): Promise<Articles> {
             const post = this.repository.create({
                 title,
-                slug,
-                html,
-                feature_image,
+                description,
+                content,
                 visibility,
-                show_title_and_feature_image,
                 status,
                 type,
-                plaintext,
-                admin_id
+                admin,
+                tags,
+                subjects
             })
 
             await this.repository.save(post)

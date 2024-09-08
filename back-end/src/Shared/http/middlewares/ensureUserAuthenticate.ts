@@ -13,7 +13,7 @@ async function ensureUserAuthenticate(request: Request, response: Response, next
     const authHeader = request.headers.authorization;
 
     if(!authHeader){
-        throw new Error("Token missing")
+        throw new Error("Token missing").message
     }
 
     const [, token] = authHeader.split(" ");
@@ -26,7 +26,7 @@ async function ensureUserAuthenticate(request: Request, response: Response, next
         const user = await userRepo.findById(user_id)
 
         if(!user){
-            throw new Error("User does not exists")
+            throw new Error("User does not exists").message
         }
 
         request.user = {
@@ -34,8 +34,9 @@ async function ensureUserAuthenticate(request: Request, response: Response, next
         }
 
         next()
-    } catch {
-        throw new Error("Invalid token")
+    } catch(error) {
+        console.error("Erro no middleware de autenticação:", error);
+        return response.status(401).json({ message: error instanceof Error ? error.message : "Token inválido" });
     }
 }
 

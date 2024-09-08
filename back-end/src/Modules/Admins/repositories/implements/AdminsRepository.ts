@@ -11,7 +11,23 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
-    async updateAvatar({ id, name, cellphone, email, password, admin_role_id, avatar }: IAdminsRepositoryDTO): Promise<void> {
+
+    listUsers(role: string, plan_id?: string, status_id?: string): Promise<Admins[]> {
+        const userQuery = this.repository.createQueryBuilder("u").where("u.role = :role", {role})
+
+        if(plan_id) {
+            userQuery.where("u.plan = :plan_id", { plan_id })
+        }
+
+        if(status_id) {
+            userQuery.where("u.status = :status_id", {status_id})
+        }
+
+        const users = userQuery.getMany()
+        return users
+    }
+
+    async updateAvatar({ id, name, cellphone, email, password, role, avatar }: IAdminsRepositoryDTO): Promise<void> {
         await this.repository
         .createQueryBuilder()
         .update()
@@ -25,13 +41,13 @@ class AdminRepository implements IAdminsRepository {
     async listAll(): Promise<Admins[]> {
         return await this.repository.find()
     }
-    async create({ name, cellphone, email, password, admin_role_id, avatar }: IAdminsRepositoryDTO): Promise<Admins> {
+    async create({ name, cellphone, email, password, role, avatar }: IAdminsRepositoryDTO): Promise<Admins> {
         const admin =  this.repository.create({
             name,
             email,
             password,
             cellphone,
-            admin_role_id,
+            role,
             avatar
         });
 
