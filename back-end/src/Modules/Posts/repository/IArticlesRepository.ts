@@ -44,8 +44,7 @@ interface IArticlesRepository {
     listPilulas(): Promise<Articles[]>;
     listTextos(): Promise<Articles[]>;
 
-    findTextByStatus(status_id: string): Promise<Articles[]>
-    findPilulasByStatus(status_id: string): Promise<Articles[]>
+    findPostByParams(type_id: string,author_id?: string, status_id?: string): Promise<Articles[]>
     findById(id: string): Promise<Articles>;
     findByName(name: string): Promise<Articles>
 
