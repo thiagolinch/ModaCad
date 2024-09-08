@@ -26,7 +26,7 @@ const createPost = new CreatePostController();
 const deletepost = new DeletePostController()
 const listAll = new ListAllTextController();
 const listPilulas = new ListPilulasController();
-const listTextos = new ListTextosController();
+const listTextos = new ListAllTextController();
 const uploadArticleImage = new UploadArticleImageController();
 const getArticleImage = new GetImagesController();
 const createArticleSubject = new CreateArticleSubjectsController();
@@ -46,16 +46,17 @@ postRoute.patch("/:id", ensureAdminAuhenticate,)
 
 // PUBLISH POST
 
-// LIST ALL
-postRoute.get("/", listAll.handle)
+// LIST ALL POSTS, CAN FILTER BY TYPE AND STATUS
+// baseURL/post/list?type=texto&status=
+postRoute.get("/list", listAll.handle)
 
 // LIST TEXTOS BY STATUS
 // postRoute.get("/textos", listTextos.handle)
-postRoute.get("/textos", listTextos.handle)
+// postRoute.get("/list", listTextos.handle)
 
 // LIST PILULAS BY STATUS
 // postRoute.get("/pilulas", listPilulas.handle)
-postRoute.get("/pilulas", listPilulas.handle)
+// postRoute.get("/pilulas", listPilulas.handle)
 
 // UPLOAD IMAGE TO ARTICLE
 postRoute.post("/images/:id", ensureAdminAuhenticate, uploadArticleImageMulter.array("images"), uploadArticleImage.handle)

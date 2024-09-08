@@ -10,13 +10,25 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
-    async findTextByStatus(status_id: string): Promise<Articles[]> {
-        const texts = await this.repository.find({ status: status_id})
-        return texts
+    update({ title, description, content, visibility, type, admin, tags, subjects }: IArticlesRepositoryDTO): Promise<Articles> {
+        throw new Error("Method not implemented.");
     }
-    async findPilulasByStatus(status_id: string): Promise<Articles[]> {
-        const pilulas = await this.repository.find({ status: status_id })
-        return pilulas
+    updateStatus(admin: string, post: string): Promise<void> {
+        throw new Error("Method not implemented.");
+    }
+    async findPostByParams(type_id: string, status_id?: string, author_id?: string): Promise<Articles[]> {
+        const postQuery = this.repository.createQueryBuilder("p").where("p.type = :type", {type: type_id})
+
+        if(status_id){
+            postQuery.andWhere("p.status = :status_id", { status_id})
+        }
+
+        if(author_id) {
+            postQuery.andWhere("p.admin = :author_id", {author_id})
+        }
+
+        const posts = postQuery.getMany()
+        return posts
     }
     async findById(id: string): Promise<Articles> {
         return await this.repository.findOne({id})

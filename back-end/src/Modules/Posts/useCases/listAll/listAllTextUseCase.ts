@@ -11,8 +11,8 @@ class ListAllTexts {
         private articleRepository: IArticlesRepository
     ){}
 
-    async execute (status_id: string): Promise<Articles[]> {
-        const texts = await this.articleRepository.findTextByStatus(status_id)
+    async execute (type_id: string, status_id?: string, author_id?: string): Promise<Articles[]> {
+        const texts = await this.articleRepository.findPostByParams(status_id, type_id, author_id)
 
         return texts;
     }
