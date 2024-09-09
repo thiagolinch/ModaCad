@@ -27,16 +27,13 @@ interface IArticlesRepository {
         subjects
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
-    update({
-        title,
-        description,
-        content,
-        visibility,
-        type,
-        admin,
-        tags,
-        subjects 
-    }: IArticlesRepositoryDTO): Promise<Articles>;
+    update(
+        id: string,
+        title?: string,
+        description?: string,
+        content?: string,
+        tags?: string[],
+        subjects?: string[]): Promise<Articles>;
 
     updateStatus(admin: string, post: string): Promise<void>;
 

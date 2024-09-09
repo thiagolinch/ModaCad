@@ -10,8 +10,39 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
-    update({ title, description, content, visibility, type, admin, tags, subjects }: IArticlesRepositoryDTO): Promise<Articles> {
-        throw new Error("Method not implemented.");
+    async update(
+        id: string,
+        title?: string,
+        description?: string,
+        content?: string,
+        tags?: string[],
+        subjects?: string[]
+    ): Promise<Articles> {
+        const post = await this.repository.findOne({id})
+        if(title) {
+            post.title = title
+        }
+
+        if(description) {
+            post.description = description
+        }
+
+        if(content) {
+            post.content = content
+        }
+
+        if(tags) {
+            post.tags = tags
+        }
+
+        if(subjects) {
+            post.subjects= subjects
+        }
+
+        await this.repository.save(post)
+
+        return post
+
     }
     updateStatus(admin: string, post: string): Promise<void> {
         throw new Error("Method not implemented.");
