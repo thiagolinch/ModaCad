@@ -22,7 +22,6 @@ export async function ensureAdminCanPost(request: Request, response: Response, n
         const roleRepo = new AdminRoleRepository();
         
         const admin = await adminRepo.findById(adminId);
-        console.log(admin)
 
         if(admin.role == "colaborador"){
             throw new Error("Administrador nao autorizado").message           
