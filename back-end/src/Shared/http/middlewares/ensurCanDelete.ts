@@ -6,36 +6,29 @@ import { AdminRoleRepository } from "../../../Modules/Admins/repositories/implem
 import { AdminRole } from "../../../Modules/Admins/entity/AdminRole";
 
 interface IPayload {
-    sub: string;
+    subject: string;
     role: string;
 };
 
-export async function ensureAuthor(request: Request, response: Response, next: NextFunction) {
+export async function ensurCanDelete(request: Request, response: Response, next: NextFunction) {
     const authHeader = request.headers.authorization;
 
     const [, token] = authHeader.split(" ");
 
     try {
-        const { sub: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
+        const { subject: adminId } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
-        const roleRepo = new AdminRoleRepository();
         
-        const role = "autor"
-        const admin = await adminRepo.findById(admin_id);
+        const admin = await adminRepo.findById(adminId)
 
-        if(admin.role != role){
-           throw new Error("Administrador não autorizado.").message
+        if(admin.role === "administrador"){
+            throw new Error("Administrador nao autorizado").message           
         }
-
-        request.admin = {
-            id: admin.id,
-            role: admin.role
-        }
-
+        
         next()
     } catch(error) {
         console.error("Erro no middleware de autenticação:", error);
-        return response.status(401).json({ message: error instanceof Error ? error.message : "Administrador não autorizado." });
+        return response.status(401).json({ message: error instanceof Error ? error.message : "Token inválido" });
     }
 }
