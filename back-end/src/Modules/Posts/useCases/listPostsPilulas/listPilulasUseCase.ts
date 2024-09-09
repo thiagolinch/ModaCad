@@ -12,8 +12,7 @@ class ListPilulasUseCase {
     ){}
 
     async execute (status_id: string): Promise<Articles[]> {
-        console.log(status_id)
-        const pilulas = await this.articleRepository.findPilulasByStatus(status_id)
+        const pilulas = await this.articleRepository.findPostByParams(status_id)
 
         return pilulas;
     }
