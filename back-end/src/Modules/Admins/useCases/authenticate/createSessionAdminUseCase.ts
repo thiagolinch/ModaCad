@@ -37,7 +37,6 @@ class CreateSessionAdminUseCase {
             role: admin.role.toString,
             expiresIn: "1d"
         }, "88f1c14bd2a14b42fad21d64739889e9")
-        console.log(admin.role)
 
         const tokenResponse: Iresponse = {
             admin: {

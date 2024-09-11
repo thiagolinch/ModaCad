@@ -19,7 +19,6 @@ export async function ensureAdministrador(request: Request, response: Response, 
         const { subject: adminId } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
-        const roleRepo = new AdminRoleRepository();
         
         const admin = await adminRepo.findById(adminId);
 

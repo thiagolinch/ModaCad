@@ -54,6 +54,6 @@ adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAdminAuhenticate
 adminRoute.get("/users", ensureAdminAuhenticate, listUsers.handle );
 
 // GET TEXTO PELO ID
-adminRoute.get("/texto/:id", ensureAdminAuhenticate, getTexto.handle)
+adminRoute.get("/texto/:id", getTexto.handle)
 
 export  { adminRoute };
