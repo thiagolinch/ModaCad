@@ -22,7 +22,7 @@ export async function ensurCanDelete(request: Request, response: Response, next:
         
         const admin = await adminRepo.findById(adminId)
 
-        if(admin.role === "administrador"){
+        if(admin.role != "administrador"){
             throw new Error("Administrador nao autorizado").message           
         }
         
