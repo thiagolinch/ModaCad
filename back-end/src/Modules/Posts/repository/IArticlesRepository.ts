@@ -1,3 +1,4 @@
+import { Admins } from "../../Admins/entity/Admins";
 import { Articles } from "../entity/Articles"
 
 
@@ -9,9 +10,10 @@ interface IArticlesRepositoryDTO {
     visibility: string;
     type: string;
     status: string;
-    admin: string;
     tags?: string[];
-    subjects?: string[]
+    admin?: Admins;
+    created_at?: Date;
+    updated_at?: Date;
 }
 
 interface IArticlesRepository {
@@ -22,10 +24,11 @@ interface IArticlesRepository {
         visibility,
         status,
         type,
-        admin,
         tags,
-        subjects
+        admin
     }: IArticlesRepositoryDTO): Promise<Articles>;
+
+    save(data: IArticlesRepositoryDTO): Promise<Articles>;
 
     update(
         id: string,
@@ -33,9 +36,11 @@ interface IArticlesRepository {
         description?: string,
         content?: string,
         tags?: string[],
-        subjects?: string[]): Promise<Articles>;
+        subjects?: string[],
+        status?: string
+    ): Promise<Articles>;
 
-    updateStatus(admin: string, post: string): Promise<void>;
+    updateStatus(adminId: string, post: string): Promise<void>;
 
     list(): Promise<Articles[]>;
     listPilulas(): Promise<Articles[]>;

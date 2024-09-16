@@ -12,7 +12,8 @@ class UpdatePostController {
             description,
             content,
             tags,
-            subjects
+            subjects,
+            status
         } = request.body;
         const useCase = container.resolve(UpdatePostUseCase)
 
@@ -23,7 +24,8 @@ class UpdatePostController {
                 description,
                 content,
                 tags,
-                subjects
+                subjects,
+                status
             )
             return response.status(200).send()
         } catch (error) {
