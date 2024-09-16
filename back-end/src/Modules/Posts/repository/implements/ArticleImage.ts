@@ -9,11 +9,17 @@ class ArticleImageRepository implements IArticleImageRepository {
     constructor() {
         this.repository = getRepository(ArticleImage);
     }
+    async findById(post_id: string): Promise<ArticleImage[]> {
+        const post_images = this.repository.find({article_id: post_id})
 
-    async create( image_name: string, article_id: string): Promise<ArticleImage> {
+        return post_images
+    }
+
+    async create( image_name: string, article_id: string, folder: string): Promise<ArticleImage> {
         const articleImage = this.repository.create({
             image_name,
-            article_id
+            article_id,
+            folder
         })
 
         await this.repository.save(articleImage)

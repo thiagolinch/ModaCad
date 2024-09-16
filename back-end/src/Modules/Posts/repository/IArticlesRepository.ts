@@ -11,7 +11,8 @@ interface IArticlesRepositoryDTO {
     status: string;
     admin: string;
     tags?: string[];
-    subjects?: string[]
+    subjects?: string[],
+    images?: string[]
 }
 
 interface IArticlesRepository {
@@ -24,7 +25,8 @@ interface IArticlesRepository {
         type,
         admin,
         tags,
-        subjects
+        subjects,
+        images
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
     update(
@@ -33,7 +35,9 @@ interface IArticlesRepository {
         description?: string,
         content?: string,
         tags?: string[],
-        subjects?: string[]): Promise<Articles>;
+        subjects?: string[],
+        images?: string[]
+    ): Promise<Articles>;
 
     updateStatus(admin: string, post: string): Promise<void>;
 

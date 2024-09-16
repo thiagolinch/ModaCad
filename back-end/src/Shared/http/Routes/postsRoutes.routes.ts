@@ -64,7 +64,7 @@ postRoute.get("/", listPosts.handle)
 postRoute.post("/images/:id", ensureAdminAuhenticate, uploadArticleImageMulter.array("images"), uploadArticleImage.handle)
 
 // GET IMAGE FROM S3
-postRoute.get("/images/:image_name", getArticleImage.handle)
+postRoute.get("/images/:id", getArticleImage.handle)
 
 
 

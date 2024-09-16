@@ -16,7 +16,8 @@ class ArticleRepository implements IArticlesRepository {
         description?: string,
         content?: string,
         tags?: string[],
-        subjects?: string[]
+        subjects?: string[],
+        images?: string[]
     ): Promise<Articles> {
         const post = await this.repository.findOne({id})
         if(title) {
@@ -37,6 +38,10 @@ class ArticleRepository implements IArticlesRepository {
 
         if(subjects) {
             post.subjects= subjects
+        }
+
+        if(images) {
+            post.images = images
         }
 
         await this.repository.save(post)

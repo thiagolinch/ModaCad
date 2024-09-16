@@ -43,6 +43,9 @@ class Articles {
     @Column()
     status: string;
 
+    @Column('simple-array', { nullable: true, array: true })
+    images!: string[];
+
     @Column()
     visibility: string;
 

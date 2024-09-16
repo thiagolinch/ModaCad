@@ -47,11 +47,11 @@ class S3StorageProvider implements IStorageProvider {
   };
 
   
-  async get(image_name: string): Promise<string> {
+  async get(image_name: string, folderDest: string): Promise<string> {
     
     const getObjectParams = {
       Bucket: process.env.AWS_BUCKET,
-      Key: `content/images/2024/09/images/${image_name}`
+      Key: `${folderDest}${image_name}`
     }
 
     const command = new GetObjectCommand(getObjectParams)
