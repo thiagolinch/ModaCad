@@ -18,6 +18,9 @@ class ArticleImage {
     @JoinColumn({name: "article_id"})
     article: Articles
 
+    @Column()
+    image_url: string;
+
     @CreateDateColumn()
     created_at: Date
 
