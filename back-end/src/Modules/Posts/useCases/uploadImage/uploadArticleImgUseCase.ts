@@ -25,6 +25,15 @@ class UploadArticleImageUseCase {
 
     async execute({image_name, article_id}: IRequest): Promise<void> {
         const articleExists = await this.articleRepo.findById(article_id)
+        let now = new Date();
+        let year = now.getFullYear();
+        let month = `${now.getMonth() +1 }`;
+    
+        if (month.length === 1) {
+          month = `0${month}`;
+        }
+
+        /* const folder = `content/images/${year}/${month}/${folder}/${file}` */
         
 
         if(!articleExists) {
@@ -37,7 +46,7 @@ class UploadArticleImageUseCase {
             await this.articleImageRepo.create(
                 image,
                 article_id
-            );            
+            );
             
         })
     }
