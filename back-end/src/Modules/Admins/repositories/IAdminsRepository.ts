@@ -26,6 +26,7 @@ interface IAdminsRepository {
     ): Promise<void>;
 
     findById(id: string): Promise<Admins>
+    findByIds(id: string[]): Promise<Admins[]>
     findByEmail(email: string): Promise<Admins>
 
     listUsers(role: string, plan_id?: string, status_id?: string): Promise<Admins[]>

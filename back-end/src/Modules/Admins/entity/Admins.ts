@@ -1,7 +1,8 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 import { AdminRole } from "./AdminRole";
 import { Plans } from "../../Posts/entity/Plans";
+import { Articles } from "../../Posts/entity/Articles";
 
 @Entity("admins")//admins
 class Admins {
@@ -40,6 +41,20 @@ class Admins {
     @ManyToOne(() => Plans)
     @JoinColumn({name: "plan"})
     plans: Plans;
+
+    @ManyToMany(() => Articles)
+    @JoinTable({
+        name: "post_admins",
+        joinColumn: {
+            name: "posts",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "admin",
+            referencedColumnName: "id"
+        }
+    })
+    posts: Articles;
 
     @CreateDateColumn()
     created_at: Date
