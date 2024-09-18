@@ -25,7 +25,6 @@ const updateControler = new UpdateUserController()
 const profileAdminController = new AdminProfileController()
 const listUsers = new ListUsersController();
 const updateAdminAvatar = new UploadAdminAvatarController()
-const getTexto = new TextoMdcController();
 
 const uploadAdminAvatar = multer(upload)
 
@@ -36,24 +35,19 @@ adminRoute.post("/", createAdmController.handle)
 adminRoute.put("/:id", ensureAdminAuhenticate, ensureAdministrador, updateControler.handle)
 
 // DELETE ADMIN
-adminRoute.delete("/:id", () => {
+adminRoute.delete("/:id", ensureAdministrador,  () => {
     console.log("delete member route working")
 })
+
 // ADMIN PROFILE
 adminRoute.get("/profile", ensureAdminAuhenticate, profileAdminController.handle);
 
 // ADD AVATAR TO ADMIN
 adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAdminAuhenticate, updateAdminAvatar.handle);
 
-// UPLOAD ADMIN AVATAR
-
-// LIST MEMBERS
-// adminRoute.get("/members", ensureAdminAuhenticate, listMembers.handle)
-
 // LIST ADMINS
 adminRoute.get("/users", ensureAdminAuhenticate, listUsers.handle );
 
-// GET TEXTO PELO ID
-adminRoute.get("/texto/:id", getTexto.handle)
+
 
 export  { adminRoute };

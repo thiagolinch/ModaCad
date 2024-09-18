@@ -37,9 +37,9 @@ interface IArticlesRepository {
 
     update(
         id: string,
-        status: string,
-        visibility: string,
-        type: string,
+        status?: string,
+        visibility?: string,
+        type?: string,
         title?: string,
         description?: string,
         content?: string,
