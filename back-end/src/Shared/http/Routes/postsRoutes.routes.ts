@@ -26,13 +26,9 @@ import { CreatePostAdminController } from "../../../Modules/Posts/useCases/creat
 const postRoute = Router()
 
 const uploadArticleImageMulter = multer(upload)
-
 const createPost = new CreatePostController();
-
 const getTexto = new TextoMdcController();
-
 const createPostAdmin = new CreatePostAdminController();
-
 const updatePost = new UpdatePostController();
 const deletepost = new DeletePostController()
 const filterTexto = new FilterTextoController();
@@ -64,7 +60,7 @@ postRoute.get("/:id", getTexto.handle)
 
 // LIST ALL POSTS, CAN FILTER BY TYPE AND STATUS
 // baseURL/post/list?type=texto&status=&autor=
-postRoute.get("/filter", filterTexto.handle)
+postRoute.get("/", filterTexto.handle)
 
 // GET ALL POSTS 
 postRoute.get("/", listPosts.handle)
