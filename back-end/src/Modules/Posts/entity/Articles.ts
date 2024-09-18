@@ -1,4 +1,4 @@
-import { Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from 'uuid';
 
 import { Admins } from "../../Admins/entity/Admins";
@@ -23,14 +23,21 @@ class Articles {
     @Column()
     content: string;
 
-    @Column()
-    admin: string;
-
     @ManyToMany(() => Admins)
-    @JoinColumn({name: "admin"})
+    @JoinTable({
+        name: "post_admins",
+        joinColumn: {
+            name: "admins",
+            referencedColumnName: "id"
+        },
+        inverseJoinColumn: {
+            name: "posts",
+            referencedColumnName: "id"
+        }
+    })
     admins: Admins;
 
-    @Column("text", {array: true})
+    @Column("varchar", {array: true})
     tags: string[];
     
     @Column("uuid", {array: true})
@@ -48,6 +55,19 @@ class Articles {
 
     @Column()
     visibility: string;
+
+    @Column("array")
+    imagesUrl: string[];
+
+
+    @CreateDateColumn()
+    created_at: Date
+
+    @CreateDateColumn()
+    updated_at: Date
+
+    @CreateDateColumn()
+    published_at: Date
 
     constructor() {
         if (!this.id) {

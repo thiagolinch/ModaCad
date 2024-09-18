@@ -16,7 +16,11 @@ import { ensureAdminCanPost } from "../middlewares/ensureCanPost";
 import { ensurCanDelete } from "../middlewares/ensurCanDelete";
 import { ListPostsController } from "../../../Modules/Posts/useCases/listPosts/ListPostsController";
 import { UpdatePostController } from "../../../Modules/Posts/useCases/updatePost/updatePostController";
+
 import { TextoMdcController } from "../../../Modules/Posts/useCases/getTexto/textoMdcController";
+
+import { CreatePostAdminController } from "../../../Modules/Posts/useCases/createPostAdmin/createPostAdmincontroller";
+
 
 
 const postRoute = Router()
@@ -24,7 +28,11 @@ const postRoute = Router()
 const uploadArticleImageMulter = multer(upload)
 
 const createPost = new CreatePostController();
+
 const getTexto = new TextoMdcController();
+
+const createPostAdmin = new CreatePostAdminController();
+
 const updatePost = new UpdatePostController();
 const deletepost = new DeletePostController()
 const filterTexto = new FilterTextoController();
@@ -36,6 +44,9 @@ const createArticleSubject = new CreateArticleSubjectsController();
 
 // CREATE POST
 postRoute.post("/", ensureAdminAuhenticate, createPost.handle)
+
+// CREATE POST ADMIN RELATION
+postRoute.post("/admins/:id", ensureAdminAuhenticate, createPostAdmin.handle)
 
 // DELETE POST
 postRoute.delete("/:id", ensureAdminAuhenticate, ensurCanDelete, deletepost.handle)
