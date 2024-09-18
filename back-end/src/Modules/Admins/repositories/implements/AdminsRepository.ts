@@ -11,6 +11,9 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
+    async findByIds(id: string[]): Promise<Admins[]> {
+        return await this.repository.findByIds(id)
+    }
 
     async update(
         id: string,

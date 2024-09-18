@@ -2,6 +2,7 @@ import { getRepository, Repository } from "typeorm";
 import { IAdminsRepository } from "../../../Admins/repositories/IAdminsRepository";
 import { Articles } from "../../entity/Articles";
 import { IArticlesRepository, IArticlesRepositoryDTO } from "../IArticlesRepository";
+import { Admins } from "../../../Admins/entity/Admins";
 
 
 class ArticleRepository implements IArticlesRepository {
@@ -9,6 +10,13 @@ class ArticleRepository implements IArticlesRepository {
 
     constructor() {
         this.repository = getRepository(Articles)
+    }
+    async save(data: IArticlesRepositoryDTO): Promise<Articles> {
+        const id = data.id
+        const post = await this.repository.findOne({id})
+        await this.repository.save(post)
+        
+        return post
     }
     async update(
         id: string,
@@ -20,7 +28,8 @@ class ArticleRepository implements IArticlesRepository {
         type?: string,
         tags?: string[],
         subjects?: string[],
-        images?: string[]
+        images?: string[],
+        status?: string
     ): Promise<Articles> {
         const post = await this.repository.findOne({id})
 
@@ -58,6 +67,10 @@ class ArticleRepository implements IArticlesRepository {
 
         if(images) {
             post.images = images
+        }
+
+        if(status) {
+            post.status = status
         }
 
         await this.repository.save(post)
@@ -101,9 +114,8 @@ class ArticleRepository implements IArticlesRepository {
         visibility,
         status,
         type,
-        admin,
         tags,
-        subjects
+        admin
         }: IArticlesRepositoryDTO): Promise<Articles> {
             const post = this.repository.create({
                 title,
@@ -112,9 +124,7 @@ class ArticleRepository implements IArticlesRepository {
                 visibility,
                 status,
                 type,
-                admin,
-                tags,
-                subjects
+                tags
             })
 
             await this.repository.save(post)
@@ -130,7 +140,6 @@ class ArticleRepository implements IArticlesRepository {
     findByName(name: string): Promise<Articles> {
         throw new Error("Method not implemented.");
     }
-    
 }
 
 export { ArticleRepository }
