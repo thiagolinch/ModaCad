@@ -46,7 +46,6 @@ interface IArticlesRepository {
         tags?: string[],
         subjects?: string[],
         images?: string[],
-        status?: string,
     ): Promise<Articles>;
 
     updateStatus(adminId: string, post: string): Promise<void>;

@@ -18,8 +18,7 @@ class UpdatePostUseCase {
         status?: string,
         type?: string,
         tags?: string[],
-        subjects?: string[],
-        status?: string
+        subjects?: string[]
     ): Promise<void> {
         const post = await this.articleRepo.findById(id)
 
@@ -36,8 +35,7 @@ class UpdatePostUseCase {
             visibility,
             type,
             tags,
-            subjects,
-            status
+            subjects
         )
     }
 }

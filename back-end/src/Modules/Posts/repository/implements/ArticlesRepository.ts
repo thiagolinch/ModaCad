@@ -29,7 +29,6 @@ class ArticleRepository implements IArticlesRepository {
         tags?: string[],
         subjects?: string[],
         images?: string[],
-        status?: string
     ): Promise<Articles> {
         const post = await this.repository.findOne({id})
 

@@ -56,8 +56,8 @@ class Articles {
     @Column()
     visibility: string;
 
-    @Column("array")
-    imagesUrl: string[];
+    // @Column('simple-array', { nullable: true, array: true })
+    // imagesUrl: string[];
 
 
     @CreateDateColumn()
