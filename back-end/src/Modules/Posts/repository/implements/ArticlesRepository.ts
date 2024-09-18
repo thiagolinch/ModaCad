@@ -15,13 +15,21 @@ class ArticleRepository implements IArticlesRepository {
         title?: string,
         description?: string,
         content?: string,
+        status?: string,
+        visibility?: string,
+        type?: string,
         tags?: string[],
         subjects?: string[],
         images?: string[]
     ): Promise<Articles> {
         const post = await this.repository.findOne({id})
+
         if(title) {
             post.title = title
+        }
+
+        if(status) {
+            post.status = status
         }
 
         if(description) {
@@ -38,6 +46,14 @@ class ArticleRepository implements IArticlesRepository {
 
         if(subjects) {
             post.subjects= subjects
+        }        
+
+        if(type) {
+            post.type = type
+        }
+
+        if(visibility) {
+            post.visibility = visibility
         }
 
         if(images) {

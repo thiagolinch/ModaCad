@@ -14,6 +14,9 @@ class UpdatePostUseCase {
         title?: string,
         description?: string,
         content?: string,
+        visibility?: string,
+        status?: string,
+        type?: string,
         tags?: string[],
         subjects?: string[]
     ): Promise<void> {
@@ -28,6 +31,9 @@ class UpdatePostUseCase {
             title,
             description,
             content,
+            status,
+            visibility,
+            type,
             tags,
             subjects
         )

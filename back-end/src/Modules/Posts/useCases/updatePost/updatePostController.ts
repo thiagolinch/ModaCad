@@ -11,6 +11,9 @@ class UpdatePostController {
             title,
             description,
             content,
+            visibility,
+            status,
+            type,
             tags,
             subjects
         } = request.body;
@@ -22,6 +25,9 @@ class UpdatePostController {
                 title,
                 description,
                 content,
+                visibility,
+                status,
+                type,
                 tags,
                 subjects
             )
