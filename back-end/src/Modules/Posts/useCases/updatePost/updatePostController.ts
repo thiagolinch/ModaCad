@@ -11,6 +11,9 @@ class UpdatePostController {
             title,
             description,
             content,
+            visibility,
+            status,
+            type,
             tags,
             subjects,
             status
@@ -23,6 +26,9 @@ class UpdatePostController {
                 title,
                 description,
                 content,
+                visibility,
+                status,
+                type,
                 tags,
                 subjects,
                 status

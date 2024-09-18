@@ -8,6 +8,7 @@ import { S3StorageProvider } from "../../../../Shared/container/providers/Storag
 interface IRequest {
     article_id: string;
     image_name: string[];
+    folder: string;
 };
 
 @injectable()
@@ -23,7 +24,7 @@ class UploadArticleImageUseCase {
         private storageProvider: S3StorageProvider
     ){}
 
-    async execute({image_name, article_id}: IRequest): Promise<void> {
+    async execute({image_name, article_id, folder}: IRequest): Promise<void> {
         const articleExists = await this.articleRepo.findById(article_id)
         let now = new Date();
         let year = now.getFullYear();
@@ -33,7 +34,7 @@ class UploadArticleImageUseCase {
           month = `0${month}`;
         }
 
-        /* const folder = `content/images/${year}/${month}/${folder}/${file}` */
+        const folderDest = `content/images/${year}/${month}/${folder}/`
         
 
         if(!articleExists) {
@@ -42,10 +43,11 @@ class UploadArticleImageUseCase {
 
         image_name.map(async (image) => {
             await this.storageProvider.save(image, "images")
-            const url  = await this.storageProvider.get(image)
+            const url  = await this.storageProvider.get(image, folderDest)
             await this.articleImageRepo.create(
                 image,
-                article_id
+                article_id,
+                folderDest.toString()
             );
             
         })

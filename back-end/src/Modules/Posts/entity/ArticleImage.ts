@@ -21,6 +21,9 @@ class ArticleImage {
     @Column()
     image_url: string;
 
+    @Column()
+    folder: string;
+
     @CreateDateColumn()
     created_at: Date
 

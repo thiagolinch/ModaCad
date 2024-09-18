@@ -14,9 +14,10 @@ class UploadArticleImageController {
         const uploadArticleImageUseCase = container.resolve(UploadArticleImageUseCase)
 
         const image_name = images.map((file) => file.filename)
+        const folder = "images"
 
         try {
-            await uploadArticleImageUseCase.execute({image_name, article_id: id})
+            await uploadArticleImageUseCase.execute({image_name, article_id: id, folder})
             return response.status(201).send()
         } catch (error) {
             
