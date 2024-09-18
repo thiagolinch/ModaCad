@@ -3,6 +3,17 @@ import { inject, injectable } from "tsyringe";
 import { IArticlesRepository } from "../../repository/IArticlesRepository";
 import { Articles } from "../../entity/Articles";
 
+interface IResponse {
+    title: string;
+    featured_image: string,
+    description: string;
+    visibility: string;
+    type: string;
+    status: string;
+    admin: string;
+    tags?: string[];
+    subjects?: string[],
+}
 
 @injectable()
 class FilterTextosUseCase {

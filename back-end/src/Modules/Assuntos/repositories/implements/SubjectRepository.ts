@@ -20,7 +20,7 @@ class SubjectRepository implements ISubjectsRepository {
     }
 
     async delete(name: string): Promise<void> {
-         await this.repository.delete({name})
+        await this.repository.delete({name})
     }
     
     findById(id: string): Promise<Subjects> {

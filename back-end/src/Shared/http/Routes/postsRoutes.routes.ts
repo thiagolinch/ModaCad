@@ -5,7 +5,6 @@ import upload from "../../../Config/upload"
 
 import { ensureAdminAuhenticate } from "../middlewares/ensureAdminAuthenticate";
 import { FilterTextoController } from "../../../Modules/Posts/useCases/filterPosts/filterTextosController";
-import { ListPilulasController } from "../../../Modules/Posts/useCases/listPostsPilulas/listPilulasController";
 
 
 import multer from "multer";
@@ -17,6 +16,7 @@ import { ensureAdminCanPost } from "../middlewares/ensureCanPost";
 import { ensurCanDelete } from "../middlewares/ensurCanDelete";
 import { ListPostsController } from "../../../Modules/Posts/useCases/listPosts/ListPostsController";
 import { UpdatePostController } from "../../../Modules/Posts/useCases/updatePost/updatePostController";
+import { TextoMdcController } from "../../../Modules/Posts/useCases/getTexto/textoMdcController";
 
 
 const postRoute = Router()
@@ -24,6 +24,7 @@ const postRoute = Router()
 const uploadArticleImageMulter = multer(upload)
 
 const createPost = new CreatePostController();
+const getTexto = new TextoMdcController();
 const updatePost = new UpdatePostController();
 const deletepost = new DeletePostController()
 const filterTexto = new FilterTextoController();
@@ -44,6 +45,9 @@ postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAdminCanPost, crea
 
 // UPDATE POST
 postRoute.put("/:id", ensureAdminAuhenticate, ensureAdminCanPost, updatePost.handle)
+
+// GET TEXTO PELO ID
+postRoute.get("/:id", getTexto.handle)
 
 // UPDATE STATUS POST
 
