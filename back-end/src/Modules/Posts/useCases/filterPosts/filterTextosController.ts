@@ -7,8 +7,8 @@ import { FilterTextosUseCase } from "./filterTextosUseCase";
 class FilterTextoController {
     async handle(request: Request, response: Response): Promise<Response> {
         const type_id = request.query.type
-        const status_id = request.query.status
-        const author_id = request.query.autor
+        const status_id = request.query.statusId
+        const author_id = request.query.authorId
 
         const filterTextUC =  container.resolve(FilterTextosUseCase)
 
