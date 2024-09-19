@@ -5,6 +5,7 @@ import { Articles } from "../entity/Articles"
 interface IArticlesRepositoryDTO {
     id?: string;
     title: string;
+    admin: string;
     description: string;
     content: string;
     visibility: string;
@@ -13,7 +14,6 @@ interface IArticlesRepositoryDTO {
     tags?: string[];
     subjects?: string[],
     images?: string[]
-    admin?: Admins;
     created_at?: Date;
     updated_at?: Date;
 

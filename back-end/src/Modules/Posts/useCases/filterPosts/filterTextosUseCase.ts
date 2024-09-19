@@ -13,7 +13,7 @@ interface IResponse {
     admin: string;
     tags?: string[];
     subjects?: string[],
-}
+}[]
 
 @injectable()
 class FilterTextosUseCase {

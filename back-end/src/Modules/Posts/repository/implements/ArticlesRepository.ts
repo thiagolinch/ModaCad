@@ -80,22 +80,30 @@ class ArticleRepository implements IArticlesRepository {
     updateStatus(admin: string, post: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
+
+
     async findPostByParams(type_id: string, status_id?: string, author_id?: string): Promise<Articles[]> {
-        const postQuery = this.repository.createQueryBuilder("p").where("p.type = :type", {type: type_id})
-
-        if(status_id){
-            postQuery.andWhere("p.status = :status_id", { status_id})
+        const postQuery = this.repository.createQueryBuilder("p")
+            .where("p.type = :type", { type: type_id })
+            .leftJoinAndSelect("p.admins", "admin")
+    
+        if (status_id) {
+            postQuery.andWhere("p.status = :status_id", { status_id });
         }
-
-        if(author_id) {
-            postQuery.andWhere("p.admin = :author_id", {author_id})
+    
+        if (author_id) {
+            postQuery.andWhere("p.admin = :author_id", { author_id });
+            // Incluindo os dados do admin quando requisitado
+            postQuery.leftJoinAndSelect("p.admins", "admin");
         }
-
-        const posts = postQuery.getMany()
-        return posts
+    
+        const posts = await postQuery.getMany();
+        return posts;
     }
+    
+    
     async findById(id: string): Promise<Articles> {
-        return await this.repository.findOne({id})
+        return await this.repository.findOne({id}, {relations: ["admins"]})
     }
     async listPilulas(): Promise<Articles[]> {
         const pilulas = await this.repository.find({type: "Pilulas"})
@@ -123,7 +131,8 @@ class ArticleRepository implements IArticlesRepository {
                 visibility,
                 status,
                 type,
-                tags
+                tags,
+                admin
             })
 
             await this.repository.save(post)

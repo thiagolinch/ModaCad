@@ -23,18 +23,11 @@ class Articles {
     @Column()
     content: string;
 
-    @ManyToMany(() => Admins)
-    @JoinTable({
-        name: "post_admins",
-        joinColumn: {
-            name: "admins",
-            referencedColumnName: "id"
-        },
-        inverseJoinColumn: {
-            name: "posts",
-            referencedColumnName: "id"
-        }
-    })
+    @Column()
+    admin: string;
+
+    @ManyToOne(() => Admins)
+    @JoinColumn({ name: "admin" })
     admins: Admins;
 
     @Column("varchar", {array: true})

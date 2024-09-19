@@ -33,7 +33,9 @@ class CreatePostUseCase {
             subjects
          })
 
-         return post
+         const blog = await this.articleRepository.findById(post.id)
+
+         return blog
     }
 }
 
