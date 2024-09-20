@@ -20,6 +20,8 @@ import { UpdatePostController } from "../../../Modules/Posts/useCases/updatePost
 import { TextoMdcController } from "../../../Modules/Posts/useCases/getTexto/textoMdcController";
 
 import { CreatePostAdminController } from "../../../Modules/Posts/useCases/createPostAdmin/createPostAdmincontroller";
+import { UploadFeatureImageController } from "../../../Modules/Posts/useCases/uploadFeatureImage/uploadFeatureImageController";
+import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/deleteFeatureImage/deleteFeatureImageController";
 
 
 
@@ -34,6 +36,8 @@ const deletepost = new DeletePostController()
 const filterTexto = new FilterTextoController();
 const listPosts = new ListPostsController()
 const uploadArticleImage = new UploadArticleImageController();
+const uploadFeatureImage = new UploadFeatureImageController();
+const deleteFeatureImage = new DeleteFeatureImageController();
 const getArticleImage = new GetImagesController();
 const createArticleSubject = new CreateArticleSubjectsController();
 
@@ -73,6 +77,12 @@ postRoute.get("/", listPosts.handle)
 
 // UPLOAD IMAGE TO ARTICLE
 postRoute.post("/images/:id", ensureAdminAuhenticate, uploadArticleImageMulter.array("images"), uploadArticleImage.handle)
+
+// UPLOAD FEATURE IMAGE TO ARTICLE
+postRoute.post("/images/feature-image/:id", ensureAdminAuhenticate, uploadArticleImageMulter.single("images"), uploadFeatureImage.handle)
+
+// DELETE FEATURE IMAGE FROM ARTICLE
+postRoute.delete("/images/feature-image/:id", ensureAdminAuhenticate, deleteFeatureImage.handle)
 
 // GET IMAGE FROM S3
 postRoute.get("/images/:id", getArticleImage.handle)

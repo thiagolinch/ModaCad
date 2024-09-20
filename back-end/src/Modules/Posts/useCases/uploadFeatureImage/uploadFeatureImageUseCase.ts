@@ -7,12 +7,12 @@ import { S3StorageProvider } from "../../../../Shared/container/providers/Storag
 
 interface IRequest {
     article_id: string;
-    image_name: string[];
+    image_name: string;
     folder: string;
 };
 
 @injectable()
-class UploadArticleImageUseCase {
+class UploadFeatureImageUseCase {
     constructor(
         @inject("ArticleRepository")
         private articleRepo: IArticlesRepository,
@@ -24,9 +24,17 @@ class UploadArticleImageUseCase {
         private storageProvider: S3StorageProvider
     ){}
 
-    async execute({image_name, article_id, folder}: IRequest): Promise<void> {
+    async execute({image_name, article_id, folder}: IRequest): Promise<string> {
         const articleExists = await this.articleRepo.findById(article_id)
-        
+
+        if(articleExists.feature_image) {   
+            const image = await this.articleImageRepo.findById(articleExists.id)
+            
+            await this.storageProvider.delete(image_name, image.folder)
+            await this.articleImageRepo.delete(image.image_name)
+            console.log("deleted")
+        }
+
         let now = new Date();
         let year = now.getFullYear();
         let month = `${now.getMonth() +1 }`;
@@ -42,18 +50,20 @@ class UploadArticleImageUseCase {
             throw new Error("This article does not exists").message
         }
 
-        image_name.map(async (image) => {
-            await this.storageProvider.save(image, "images")
-            const url  = await this.storageProvider.get(image, folderDest)
-            await this.articleImageRepo.create(
-                image,
-                article_id,
-                folderDest.toString()
-            );
-            
-        })
+        const feature_image = await this.storageProvider.save(image_name, "images")
+        console.log(feature_image)
+
+        await this.articleImageRepo.create(
+            image_name,
+            article_id,
+            folderDest.toString()
+        )
+
+        await this.articleRepo.updateFeatureImage(articleExists.id, feature_image)
+
+        return feature_image;
     }
 
 }
 
-export { UploadArticleImageUseCase }
+export { UploadFeatureImageUseCase }

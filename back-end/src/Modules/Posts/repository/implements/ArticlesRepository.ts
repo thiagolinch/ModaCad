@@ -11,6 +11,25 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
+
+
+    async updateFeatureImage(id: string, feature_image: string): Promise<void> {
+        await this.repository.createQueryBuilder("p")
+        .update()
+        .set({feature_image})
+        .where("id = :id")
+        .setParameters({id})
+        .execute()
+    }
+
+    async deleteFeatureImageController(id: string): Promise<void> {
+        const post = await this.repository.findOne({id})
+
+        post.feature_image = null
+
+        await this.repository.save(post)
+    }
+
     async save(data: IArticlesRepositoryDTO): Promise<Articles> {
         const id = data.id
         const post = await this.repository.findOne({id})
@@ -53,7 +72,7 @@ class ArticleRepository implements IArticlesRepository {
         }
 
         if(subjects) {
-            post.subjects= subjects
+            post.subject_id= subjects
         }        
 
         if(type) {

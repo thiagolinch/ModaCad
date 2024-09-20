@@ -2,8 +2,10 @@ import { ArticleImage } from "../entity/ArticleImage";
 
 interface IArticleImageRepository {
     create(image_name: string, article_id: string, folder: string): Promise<ArticleImage>;
-    findById(image_name: string): Promise<ArticleImage[]>;
-    /* get(image_name: string): Promise<ArticleImage>; */
+    findByIds(image_name: string): Promise<ArticleImage[]>;
+    findById(post_id: string): Promise<ArticleImage>;
+    findbyName(image_name: string): Promise<ArticleImage>;
+    delete(image_name: string): Promise<void>;
 }
 
 export { IArticleImageRepository }
