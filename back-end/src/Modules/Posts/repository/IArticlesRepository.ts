@@ -1,5 +1,6 @@
 import { Admins } from "../../Admins/entity/Admins";
 import { Articles } from "../entity/Articles"
+import { DeleteFeatureImageController } from "../useCases/deleteFeatureImage/deleteFeatureImageController";
 
 
 interface IArticlesRepositoryDTO {
@@ -49,6 +50,9 @@ interface IArticlesRepository {
     ): Promise<Articles>;
 
     updateStatus(adminId: string, post: string): Promise<void>;
+
+    updateFeatureImage(id: string, feature_image: string): Promise<void>;
+    deleteFeatureImageController(id: string): Promise<void>;
 
     list(): Promise<Articles[]>;
     listPilulas(): Promise<Articles[]>;

@@ -21,17 +21,25 @@ class UploadAdminAvatarUseCase {
     async execute({admin_id, admin_avatar_file}: IRequest): Promise<void> {
         const admin = await this.adminsRepository.findById(admin_id);
 
-        if(admin.avatar){
-            await this.storageProvider.delete(admin.avatar, "avatar")
+        let now = new Date();
+        let month = `${now.getMonth() +1 }`;
+    
+        if (month.length === 1) {
+          month = `0${month}`;
         }
 
-        await this.storageProvider.save(admin_avatar_file, "avatar");
+        // if(admin.avatar){
+        //     await this.storageProvider.deleteAvatar(admin.avatar, "avatar")
+        // }
 
-        admin.avatar = admin_avatar_file;
+        const image = await this.storageProvider.saveAvatar(admin_avatar_file, "avatar");
+        
+        const avatarUrl = await this.storageProvider.get(image, `content/images/avatar/`)
+
+        admin.avatar = avatarUrl;
 
         await this.adminsRepository.updateAvatar(admin);
     }
-
 };
 
 export { UploadAdminAvatarUseCase }

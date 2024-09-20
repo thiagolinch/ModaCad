@@ -3,7 +3,6 @@ import { v4 as uuidV4 } from 'uuid';
 
 import { Admins } from "../../Admins/entity/Admins";
 import { Subjects } from "../../Assuntos/entities/Subject";
-import { ArticleImage } from "./ArticleImage";
 
 
 @Entity("articles")//articles
@@ -12,16 +11,31 @@ class Articles {
     id?: string;
 
     @Column()
-    title: string;
+    post_id?: string;
 
     @Column()
-    description: string;
+    title?: string;
 
     @Column()
-    type: string;
+    description?: string;
 
     @Column()
-    content: string;
+    feature_image?: string;
+
+    @Column()
+    type?: string;
+
+    @Column()
+    content?: string;
+
+    @Column()
+    status: string;
+
+    @Column('simple-array', { nullable: true, array: true })
+    images?: string[];
+
+    @Column()
+    visibility?: string;
 
     @Column()
     admin: string;
@@ -30,29 +44,6 @@ class Articles {
     @JoinColumn({ name: "admin" })
     admins: Admins;
 
-    @Column("varchar", {array: true})
-    tags: string[];
-    
-    @Column("uuid", {array: true})
-    subjects: string[];
-
-    @ManyToMany(() => Subjects)
-    @JoinColumn({name: "subjects"})
-    subject: Subjects;
-
-    @Column()
-    status: string;
-
-    @Column('simple-array', { nullable: true, array: true })
-    images!: string[];
-
-    @Column()
-    visibility: string;
-
-    // @Column('simple-array', { nullable: true, array: true })
-    // imagesUrl: string[];
-
-
     @CreateDateColumn()
     created_at: Date
 
@@ -60,11 +51,22 @@ class Articles {
     updated_at: Date
 
     @CreateDateColumn()
-    published_at: Date
+    published_at?: Date
+
+    @Column("varchar", {array: true})
+    tags?: string[];   
+
+    @Column("uuid", {array: true})
+    subject_id?: string[];
+
+    @ManyToMany(() => Subjects)
+    @JoinColumn({name: "subjects"})
+    subject: Subjects;
 
     constructor() {
         if (!this.id) {
             this.id = uuidV4()
+            this.post_id = uuidV4()
         }
     }
 }
