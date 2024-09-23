@@ -27,12 +27,15 @@ class UploadFeatureImageUseCase {
     async execute({image_name, article_id, folder}: IRequest): Promise<string> {
         const articleExists = await this.articleRepo.findById(article_id)
 
+        if(!articleExists) {
+            throw new Error("This article does not exists").message
+        }
+
         if(articleExists.feature_image) {   
             const image = await this.articleImageRepo.findById(articleExists.id)
             
             await this.storageProvider.delete(image_name, image.folder)
             await this.articleImageRepo.delete(image.image_name)
-            console.log("deleted")
         }
 
         let now = new Date();
@@ -44,14 +47,8 @@ class UploadFeatureImageUseCase {
         }
 
         const folderDest = `content/images/${year}/${month}/${folder}/`
-        
-
-        if(!articleExists) {
-            throw new Error("This article does not exists").message
-        }
 
         const feature_image = await this.storageProvider.save(image_name, "images")
-        console.log(feature_image)
 
         await this.articleImageRepo.create(
             image_name,
