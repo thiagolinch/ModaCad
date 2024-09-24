@@ -6,7 +6,6 @@ import { resolve } from "path";
 import upload from "../../../../../Config/upload";
 
 import { IStorageProvider } from "../IStorageProvider";
-import { getSignedUrl } from "@aws-sdk/s3-request-presigner";
 
 class S3StorageProvider implements IStorageProvider {
   private client: S3Client;
@@ -44,15 +43,9 @@ class S3StorageProvider implements IStorageProvider {
     });
 
     await this.client.send(params)
-
-    const getObjectParams = {
-      Bucket: process.env.AWS_BUCKET,
-      Key: dest
-    }
-
-    const command = new GetObjectCommand(getObjectParams)
  
-    const url = await getSignedUrl(this.client, command);
+    // https://d3azcaa09e3xht.cloudfront.net/content/images/2024/09/images/IMG_5326.JPG  (EXEMPLO)
+    const url = `https://d3azcaa09e3xht.cloudfront.net/${dest}`;
 
     return url
   };
@@ -70,14 +63,18 @@ class S3StorageProvider implements IStorageProvider {
       month = `0${month}`;
     }
 
+    const dest = `content/images/${folder}/${originalName}`
+
     const params = new PutObjectCommand({
       Bucket: process.env.AWS_BUCKET,
-      Key: `content/images/${folder}/${file}`,
+      Key: dest,
       Body: fileContent,
       ContentType: contentType
     });
 
     await this.client.send(params)
+
+    const url = `https://d3azcaa09e3xht.cloudfront.net/${dest}`;    
 
     return file;
   };
@@ -90,9 +87,8 @@ class S3StorageProvider implements IStorageProvider {
       Key: `${folderDest}${image_name}`
     }
 
-    const command = new GetObjectCommand(getObjectParams)
- 
-    const url = await getSignedUrl(this.client, command);
+    // https://d3azcaa09e3xht.cloudfront.net/content/images/2024/09/images/IMG_5326.JPG  (EXEMPLO)
+    const url = `https://d3azcaa09e3xht.cloudfront.net/${folderDest}${image_name}`;
 
     return url
   };
