@@ -10,11 +10,12 @@ class ArticleImageRepository implements IArticleImageRepository {
         this.repository = getRepository(ArticleImage);
     }
 
-    async create( image_name: string, article_id: string, folder: string): Promise<ArticleImage> {
+    async create( image_name: string, article_id: string, folder: string, image_url?: string): Promise<ArticleImage> {
         const articleImage = this.repository.create({
             image_name,
             article_id,
-            folder
+            folder,
+            image_url
         })
 
         await this.repository.save(articleImage)

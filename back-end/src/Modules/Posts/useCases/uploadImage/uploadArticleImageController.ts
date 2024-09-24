@@ -2,27 +2,28 @@ import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { UploadArticleImageUseCase } from "./uploadArticleImgUseCase";
 
-interface IFiles {
+interface IFile {
     filename: string;
-};
+}
 
 class UploadArticleImageController {
-
     async handle(request: Request, response: Response): Promise<Response> {
-        const {id} = request.params;
-        const images = request.files as IFiles[];
-        const uploadArticleImageUseCase = container.resolve(UploadArticleImageUseCase)
+        const image = request.file as IFile; 
 
-        const image_name = images.map((file) => file.filename)
-        const folder = "images"
+        const uploadArticleImageUseCase = container.resolve(UploadArticleImageUseCase);
+
+        const image_name = image.filename;
+        const folder = "images";
 
         try {
-            await uploadArticleImageUseCase.execute({image_name, article_id: id, folder})
-            return response.status(201).send()
+            const url = await uploadArticleImageUseCase.execute({ image_name, folder });
+            return response.status(201).json(url);
         } catch (error) {
-            
-        };
-    };
+            // Handle the error appropriately
+            console.error("Error uploading article image:", error);
+            return response.status(500).json({ error: "Internal server error" });
+        }
+    }
 }
 
 export { UploadArticleImageController };

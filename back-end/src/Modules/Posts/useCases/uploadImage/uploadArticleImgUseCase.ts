@@ -6,8 +6,7 @@ import { IArticleImageRepository } from "../../repository/IArticlesImage";
 import { S3StorageProvider } from "../../../../Shared/container/providers/StorageProvider/Implements/S3StorageProvider";
 
 interface IRequest {
-    article_id: string;
-    image_name: string[];
+    image_name: string;
     folder: string;
 };
 
@@ -24,8 +23,15 @@ class UploadArticleImageUseCase {
         private storageProvider: S3StorageProvider
     ){}
 
-    async execute({image_name, article_id, folder}: IRequest): Promise<void> {
-        const articleExists = await this.articleRepo.findById(article_id)
+    async execute({image_name, folder}: IRequest): Promise<string> {
+        const imageExists = await this.articleImageRepo.findbyName(image_name)
+
+        if(imageExists) {
+            const image = await this.articleImageRepo.findbyName(image_name)
+            
+            await this.storageProvider.delete(image.image_name, image.folder)
+            await this.articleImageRepo.delete(image.image_name)
+        }
         
         let now = new Date();
         let year = now.getFullYear();
@@ -38,20 +44,16 @@ class UploadArticleImageUseCase {
         const folderDest = `content/images/${year}/${month}/${folder}/`
         
 
-        if(!articleExists) {
-            throw new Error("This article does not exists").message
-        }
+        await this.storageProvider.save(image_name, "images")
+        const url  = await this.storageProvider.get(image_name, folderDest)
 
-        image_name.map(async (image) => {
-            await this.storageProvider.save(image, "images")
-            const url  = await this.storageProvider.get(image, folderDest)
-            await this.articleImageRepo.create(
-                image,
-                article_id,
-                folderDest.toString()
-            );
-            
-        })
+        await this.articleImageRepo.create(
+            image_name,
+            url,
+            folderDest.toString()
+        );
+        
+        return url
     }
 
 }

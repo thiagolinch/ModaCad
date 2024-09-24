@@ -33,9 +33,11 @@ class UploadFeatureImageUseCase {
 
         if(articleExists.feature_image) {   
             const image = await this.articleImageRepo.findById(articleExists.id)
-            
-            await this.storageProvider.delete(image_name, image.folder)
-            await this.articleImageRepo.delete(image.image_name)
+
+            if(image) {
+                await this.storageProvider.delete(image.image_name, image.folder)
+                await this.articleImageRepo.delete(image.image_name)
+            }
         }
 
         let now = new Date();
@@ -48,17 +50,18 @@ class UploadFeatureImageUseCase {
 
         const folderDest = `content/images/${year}/${month}/${folder}/`
 
-        const feature_image = await this.storageProvider.save(image_name, "images")
+        const image_url = await this.storageProvider.save(image_name, "images")
 
         await this.articleImageRepo.create(
             image_name,
             article_id,
-            folderDest.toString()
+            folderDest.toString(),
+            image_url
         )
 
-        await this.articleRepo.updateFeatureImage(articleExists.id, feature_image)
+        await this.articleRepo.updateFeatureImage(articleExists.id, image_url)
 
-        return feature_image;
+        return image_url;
     }
 
 }
