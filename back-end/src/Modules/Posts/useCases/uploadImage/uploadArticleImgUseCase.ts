@@ -42,6 +42,7 @@ class UploadArticleImageUseCase {
         }
 
         const folderDest = `content/images/${year}/${month}/${folder}/`
+        const article_id = null
         
 
         await this.storageProvider.save(image_name, "images")
@@ -49,8 +50,9 @@ class UploadArticleImageUseCase {
 
         await this.articleImageRepo.create(
             image_name,
+            article_id,
+            folderDest.toString(),
             url,
-            folderDest.toString()
         );
         
         return url

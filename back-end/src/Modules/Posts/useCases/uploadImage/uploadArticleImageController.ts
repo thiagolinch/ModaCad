@@ -9,6 +9,7 @@ interface IFile {
 class UploadArticleImageController {
     async handle(request: Request, response: Response): Promise<Response> {
         const image = request.file as IFile; 
+        console.log(image)
 
         const uploadArticleImageUseCase = container.resolve(UploadArticleImageUseCase);
 
