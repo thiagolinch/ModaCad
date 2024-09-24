@@ -48,16 +48,16 @@ class UploadFeatureImageUseCase {
           month = `0${month}`;
         }
 
-        const folderDest = `content/images/${year}/${month}/${folder}/`
+        // const folderDest = `content/images/${year}/${month}/${folder}/`
 
         const image_url = await this.storageProvider.save(image_name, "images")
 
-        await this.articleImageRepo.create(
+        /* await this.articleImageRepo.create(
             image_name,
             article_id,
             folderDest.toString(),
             image_url
-        )
+        ) */
 
         await this.articleRepo.updateFeatureImage(articleExists.id, image_url)
 

@@ -19,22 +19,6 @@ class TextoModacadUseCase {
 
     async execute(id: string): Promise<Articles> {
         const post = await this.articleRepo.findById(id)
-
-        if(post.feature_image) {
-
-            const feature_image = await this.articleImageRepo.findById(post.id)
-
-            if(feature_image) {
-                const imageUrl = await this.storageProvider.get(feature_image.image_name, feature_image.folder)
-    
-                await this.articleRepo.updateFeatureImage(post.id, imageUrl)
-
-                return post
-            }
-            
-        return post
-        }
-
         
         return post
     }
