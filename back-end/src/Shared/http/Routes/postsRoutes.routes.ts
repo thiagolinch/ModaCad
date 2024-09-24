@@ -24,7 +24,6 @@ import { UploadFeatureImageController } from "../../../Modules/Posts/useCases/up
 import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/deleteFeatureImage/deleteFeatureImageController";
 
 
-
 const postRoute = Router()
 
 const uploadArticleImageMulter = multer(upload)
@@ -76,7 +75,7 @@ postRoute.get("/", listPosts.handle)
 // postRoute.get("/pilulas", listPilulas.handle)
 
 // UPLOAD IMAGE TO ARTICLE
-postRoute.post("/images/:id", ensureAdminAuhenticate, uploadArticleImageMulter.array("images"), uploadArticleImage.handle)
+postRoute.post("/images", ensureAdminAuhenticate, uploadArticleImageMulter.single("image"), uploadArticleImage.handle)
 
 // UPLOAD FEATURE IMAGE TO ARTICLE
 postRoute.post("/images/feature-image/:id", ensureAdminAuhenticate, uploadArticleImageMulter.single("images"), uploadFeatureImage.handle)
@@ -84,9 +83,7 @@ postRoute.post("/images/feature-image/:id", ensureAdminAuhenticate, uploadArticl
 // DELETE FEATURE IMAGE FROM ARTICLE
 postRoute.delete("/images/feature-image/:id", ensureAdminAuhenticate, deleteFeatureImage.handle)
 
-// GET IMAGE FROM S3
+// GET IMAGE FROM S3 
 postRoute.get("/images/:id", getArticleImage.handle)
-
-
 
 export { postRoute }

@@ -26,7 +26,6 @@ export class DeleteFeatureImageUseCase {
         }
 
         const image = await this.imageRepo.findById(post.id)
-        console.log(image)
 
         await this.storageProvider.delete(image.image_name, image.folder)
 

@@ -104,6 +104,7 @@ class ArticleRepository implements IArticlesRepository {
     async findPostByParams(type_id: string, status_id?: string, author_id?: string): Promise<Articles[]> {
         const postQuery = this.repository.createQueryBuilder("p")
             .where("p.type = :type", { type: type_id })
+            // Incluindo os dados do admin quando requisitado
             .leftJoinAndSelect("p.admins", "admin")
     
         if (status_id) {
@@ -112,8 +113,6 @@ class ArticleRepository implements IArticlesRepository {
     
         if (author_id) {
             postQuery.andWhere("p.admin = :author_id", { author_id });
-            // Incluindo os dados do admin quando requisitado
-            postQuery.leftJoinAndSelect("p.admins", "admin");
         }
     
         const posts = await postQuery.getMany();
