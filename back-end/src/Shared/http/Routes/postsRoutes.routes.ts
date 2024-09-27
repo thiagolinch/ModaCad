@@ -1,27 +1,27 @@
 import { Router } from "express";
-import { CreatePostController } from "../../../Modules/Posts/useCases/createPost/createPostController";
+import { CreatePostController } from "../../../Modules/Posts/useCases/PostUseCases/createPost/createPostController";
 
 import upload from "../../../Config/upload"
 
 import { ensureAdminAuhenticate } from "../middlewares/ensureAdminAuthenticate";
-import { FilterTextoController } from "../../../Modules/Posts/useCases/filterPosts/filterTextosController";
+import { FilterTextoController } from "../../../Modules/Posts/useCases/PostUseCases/filterPosts/filterTextosController";
 
 
 import multer from "multer";
-import { UploadArticleImageController } from "../../../Modules/Posts/useCases/uploadImage/uploadArticleImageController";
-import { GetImagesController } from "../../../Modules/Posts/useCases/getImages/getImagesController";
-import { CreateArticleSubjectsController } from "../../../Modules/Posts/useCases/createPostSubjects/createPostSubjectsController";
-import { DeletePostController } from "../../../Modules/Posts/useCases/deletepost/deletePostController";
+import { UploadArticleImageController } from "../../../Modules/Posts/useCases/PostUseCases/uploadImage/uploadArticleImageController";
+import { GetImagesController } from "../../../Modules/Posts/useCases/PostUseCases/getImages/getImagesController";
+import { CreateArticleSubjectsController } from "../../../Modules/Posts/useCases/PostUseCases/createPostSubjects/createPostSubjectsController";
+import { DeletePostController } from "../../../Modules/Posts/useCases/PostUseCases/deletepost/deletePostController";
 import { ensureAdminCanPost } from "../middlewares/ensureCanPost";
 import { ensurCanDelete } from "../middlewares/ensurCanDelete";
-import { ListPostsController } from "../../../Modules/Posts/useCases/listPosts/ListPostsController";
-import { UpdatePostController } from "../../../Modules/Posts/useCases/updatePost/updatePostController";
+import { ListPostsController } from "../../../Modules/Posts/useCases/PostUseCases/listPosts/ListPostsController";
+import { UpdatePostController } from "../../../Modules/Posts/useCases/PostUseCases/updatePost/updatePostController";
 
-import { TextoMdcController } from "../../../Modules/Posts/useCases/getTexto/textoMdcController";
+import { TextoMdcController } from "../../../Modules/Posts/useCases/PostUseCases/getTexto/textoMdcController";
 
-import { CreatePostAdminController } from "../../../Modules/Posts/useCases/createPostAdmin/createPostAdmincontroller";
-import { UploadFeatureImageController } from "../../../Modules/Posts/useCases/uploadFeatureImage/uploadFeatureImageController";
-import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/deleteFeatureImage/deleteFeatureImageController";
+import { CreatePostAdminController } from "../../../Modules/Posts/useCases/PostUseCases/createPostAdmin/createPostAdmincontroller";
+import { UploadFeatureImageController } from "../../../Modules/Posts/useCases/PostUseCases/uploadFeatureImage/uploadFeatureImageController";
+import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/PostUseCases/deleteFeatureImage/deleteFeatureImageController";
 
 
 const postRoute = Router()

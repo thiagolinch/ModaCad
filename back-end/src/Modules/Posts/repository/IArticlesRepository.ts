@@ -1,12 +1,12 @@
 import { Admins } from "../../Admins/entity/Admins";
 import { Articles } from "../entity/Articles"
-import { DeleteFeatureImageController } from "../useCases/deleteFeatureImage/deleteFeatureImageController";
+import { DeleteFeatureImageController } from "../useCases/PostUseCases/deleteFeatureImage/deleteFeatureImageController";
 
 
 interface IArticlesRepositoryDTO {
     id?: string;
     title: string;
-    admin: string;
+    admin: string[];
     description: string;
     content: string;
     visibility: string;
