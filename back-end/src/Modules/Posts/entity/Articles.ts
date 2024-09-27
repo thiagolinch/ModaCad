@@ -3,6 +3,7 @@ import { v4 as uuidV4 } from 'uuid';
 
 import { Admins } from "../../Admins/entity/Admins";
 import { Subjects } from "../../Assuntos/entities/Subject";
+import { Tags } from "./Tags";
 
 
 @Entity("articles")//articles
@@ -37,12 +38,19 @@ class Articles {
     @Column()
     visibility?: string;
 
-    @Column()
-    admin: string;
-
-    @ManyToOne(() => Admins)
-    @JoinColumn({ name: "admin" })
-    admins: Admins;
+    @ManyToMany(() => Admins)
+    @JoinTable({
+        name: "post_admin", // Nome da tabela de junção
+        joinColumn: {
+            name: "post_id", // Nome da coluna na tabela de junção que referencia articles
+            referencedColumnName: "post_id",
+        },
+        inverseJoinColumn: {
+            name: "admin_id", // Nome da coluna na tabela de junção que referencia admins
+            referencedColumnName: "id",
+        }
+    })
+    admins: Admins[];
 
     @CreateDateColumn()
     created_at: Date
@@ -52,9 +60,20 @@ class Articles {
 
     @CreateDateColumn()
     published_at?: Date
-
-    @Column("varchar", {array: true})
-    tags?: string[];   
+    
+    @ManyToMany(() => Tags, tag => tag.articles)
+    @JoinTable({
+        name: "posts_tags", // Nome da tabela de junção
+        joinColumn: {
+            name: "post_id", // Nome da coluna de artigo na tabela de junção
+            referencedColumnName: "post_id"
+        },
+        inverseJoinColumn: {
+            name: "tag_id", // Nome da coluna de tag na tabela de junção
+            referencedColumnName: "id"
+        }
+    })
+    tags: Tags[]; 
 
     @Column("uuid", {array: true})
     subject_id?: string[];

@@ -65,15 +65,7 @@ class ArticleRepository implements IArticlesRepository {
 
         if(content) {
             post.content = content
-        }
-
-        if(tags) {
-            post.tags = tags
-        }
-
-        if(subjects) {
-            post.subject_id= subjects
-        }        
+        }       
 
         if(type) {
             post.type = type
@@ -83,9 +75,9 @@ class ArticleRepository implements IArticlesRepository {
             post.visibility = visibility
         }
 
-        if(images) {
-            post.images = images
-        }
+        if(subjects) {
+            post.subject_id= subjects
+        }   
 
         if(status) {
             post.status = status
@@ -104,15 +96,18 @@ class ArticleRepository implements IArticlesRepository {
     async findPostByParams(type_id: string, status_id?: string, author_id?: string): Promise<Articles[]> {
         const postQuery = this.repository.createQueryBuilder("p")
             .where("p.type = :type", { type: type_id })
-            // Incluindo os dados do admin quando requisitado
-            .leftJoinAndSelect("p.admins", "admin")
-    
+            // Faz o join na tabela relacional post_admin para buscar o admin correspondente
+            .leftJoin("post_admin", "pa", "pa.post_id = p.id") // Relaciona articles com admins via tabela relacional
+            .leftJoinAndSelect("pa.admin", "admin") // Busca os dados do admin
+        
+        // Filtro por status, se fornecido
         if (status_id) {
             postQuery.andWhere("p.status = :status_id", { status_id });
         }
     
+        // Filtro pelo ID do admin, se fornecido
         if (author_id) {
-            postQuery.andWhere("p.admin = :author_id", { author_id });
+            postQuery.andWhere("pa.admin_id = :author_id::varchar", { author_id });
         }
     
         const posts = await postQuery.getMany();
@@ -120,8 +115,13 @@ class ArticleRepository implements IArticlesRepository {
     }
     
     
+    
+    
     async findById(id: string): Promise<Articles> {
-        return await this.repository.findOne({id}, {relations: ["admins"]})
+        return await this.repository.findOne(id, {
+            relations: ["tags", "admins"], // Carregar as tags relacionadas
+        });
+    
     }
     async listPilulas(): Promise<Articles[]> {
         const pilulas = await this.repository.find({type: "Pilulas"})
@@ -149,8 +149,7 @@ class ArticleRepository implements IArticlesRepository {
                 visibility,
                 status,
                 type,
-                tags,
-                admin
+                //admin
             })
 
             await this.repository.save(post)

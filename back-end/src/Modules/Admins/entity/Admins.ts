@@ -42,19 +42,9 @@ class Admins {
     @JoinColumn({name: "plan"})
     plans: Plans;
 
-    @ManyToMany(() => Articles)
-    @JoinTable({
-        name: "post_admins",
-        joinColumn: {
-            name: "posts",
-            referencedColumnName: "id"
-        },
-        inverseJoinColumn: {
-            name: "admin",
-            referencedColumnName: "id"
-        }
-    })
-    posts: Articles;
+    @ManyToMany(() => Articles, article => article.admin)
+    @JoinTable()
+    posts: Articles[];
 
     @CreateDateColumn()
     created_at: Date

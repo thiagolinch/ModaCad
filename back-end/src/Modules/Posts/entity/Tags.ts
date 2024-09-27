@@ -1,76 +1,85 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
-import { v4 as uuidV4 } from "uuid"
+import { 
+    Column, 
+    CreateDateColumn, 
+    Entity, 
+    ManyToMany, 
+    PrimaryColumn, 
+    UpdateDateColumn 
+} from "typeorm";
+import { v4 as uuidV4 } from "uuid";
+import { Articles } from "./Articles";
 
-
-
-@Entity()
+@Entity("tags")
 export class Tags {
     @PrimaryColumn()
     id?: string;
 
-    @Column()
+    @Column({ nullable: true })
     name: string;
 
-    @Column()
+    @Column({ nullable: true })
     slug: string;
 
-    @Column()
+    @Column({ nullable: true })
     description: string;
 
-    @Column()
+    @Column({ nullable: true })
     feature_image: string;
 
-    @Column()
-    parent_id?: any;
+    @Column({ nullable: true })
+    parent_id?: string;
 
-    @Column()
+    @Column({ nullable: true })
     visibility: string;
 
-    @Column()
+    @Column({ nullable: true })
     og_image?: string;
 
-    @Column()
+    @Column({ nullable: true })
     og_title?: string;
 
-    @Column()
+    @Column({ nullable: true })
     og_description?: string;
 
-    @Column()
+    @Column({ nullable: true })
     twitter_image?: string;
 
-    @Column()
+    @Column({ nullable: true })
     twitter_title?: string;
 
-    @Column()
+    @Column({ nullable: true })
     twitter_description?: string;
 
-    @Column()
+    @Column({ nullable: true })
     meta_title?: string;
 
-    @Column()
+    @Column({ nullable: true })
     meta_description?: string;
 
-    @Column()
-    code_injection_head?: any;
+    @Column({ nullable: true })
+    code_injection_head?: string;
 
-    @Column()
-    code_injection_foot?: any;
+    @Column({ nullable: true })
+    code_injection_foot?: string;
 
-    @Column()
+    @Column({ nullable: true })
     cannonical_url?: string;
 
-    @Column()
-    accesnt_color?: any;
+    @Column({ nullable: true })
+    accent_color?: string;
 
     @CreateDateColumn()
     created_at: Date;
 
-    @CreateDateColumn()
+    @UpdateDateColumn() // Alterado para UpdateDateColumn
     updated_at: Date;
 
+    @ManyToMany(() => Articles, article => article.tags) // Manter a relação ManyToMany
+    articles: Articles[];
+
     constructor() {
-        if(!this.id) {
-            this.id = uuidV4()
+        if (!this.id) {
+            this.id = uuidV4();
         }
     }
 }
