@@ -18,7 +18,10 @@ class TextoModacadUseCase {
     ) {}
 
     async execute(id: string): Promise<Articles> {
-        const post = await this.articleRepo.findById(id)
+        const postId = await this.articleRepo.findById(id)
+        const post_id = postId.post_id
+
+        const post = await this.articleRepo.findByPostId(post_id)
         
         return post
     }

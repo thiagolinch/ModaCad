@@ -10,7 +10,6 @@ import { FilterTextoController } from "../../../Modules/Posts/useCases/PostUseCa
 import multer from "multer";
 import { UploadArticleImageController } from "../../../Modules/Posts/useCases/PostUseCases/uploadImage/uploadArticleImageController";
 import { GetImagesController } from "../../../Modules/Posts/useCases/PostUseCases/getImages/getImagesController";
-import { CreateArticleSubjectsController } from "../../../Modules/Posts/useCases/PostUseCases/createPostSubjects/createPostSubjectsController";
 import { DeletePostController } from "../../../Modules/Posts/useCases/PostUseCases/deletepost/deletePostController";
 import { ensureAdminCanPost } from "../middlewares/ensureCanPost";
 import { ensurCanDelete } from "../middlewares/ensurCanDelete";
@@ -22,6 +21,7 @@ import { TextoMdcController } from "../../../Modules/Posts/useCases/PostUseCases
 import { CreatePostAdminController } from "../../../Modules/Posts/useCases/PostUseCases/createPostAdmin/createPostAdmincontroller";
 import { UploadFeatureImageController } from "../../../Modules/Posts/useCases/PostUseCases/uploadFeatureImage/uploadFeatureImageController";
 import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/PostUseCases/deleteFeatureImage/deleteFeatureImageController";
+import { CreatePostSubjectController } from "../../../Modules/Posts/useCases/SubjectUseCases/createPostSubject/createPostSubjectController";
 
 
 const postRoute = Router()
@@ -38,7 +38,7 @@ const uploadArticleImage = new UploadArticleImageController();
 const uploadFeatureImage = new UploadFeatureImageController();
 const deleteFeatureImage = new DeleteFeatureImageController();
 const getArticleImage = new GetImagesController();
-const createArticleSubject = new CreateArticleSubjectsController();
+const createPostSubject = new CreatePostSubjectController();
 
 
 // CREATE POST
@@ -51,7 +51,7 @@ postRoute.post("/admins/:id", ensureAdminAuhenticate, createPostAdmin.handle)
 postRoute.delete("/:id", ensureAdminAuhenticate, ensurCanDelete, deletepost.handle)
 
 // CREATE POST SUBJECTS
-postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAdminCanPost, createArticleSubject.handle)
+postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAdminCanPost, createPostSubject.handle)
 
 // UPDATE POST
 postRoute.put("/:id", ensureAdminAuhenticate, ensureAdminCanPost, updatePost.handle)

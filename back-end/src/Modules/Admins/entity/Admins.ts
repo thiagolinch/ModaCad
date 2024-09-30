@@ -42,7 +42,7 @@ class Admins {
     @JoinColumn({name: "plan"})
     plans: Plans;
 
-    @ManyToMany(() => Articles, article => article.admin)
+    @ManyToMany(() => Articles, article => article.admins)
     @JoinTable()
     posts: Articles[];
 

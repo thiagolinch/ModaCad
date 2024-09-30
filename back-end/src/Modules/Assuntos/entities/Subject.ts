@@ -1,4 +1,4 @@
-import { Column, Entity, Index, ManyToMany, PrimaryColumn, Unique } from "typeorm";
+import { Column, Entity, Index, JoinTable, ManyToMany, PrimaryColumn, Unique } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 import { Articles } from "../../Posts/entity/Articles";
 
@@ -13,7 +13,7 @@ class Subjects {
     @Column()
     name: string;
 
-    @ManyToMany(() => Articles, article => article.subject_id)
+    @ManyToMany(() => Articles, article => article.subjects)
     articles: Articles[];
 
     constructor() {

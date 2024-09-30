@@ -12,7 +12,6 @@ class ArticleRepository implements IArticlesRepository {
         this.repository = getRepository(Articles)
     }
 
-
     async updateFeatureImage(id: string, feature_image: string): Promise<void> {
         await this.repository.createQueryBuilder("p")
         .update()
@@ -75,10 +74,6 @@ class ArticleRepository implements IArticlesRepository {
             post.visibility = visibility
         }
 
-        if(subjects) {
-            post.subject_id= subjects
-        }   
-
         if(status) {
             post.status = status
         }
@@ -95,10 +90,18 @@ class ArticleRepository implements IArticlesRepository {
 
     async findPostByParams(type_id: string, status_id?: string, author_id?: string): Promise<Articles[]> {
         const postQuery = this.repository.createQueryBuilder("p")
-            .where("p.type = :type", { type: type_id })
-            // Faz o join na tabela relacional post_admin para buscar o admin correspondente
-            .leftJoin("post_admin", "pa", "pa.post_id = p.id") // Relaciona articles com admins via tabela relacional
-            .leftJoinAndSelect("pa.admin", "admin") // Busca os dados do admin
+        .select([
+            "p", // Seleciona todos os campos da tabela articles
+            "admin.id", // Seleciona apenas o id do admin
+            "admin.name", // Seleciona apenas o nome do admin
+            "admin.email", // Seleciona apenas o email do admin
+            "admin.avatar" // Seleciona apenas o avatar do admin
+        ])
+        .where("p.type = :type", { type: type_id })
+        .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins
+        .leftJoinAndSelect("p.tags", "tag") // Inclui todos os dados das tags
+        .leftJoinAndSelect("p.subjects", "subjects"); // Inclui todos os dados dos subjects
+
         
         // Filtro por status, se fornecido
         if (status_id) {
@@ -107,22 +110,54 @@ class ArticleRepository implements IArticlesRepository {
     
         // Filtro pelo ID do admin, se fornecido
         if (author_id) {
-            postQuery.andWhere("pa.admin_id = :author_id::varchar", { author_id });
+            postQuery.andWhere("admin.id = :author_id", { author_id });
         }
     
         const posts = await postQuery.getMany();
         return posts;
     }
-    
-    
-    
-    
-    async findById(id: string): Promise<Articles> {
-        return await this.repository.findOne(id, {
-            relations: ["tags", "admins"], // Carregar as tags relacionadas
-        });
-    
+
+    async findById(id: string): Promise<Articles | null> {
+        //return await this.repository.findOne({ where: { id }, relations: ["tags", "admins", "subjects"] });
+        const query = this.repository.createQueryBuilder("p")
+        .select([
+            "p", // Seleciona todos os campos da tabela articles
+            "admin.id", // Seleciona apenas o id do admin
+            "admin.name", // Seleciona apenas o nome do admin
+            "admin.email", // Seleciona apenas o email do admin
+            "admin.avatar" // Seleciona apenas o avatar do admin
+        ])
+        .where("p.id = :id", {id})
+        .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins
+        .leftJoinAndSelect("p.tags", "tag") // Inclui todos os dados das tags
+        .leftJoinAndSelect("p.subjects", "subjects"); // Inclui todos os dados dos subjects
+
+        const post = query.getOne()
+
+        return post
+
     }
+
+    
+    async findByPostId(post_id: string): Promise<Articles> {
+        const query = this.repository.createQueryBuilder("p")
+        .select([
+            "p", // Seleciona todos os campos da tabela articles
+            "admin.id", // Seleciona apenas o id do admin
+            "admin.name", // Seleciona apenas o nome do admin
+            "admin.email", // Seleciona apenas o email do admin
+            "admin.avatar" // Seleciona apenas o avatar do admin
+        ])
+        .where("p.post_id = :post_id", {post_id})
+        .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins
+        .leftJoinAndSelect("p.tags", "tag") // Inclui todos os dados das tags
+        .leftJoinAndSelect("p.subjects", "subjects"); // Inclui todos os dados dos subjects
+
+        const post = query.getOne()
+
+        return post
+    }
+
     async listPilulas(): Promise<Articles[]> {
         const pilulas = await this.repository.find({type: "Pilulas"})
 
@@ -140,7 +175,8 @@ class ArticleRepository implements IArticlesRepository {
         status,
         type,
         tags,
-        admin
+        subjects,
+        admins
         }: IArticlesRepositoryDTO): Promise<Articles> {
             const post = this.repository.create({
                 title,
@@ -149,7 +185,9 @@ class ArticleRepository implements IArticlesRepository {
                 visibility,
                 status,
                 type,
-                //admin
+                tags,
+                subjects,
+                admins
             })
 
             await this.repository.save(post)

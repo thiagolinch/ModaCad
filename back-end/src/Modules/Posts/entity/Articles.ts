@@ -11,8 +11,15 @@ class Articles {
     @PrimaryColumn()
     id?: string;
 
-    @Column()
-    post_id?: string;
+    @Column({
+        type: 'varchar',
+        transformer: {
+            from: (value: string) => value,
+            to: (value: string) => value
+        }
+    })
+    post_id: string;
+    
 
     @Column()
     title?: string;
@@ -38,7 +45,7 @@ class Articles {
     @Column()
     visibility?: string;
 
-    @ManyToMany(() => Admins)
+    @ManyToMany(() => Admins, admin => admin.posts)
     @JoinTable({
         name: "post_admin", // Nome da tabela de junção
         joinColumn: {
@@ -73,14 +80,21 @@ class Articles {
             referencedColumnName: "id"
         }
     })
-    tags: Tags[]; 
-
-    @Column("uuid", {array: true})
-    subject_id?: string[];
+    tags: Tags[];
 
     @ManyToMany(() => Subjects)
-    @JoinColumn({name: "subjects"})
-    subject: Subjects;
+    @JoinTable({
+        name: "posts_subjects",
+        joinColumn: {
+            name: "post_id",
+            referencedColumnName: "post_id"
+        },
+        inverseJoinColumn: {
+            name: "subject_id",
+            referencedColumnName: "id"
+        }
+    })
+    subjects: Subjects[];
 
     constructor() {
         if (!this.id) {

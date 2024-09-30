@@ -5,6 +5,7 @@
     "username": "doadmin",
     "password": "AVNS_GOJX4HPo4wqNqEcM7Fc",
     "database": "defaultdb",
+    "logging": ["query", "error"],
     "migrations": ["./src/Shared/TypeOrm/migrations/*.ts"],
     "cli": {
         "migrationsDir": "./src/Shared/TypeOrm/migrations/"

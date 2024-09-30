@@ -10,7 +10,7 @@ class TextoMdcController {
         const useCase = container.resolve(TextoModacadUseCase)
 
         try {
-            const texto = await useCase.execute(id)
+            const texto = await useCase.execute(id.toString())
             return response.status(200).json(texto)
         } catch (error) {
             return response.status(404).json(error)

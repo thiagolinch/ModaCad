@@ -1,19 +1,21 @@
 import { Admins } from "../../Admins/entity/Admins";
+import { Subjects } from "../../Assuntos/entities/Subject";
 import { Articles } from "../entity/Articles"
+import { Tags } from "../entity/Tags";
 import { DeleteFeatureImageController } from "../useCases/PostUseCases/deleteFeatureImage/deleteFeatureImageController";
 
 
 interface IArticlesRepositoryDTO {
     id?: string;
-    title: string;
-    admin: string[];
-    description: string;
-    content: string;
-    visibility: string;
-    type: string;
-    status: string;
-    tags?: string[];
-    subjects?: string[],
+    title?: string;
+    description?: string;
+    content?: string;
+    visibility?: string;
+    status?: string;
+    type?: string;
+    tags?: Tags[]; // IDs das tags
+    subjects?: Subjects[]; // IDs dos subjects
+    admins: Admins[]; // IDs dos admins
     images?: string[]
     created_at?: Date;
     updated_at?: Date;
@@ -31,7 +33,7 @@ interface IArticlesRepository {
         tags,
         subjects,
         images,
-        admin
+        admins
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
     save(data: IArticlesRepositoryDTO): Promise<Articles>;
@@ -60,6 +62,7 @@ interface IArticlesRepository {
 
     findPostByParams(type_id: string,author_id?: string, status_id?: string): Promise<Articles[]>
     findById(id: string): Promise<Articles>;
+    findByPostId(post_id: string): Promise<Articles>;
     findByName(name: string): Promise<Articles>
 
     delete(id: string): Promise<void>;

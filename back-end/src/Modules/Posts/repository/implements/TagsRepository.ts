@@ -31,6 +31,11 @@ export class TagsRepository implements ITagsRepository {
         return await this.repository.findOne({id})
     };
 
+    async findByIds(îds: string[]): Promise<Tags[]> {
+        const tags = await this.repository.findByIds(îds)
+        return tags;
+    };
+
     async update(
         id: string,
         name: string,
@@ -91,7 +96,7 @@ export class TagsRepository implements ITagsRepository {
         }
 
         if(twitter_title) {
-            tag.twitte_title = twitter_title
+            tag.twitter_title = twitter_title
         }
 
         if(twitter_image) {

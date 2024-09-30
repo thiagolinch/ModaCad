@@ -29,6 +29,7 @@ interface ITagsRepository {
     delete(id: string): Promise<void>;
     list(): Promise<Tags[]>;
     getById(id: string): Promise<Tags>;
+    findByIds(îds: string[]): Promise<Tags[]>;
     update(
         id: string,
         name: string,
