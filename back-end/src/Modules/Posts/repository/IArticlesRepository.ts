@@ -16,9 +16,21 @@ interface IArticlesRepositoryDTO {
     tags?: Tags[]; // IDs das tags
     subjects?: Subjects[]; // IDs dos subjects
     admins: Admins[]; // IDs dos admins
-    images?: string[]
-    created_at?: Date;
-    updated_at?: Date;
+    images?: string[];
+    meta_id?: string;
+    og_image?: string;
+    og_title?: string;
+    og_description?: string;
+    twitter_image?: string;
+    twitter_title?: string;
+    twitter_description?: string;
+    meta_title?: string;
+    meta_description?: string;
+    email_subject?: string;
+    frontmatter?: string;
+    feature_image_alt?: string;
+    feature_image_caption?: string;
+    email_only?: string;
 
 }
 
@@ -49,9 +61,11 @@ interface IArticlesRepository {
         tags?: string[],
         subjects?: string[],
         images?: string[],
+        meta_id?: string
     ): Promise<Articles>;
 
     updateStatus(adminId: string, post: string): Promise<void>;
+    saveMeta(articleId: string, newMetaId: string): Promise<Articles>;
 
     updateFeatureImage(id: string, feature_image: string): Promise<void>;
     deleteFeatureImageController(id: string): Promise<void>;

@@ -1,12 +1,13 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
 import { v4 as uuidV4 } from 'uuid';
 
 import { Admins } from "../../Admins/entity/Admins";
 import { Subjects } from "../../Assuntos/entities/Subject";
 import { Tags } from "./Tags";
+import { Meta } from "./Meta";
 
 
-@Entity("articles")//articles
+@Entity("articles") // Mapeamento para a tabela 'articles'
 class Articles {
     @PrimaryColumn()
     id?: string;
@@ -19,7 +20,6 @@ class Articles {
         }
     })
     post_id: string;
-    
 
     @Column()
     title?: string;
@@ -47,13 +47,13 @@ class Articles {
 
     @ManyToMany(() => Admins, admin => admin.posts)
     @JoinTable({
-        name: "post_admin", // Nome da tabela de junção
+        name: "post_admin", // Tabela de junção entre articles e admins
         joinColumn: {
-            name: "post_id", // Nome da coluna na tabela de junção que referencia articles
+            name: "post_id", // Coluna que referencia articles
             referencedColumnName: "post_id",
         },
         inverseJoinColumn: {
-            name: "admin_id", // Nome da coluna na tabela de junção que referencia admins
+            name: "admin_id", // Coluna que referencia admins
             referencedColumnName: "id",
         }
     })
@@ -67,16 +67,16 @@ class Articles {
 
     @CreateDateColumn()
     published_at?: Date
-    
+
     @ManyToMany(() => Tags, tag => tag.articles)
     @JoinTable({
-        name: "posts_tags", // Nome da tabela de junção
+        name: "posts_tags", // Tabela de junção entre articles e tags
         joinColumn: {
-            name: "post_id", // Nome da coluna de artigo na tabela de junção
+            name: "post_id", // Coluna que referencia articles
             referencedColumnName: "post_id"
         },
         inverseJoinColumn: {
-            name: "tag_id", // Nome da coluna de tag na tabela de junção
+            name: "tag_id", // Coluna que referencia tags
             referencedColumnName: "id"
         }
     })
@@ -96,10 +96,20 @@ class Articles {
     })
     subjects: Subjects[];
 
+    // Coluna que referencia a tabela de meta
+    @Column()
+    meta_id?: string;
+
+    // Relação One-to-One com a entidade Meta
+    @OneToOne(() => Meta, meta => meta.article)
+    @JoinColumn({ name: "meta_id" }) // A coluna 'meta_id' relaciona articles e meta
+    meta: Meta;
+
+    // Gera ids automaticamente
     constructor() {
         if (!this.id) {
-            this.id = uuidV4()
-            this.post_id = uuidV4()
+            this.id = uuidV4();
+            this.post_id = uuidV4();
         }
     }
 }

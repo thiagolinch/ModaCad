@@ -25,6 +25,8 @@ import { AdminRoleRepository } from '../../Modules/Admins/repositories/implement
 import { IAdminRoleRepository } from '../../Modules/Admins/repositories/IAdminRole';
 import { ITagsRepository } from '../../Modules/Posts/repository/ITagsRepository';
 import { TagsRepository } from '../../Modules/Posts/repository/implements/TagsRepository';
+import { IMetaRepository } from '../../Modules/Posts/repository/IMetaRepository';
+import { MetaRepository } from '../../Modules/Posts/repository/implements/MetaRepository';
 
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
@@ -74,4 +76,9 @@ container.registerSingleton<IArticleImageRepository>(
 container.registerSingleton<ITagsRepository>(
     "TagsRepository",
     TagsRepository
+)
+
+container.registerSingleton<IMetaRepository>(
+    "MetaRepository",
+    MetaRepository
 )
