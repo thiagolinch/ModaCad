@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { UpdatePostUseCase } from "./updatePostUseCase";
+import Joi from "joi";
 
 
 class UpdatePostController {
@@ -31,10 +32,43 @@ class UpdatePostController {
             feature_image_caption,
             email_only,
         } = request.body;
+
+        // Definindo o esquema de validação
+        const schema = Joi.object({
+            id: Joi.string().required(),
+            admins: Joi.array().items(Joi.string()).required(),
+            title: Joi.string().required(),
+            description: Joi.string().required(),
+            content: Joi.string().required(),
+            visibility: Joi.string().required(),
+            status: Joi.string().required(),
+            type: Joi.string().required(),
+            tags: Joi.array().items(Joi.string()).required(),
+            subjects: Joi.array().items(Joi.string()).required(),
+        });
+
+        // Validação
+        const { error } = schema.validate({
+            id,
+            admins,
+            title,
+            description,
+            content,
+            visibility,
+            status,
+            type,
+            tags,
+            subjects,
+        });
+
+        if (error) {
+            return response.status(400).json({ message: error.details.map(err => err.message) });
+        }
+        
         const useCase = container.resolve(UpdatePostUseCase)
 
         try {
-            await useCase.execute(
+            await useCase.execute({
                 id,
                 admins,
                 title,
@@ -58,10 +92,10 @@ class UpdatePostController {
                 feature_image_alt,
                 feature_image_caption,
                 email_only,
-            )
+            })
             return response.status(200).send()
         } catch (error) {
-            return response.status(401).json({error})
+            response.status(400).json({ message: "Erro ao atualizar o post." })
         }
     }
 
