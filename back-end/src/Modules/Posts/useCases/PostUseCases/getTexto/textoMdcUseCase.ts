@@ -11,10 +11,7 @@ class TextoModacadUseCase {
         @inject("ArticleRepository")
         private articleRepo: IArticlesRepository,
         @inject("ArticleImageRepository")
-        private articleImageRepo: IArticleImageRepository,
-
-        @inject("StorageProvider")
-        private storageProvider: S3StorageProvider
+        private articleImageRepo: IArticleImageRepository
     ) {}
 
     async execute(id: string): Promise<Articles> {
@@ -22,6 +19,7 @@ class TextoModacadUseCase {
         const post_id = postId.post_id
 
         const post = await this.articleRepo.findByPostId(post_id)
+        console.log(post)
         
         return post
     }

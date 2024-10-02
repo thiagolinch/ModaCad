@@ -51,17 +51,18 @@ class ArticleRepository implements IArticlesRepository {
         const updatedArticle = await this.repository.save(article);
         return updatedArticle;
     }
-    async update(
-        id: string,
-        title?: string,
-        description?: string,
-        content?: string,
-        status?: string,
-        visibility?: string,
-        type?: string,
-        tags?: string[],
-        subjects?: string[],
-        images?: string[]
+    async update({
+        id,
+        title,
+        description,
+        content,
+        visibility,
+        status,
+        type,
+        tags,
+        subjects,
+        admins
+        }: IArticlesRepositoryDTO
     ): Promise<Articles> {
         const post = await this.repository.findOne({id})
 
@@ -93,12 +94,20 @@ class ArticleRepository implements IArticlesRepository {
             post.status = status
         }
 
+        if(tags) {
+            post.tags = tags
+        }
+
+        if(subjects) {
+            post.subjects = subjects
+        }
 
         await this.repository.save(post)
 
         return post
 
     }
+    
     updateStatus(admin: string, post: string): Promise<void> {
         throw new Error("Method not implemented.");
     }
@@ -140,6 +149,7 @@ class ArticleRepository implements IArticlesRepository {
             .select([
                 "p", // Seleciona todos os campos de articles
                 "admin.id", // Seleciona o id de admin
+                "admin.role",
                 "admin.name", // Seleciona o nome de admin
                 "admin.email", // Seleciona o email de admin
                 "admin.avatar", // Seleciona o avatar de admin
@@ -170,10 +180,13 @@ class ArticleRepository implements IArticlesRepository {
         .select([
             "p", // Seleciona todos os campos da tabela articles
             "admin.id", // Seleciona apenas o id do admin
+            "admin.role",
             "admin.name", // Seleciona apenas o nome do admin
             "admin.email", // Seleciona apenas o email do admin
             "admin.avatar", // Seleciona apenas o avatar do admin
-            "meta"
+            "meta",
+            "tag",
+            "subjects"
         ])
         .where("p.post_id = :post_id", {post_id})
         .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins

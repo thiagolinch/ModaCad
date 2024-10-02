@@ -50,19 +50,18 @@ interface IArticlesRepository {
 
     save(data: IArticlesRepositoryDTO): Promise<Articles>;
 
-    update(
-        id: string,
-        status?: string,
-        visibility?: string,
-        type?: string,
-        title?: string,
-        description?: string,
-        content?: string,
-        tags?: string[],
-        subjects?: string[],
-        images?: string[],
-        meta_id?: string
-    ): Promise<Articles>;
+    update({
+        title,
+        description,
+        content,
+        visibility,
+        status,
+        type,
+        tags,
+        subjects,
+        images,
+        admins
+    }: IArticlesRepositoryDTO): Promise<Articles>;
 
     updateStatus(adminId: string, post: string): Promise<void>;
     saveMeta(articleId: string, newMetaId: string): Promise<Articles>;
