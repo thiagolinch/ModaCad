@@ -1,25 +1,26 @@
 import { Router } from "express"
 
-import { CreateAdmController } from "../../../Modules/Admins/useCases/createUser/createAdmController"
 import { AdminProfileController } from "../../../Modules/Admins/useCases/profileAdmin/profileAdminController"
 
 import { ensureAdminAuhenticate } from "../middlewares/ensureAdminAuthenticate"
 
 import upload from "../../../Config/upload"
 import multer from "multer"
-import { ListMembersController } from "../../../Modules/Members/useCases/listMembers/listMembersController"
+
 import { ListUsersController } from "../../../Modules/Admins/useCases/listAdms/listAdminsController"
-//import { postRoute } from "./postsRoutes.routes"
-import { TextoMdcController } from "../../../Modules/Posts/useCases/PostUseCases/getTexto/textoMdcController"
+
 import { UploadAdminAvatarController } from "../../../Modules/Admins/useCases/uploadAdminAvatar/uploadAdminAvatarController"
 import { UpdateUserController } from "../../../Modules/Admins/useCases/updateUser/updateUserController"
 import { ensureAdministrador } from "../middlewares/ensureAdministrador"
+import { CreateUserController } from "../../../Modules/Admins/useCases/createUser/createUserController"
+import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmin/createAdmController"
 
 const adminRoute = Router()
 
 const uploadAvatar = multer(upload)
 
-const createAdmController = new CreateAdmController()
+const createUserController = new CreateUserController()
+const createAdm = new CreateAdmController()
 const updateControler = new UpdateUserController()
 
 const profileAdminController = new AdminProfileController()
@@ -28,8 +29,11 @@ const updateAdminAvatar = new UploadAdminAvatarController()
 
 const uploadAdminAvatar = multer(upload)
 
-// CREATE ADMIN
-adminRoute.post("/", createAdmController.handle)
+// CREATE USER
+adminRoute.post("/", createUserController.handle)
+
+// CREATE STAFF
+adminRoute.post("/staff", ensureAdminAuhenticate, ensureAdministrador, createAdm.handle)
 
 // UPDATE USER 
 adminRoute.put("/:id", ensureAdminAuhenticate, ensureAdministrador, updateControler.handle)

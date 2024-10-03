@@ -7,6 +7,7 @@ import { authenticateAdminRoutes } from "./adminAuthenticate.routes";
 import { postRoute } from "./postsRoutes.routes";
 import { userAuth } from "./userAuthenticate.routes";
 import { tagsRoute } from "./tagRoutes.routes";
+import { metaRoute } from "./metaRoutes.routes";
 
 
 const routes = Router();
@@ -18,5 +19,6 @@ routes.use("/admins", adminRoute)
 routes.use("/admin-session", authenticateAdminRoutes)
 routes.use("/post", postRoute)
 routes.use("/tags", tagsRoute)
+routes.use("/meta", metaRoute)
 
 export { routes }   

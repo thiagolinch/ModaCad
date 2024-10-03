@@ -10,6 +10,12 @@ export class MetaRepository implements IMetaRepository {
     constructor() {
         this.repository = getRepository(Meta)
     }
+    async getbyPostId(post_id: string): Promise<Meta> {
+        return await this.repository.findOne({post_id})
+    }
+    async getById(id: string): Promise<Meta> {
+        return await this.repository.findOne({id})
+    }
     async create(data: IMetaRepositoryDTO): Promise<Meta> {
         const meta = this.repository.create(data)
 

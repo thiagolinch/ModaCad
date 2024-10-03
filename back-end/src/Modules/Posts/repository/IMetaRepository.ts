@@ -39,6 +39,8 @@ interface IMetaRepository {
         email_only?: string
     ): Promise<Meta>;
     save(meta: Meta): Promise<Meta>;
+    getbyPostId(post_id: string): Promise<Meta>;
+    getById(id: string): Promise<Meta>;
 }
 
 export { IMetaRepository, IMetaRepositoryDTO }
