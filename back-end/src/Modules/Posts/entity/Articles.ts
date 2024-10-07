@@ -97,12 +97,22 @@ class Articles {
     subjects: Subjects[];
 
     // Coluna que referencia a tabela de meta
-    @Column()
-    meta_id?: string;
+    // @Column()
+    // meta_id?: string;
 
-    // Relação One-to-One com a entidade Meta
-    @OneToOne(() => Meta, meta => meta.article)
-    @JoinColumn({ name: "meta_id" }) // A coluna 'meta_id' relaciona articles e meta
+   // Relação One-to-One com a entidade Meta
+    @ManyToMany(() => Meta, meta => meta.article)
+    @JoinTable({
+        name: "posts_meta",
+        joinColumn: {
+            name: "post_id",
+            referencedColumnName: "post_id"
+        },
+        inverseJoinColumn: {
+            name: "id",
+            referencedColumnName: "id"
+        }
+    })
     meta: Meta;
 
     // Gera ids automaticamente
