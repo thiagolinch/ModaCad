@@ -96,11 +96,7 @@ class Articles {
     })
     subjects: Subjects[];
 
-    // Coluna que referencia a tabela de meta
-    // @Column()
-    // meta_id?: string;
-
-   // Relação One-to-One com a entidade Meta
+ // Relação One-to-One com a entidade Meta
     @ManyToMany(() => Meta, meta => meta.article)
     @JoinTable({
         name: "posts_meta",

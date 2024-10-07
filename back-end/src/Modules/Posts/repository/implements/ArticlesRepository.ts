@@ -16,15 +16,15 @@ class ArticleRepository implements IArticlesRepository {
         // Busca o post pelo ID
         const post = await this.repository.findOne({ where: { id } });
 
-        if (!post) {
-            throw new Error('Article not found');
-        }
+        // if (!post) {
+        //     throw new Error('Article not found');
+        // }
     
-        // Atualiza o campo meta_id
-        post.meta_id = meta_id;
+        // // Atualiza o campo meta_id
+        // post.meta_id = meta_id;
     
-        // Salva o artigo atualizado no banco
-        await this.repository.save(post);
+        // // Salva o artigo atualizado no banco
+        // await this.repository.save(post);
     
         return post;
     }
@@ -113,23 +113,30 @@ class ArticleRepository implements IArticlesRepository {
     }
 
 
-    async findPostByParams(type_id: string, status_id?: string, author_id?: string): Promise<Articles[]> {
+    async findPostByParams(
+        type_id: string,
+        page?: number,
+        limit?: number,
+        status_id?: string,
+        author_id?: string
+    ): Promise<Articles[]> {
+        const offset = (page - 1) * limit;
+    
         const postQuery = this.repository.createQueryBuilder("p")
-        .select([
-            "p", // Seleciona todos os campos da tabela articles
-            "admin.id", // Seleciona apenas o id do admin
-            "admin.name", // Seleciona apenas o nome do admin
-            "admin.email", // Seleciona apenas o email do admin
-            "admin.avatar", // Seleciona apenas o avatar do admin
-            "meta"
-        ])
-        .where("p.type = :type", { type: type_id })
-        .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins
-        .leftJoinAndSelect("p.tags", "tag") // Inclui todos os dados das tags
-        .leftJoinAndSelect("p.subjects", "subjects") // Inclui todos os dados dos subjects
-        .leftJoinAndSelect("p.meta", "meta");
-
-        
+            .select([
+                "p", // Seleciona todos os campos da tabela articles
+                "admin.id", // Seleciona apenas o id do admin
+                "admin.name", // Seleciona apenas o nome do admin
+                "admin.email", // Seleciona apenas o email do admin
+                "admin.avatar", // Seleciona apenas o avatar do admin
+                "meta"
+            ])
+            .where("p.type = :type", { type: type_id })
+            .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins
+            .leftJoinAndSelect("p.tags", "tag") // Inclui todos os dados das tags
+            .leftJoinAndSelect("p.subjects", "subjects") // Inclui todos os dados dos subjects
+            .leftJoinAndSelect("p.meta", "meta");
+    
         // Filtro por status, se fornecido
         if (status_id) {
             postQuery.andWhere("p.status = :status_id", { status_id });
@@ -139,10 +146,15 @@ class ArticleRepository implements IArticlesRepository {
         if (author_id) {
             postQuery.andWhere("admin.id = :author_id", { author_id });
         }
-    
+
+        // Adiciona a paginação
+        postQuery.skip(offset).take(limit);
+                
         const posts = await postQuery.getMany();
-        return posts;
+        return posts;   
+        
     }
+    
 
     async findById(id: string): Promise<Articles> {
         const query = this.repository.createQueryBuilder("p")
@@ -153,11 +165,7 @@ class ArticleRepository implements IArticlesRepository {
                 "admin.name", // Seleciona o nome de admin
                 "admin.email", // Seleciona o email de admin
                 "admin.avatar", // Seleciona o avatar de admin
-                "meta.id", // Certifique-se de que meta.id é selecionado corretamente
-                "meta.og_title", // Seleciona og_title de meta
-                "meta.og_description", // Seleciona og_description de meta
-                "meta.meta_title", // Seleciona meta_title de meta
-                "meta.meta_description" // Seleciona meta_description de meta
+                "meta"
             ])
             .where("p.id = :id", { id })
             .leftJoin("p.admins", "admin") // Faz o join com a tabela admins
@@ -232,8 +240,9 @@ class ArticleRepository implements IArticlesRepository {
             })
 
             await this.repository.save(post)
+            const id = post.id
 
-            const data = this.repository.findOne(post.id, {relations: ["meta"]})
+            const data = this.repository.findOne({id}, {relations: ["meta", "tags", "admins", "subjects"]})
 
             return data;
     }

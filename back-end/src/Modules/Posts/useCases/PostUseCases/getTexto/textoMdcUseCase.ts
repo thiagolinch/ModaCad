@@ -19,7 +19,6 @@ class TextoModacadUseCase {
         const post_id = postId.post_id
 
         const post = await this.articleRepo.findByPostId(post_id)
-        console.log(post)
         
         return post
     }

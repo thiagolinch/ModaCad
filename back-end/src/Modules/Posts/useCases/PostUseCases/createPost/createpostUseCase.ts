@@ -101,7 +101,7 @@ class CreatePostUseCase {
         const newArticle = await this.articleRepository.create(article);
         const post_id = newArticle.post_id
 
-        const meta = await this.metaRepository.create({
+        await this.metaRepository.create({
             post_id, // Relaciona o post_id ao Meta
             og_image,
             og_title,
@@ -118,11 +118,11 @@ class CreatePostUseCase {
             email_only,
         });
 
-        const meta_id = meta.id
+        // const meta_id = meta.id
 
-        const post = await this.articleRepository.saveMeta(newArticle.id, meta_id)
+        // const post = await this.articleRepository.saveMeta(newArticle.id, meta_id)
 
-        return post;
+        return newArticle;
     }
 }
 

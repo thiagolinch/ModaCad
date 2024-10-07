@@ -79,7 +79,8 @@ class UpdatePostUseCase {
         email_only,
     }: ICreateArticleRequest): Promise<void> {
         const post = await this.articleRepo.findById(id)
-        const meta_id = post.meta_id
+        const meta = await this.metaRepository.getbyPostId(post.post_id)
+        console.log(feature_image_caption)
 
         if(!post) {
             throw new Error("Post dos not exists.").message
@@ -94,10 +95,17 @@ class UpdatePostUseCase {
         const foundSubjects = await this.subjectsRepository.findByIds(subjects);
         post.subjects = foundSubjects;
 
+        post.title = title
+        post.content = content
+        post.description = description
+        post.visibility = visibility
+        post.type = type
+        post.status = status
+
         await this.articleRepo.update(post)
 
         await this.metaRepository.update(
-            meta_id,
+            meta.id,
             og_image,
             og_title,
             og_description,
