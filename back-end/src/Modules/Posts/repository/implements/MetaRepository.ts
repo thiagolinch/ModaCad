@@ -85,6 +85,14 @@ export class MetaRepository implements IMetaRepository {
             meta.feature_image_alt = feature_image_alt
         }
 
+        if(feature_image_caption) {
+            meta.feature_image_caption = feature_image_caption
+        }
+
+        if(email_only) {
+            meta.email_only = email_only
+        }
+
         await this.repository.save(meta)
 
         return meta
