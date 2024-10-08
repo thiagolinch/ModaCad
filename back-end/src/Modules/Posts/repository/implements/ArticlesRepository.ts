@@ -54,6 +54,7 @@ class ArticleRepository implements IArticlesRepository {
     async update({
         id,
         title,
+        feature_image,
         description,
         content,
         visibility,
@@ -68,6 +69,10 @@ class ArticleRepository implements IArticlesRepository {
 
         if(title) {
             post.title = title
+        }
+
+        if(feature_image) {
+            post.feature_image = feature_image
         }
 
         if(status) {
@@ -218,6 +223,7 @@ class ArticleRepository implements IArticlesRepository {
 
     async create({
         title,
+        feature_image,
         description,
         content,
         visibility,
@@ -229,6 +235,7 @@ class ArticleRepository implements IArticlesRepository {
         }: IArticlesRepositoryDTO): Promise<Articles> {
             const post = this.repository.create({
                 title,
+                feature_image,
                 description,
                 content,
                 visibility,
@@ -242,7 +249,7 @@ class ArticleRepository implements IArticlesRepository {
             await this.repository.save(post)
             const id = post.id
 
-            const data = this.repository.findOne({id}, {relations: ["meta", "tags", "admins", "subjects"]})
+            const data = this.repository.findOne({id})
 
             return data;
     }

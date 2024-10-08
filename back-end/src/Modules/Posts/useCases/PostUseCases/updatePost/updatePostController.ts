@@ -12,6 +12,7 @@ class UpdatePostController {
             admins,
             title,
             description,
+            feature_image,
             content,
             visibility,
             status,
@@ -32,38 +33,6 @@ class UpdatePostController {
             feature_image_caption,
             email_only,
         } = request.body;
-
-        // Definindo o esquema de validação
-        const schema = Joi.object({
-            id: Joi.string().required(),
-            admins: Joi.array().items(Joi.string()).required(),
-            title: Joi.string().required(),
-            description: Joi.string().required(),
-            content: Joi.string().required(),
-            visibility: Joi.string().required(),
-            status: Joi.string().required(),
-            type: Joi.string().required(),
-            tags: Joi.array().items(Joi.string()).required(),
-            subjects: Joi.array().items(Joi.string()).required(),
-        });
-
-        // Validação
-        const { error } = schema.validate({
-            id,
-            admins,
-            title,
-            description,
-            content,
-            visibility,
-            status,
-            type,
-            tags,
-            subjects,
-        });
-
-        if (error) {
-            return response.status(400).json({ message: error.details.map(err => err.message) });
-        }
         
         const useCase = container.resolve(UpdatePostUseCase)
 
@@ -71,6 +40,7 @@ class UpdatePostController {
             await useCase.execute({
                 id,
                 admins,
+                feature_image,
                 title,
                 description,
                 content,
@@ -95,7 +65,7 @@ class UpdatePostController {
             })
             return response.status(200).send()
         } catch (error) {
-            response.status(400).json({ message: "Erro ao atualizar o post." })
+            response.status(400).json(error)
         }
     }
 

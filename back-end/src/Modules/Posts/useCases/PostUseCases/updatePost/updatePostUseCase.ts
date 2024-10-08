@@ -11,6 +11,7 @@ import { Admins } from "../../../../Admins/entity/Admins";
 interface ICreateArticleRequest {
     id: string;
     admins?: string[];
+    feature_image?: string;
     title?: string;
     description?: string;
     content?: string;
@@ -57,6 +58,7 @@ class UpdatePostUseCase {
         id,
         admins,
         title,
+        feature_image,
         description,
         content,
         visibility,
@@ -80,7 +82,6 @@ class UpdatePostUseCase {
     }: ICreateArticleRequest): Promise<void> {
         const post = await this.articleRepo.findById(id)
         const meta = await this.metaRepository.getbyPostId(post.post_id)
-        console.log(feature_image_caption)
 
         if(!post) {
             throw new Error("Post dos not exists.").message
@@ -101,6 +102,7 @@ class UpdatePostUseCase {
         post.visibility = visibility
         post.type = type
         post.status = status
+        post.feature_image = feature_image
 
         await this.articleRepo.update(post)
 

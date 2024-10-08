@@ -8,6 +8,7 @@ import { DeleteFeatureImageController } from "../useCases/PostUseCases/deleteFea
 interface IArticlesRepositoryDTO {
     id?: string;
     title?: string;
+    feature_image?: string;
     description?: string;
     content?: string;
     visibility?: string;
@@ -52,6 +53,7 @@ interface IArticlesRepository {
 
     update({
         title,
+        feature_image,
         description,
         content,
         visibility,

@@ -10,14 +10,15 @@ import { Tags } from "../../../entity/Tags";
 
 interface ICreateArticleRequest {
     admins: string[];
-    title: string;
-    description: string;
-    content: string;
-    visibility: string;
-    status: string;
-    type: string;
-    tags: string[]; // Array com os IDs ou nomes das tags
-    subjects: string[]; // Array com os IDs ou nomes dos subjects
+    title?: string;
+    feature_image?: string;
+    description?: string;
+    content?: string;
+    visibility?: string;
+    status?: string;
+    type?: string;
+    tags?: string[]; // Array com os IDs ou nomes das tags
+    subjects?: string[]; // Array com os IDs ou nomes dos subjects
     og_image?: string;
     og_title?: string;
     og_description?: string;
@@ -55,6 +56,7 @@ class CreatePostUseCase {
     async execute({
         admins,
         title,
+        feature_image,
         description,
         content,
         visibility,
@@ -75,11 +77,12 @@ class CreatePostUseCase {
         feature_image_alt,
         feature_image_caption,
         email_only,
-    }: ICreateArticleRequest): Promise<Articles> {
+    }: ICreateArticleRequest): Promise<string> {
        
         // 1. Criar o artigo
         const article = new Articles();
         article.title = title;
+        article.feature_image = feature_image;
         article.description = description;
         article.content = content;
         article.visibility = visibility;
@@ -122,7 +125,7 @@ class CreatePostUseCase {
 
         // const post = await this.articleRepository.saveMeta(newArticle.id, meta_id)
 
-        return newArticle;
+        return newArticle.id;
     }
 }
 

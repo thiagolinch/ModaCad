@@ -9,6 +9,7 @@ class CreatePostController {
         const {
             admins,
             title,
+            feature_image,
             description,
             content,
             visibility,
@@ -34,8 +35,9 @@ class CreatePostController {
         const createPostUseCase = container.resolve(CreatePostUseCase);
 
         try {
-            const article = await createPostUseCase.execute({
+            const articleId = await createPostUseCase.execute({
                 title,
+                feature_image,
                 description,
                 content,
                 visibility,
@@ -59,7 +61,7 @@ class CreatePostController {
                 email_only,
             });
     
-            return response.status(200).json(article)
+            return response.status(200).json(articleId)
         } catch (error) {
             return response.status(400).json({error})
         }
