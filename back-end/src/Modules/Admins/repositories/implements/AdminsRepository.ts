@@ -11,6 +11,19 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
+    async findStaff(): Promise<Admins[]> {
+        return await this.repository
+        .createQueryBuilder("admin")
+        .select([
+            "admin.id",
+            "admin.name",
+            "admin.role",
+            "admin.email",
+            "admin.avatar"
+        ])
+        .where("admin.role != :role", { role: 'member' })
+        .getMany();
+    }
     async findByIds(id: string[]): Promise<Admins[]> {
         return await this.repository.findByIds(id)
     }
@@ -53,7 +66,16 @@ class AdminRepository implements IAdminsRepository {
     }
 
     async listUsers(role: string, status_id?: string, plan_id?: string): Promise<Admins[]> {
-        const userQuery = this.repository.createQueryBuilder("u").where("u.role = :role", {role})
+        const userQuery = this.repository.createQueryBuilder("u")
+        .select([
+            "u.id",
+            "u.name",
+            "u.email",
+            "u.avatar",
+            "u.role",
+            "u.cellphone"
+        ])
+        .where("u.role = :role", {role})
 
         if(status_id) {
             userQuery.andWhere("u.status = :status_id", {status_id})
