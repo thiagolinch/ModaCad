@@ -27,6 +27,8 @@ import { ITagsRepository } from '../../Modules/Posts/repository/ITagsRepository'
 import { TagsRepository } from '../../Modules/Posts/repository/implements/TagsRepository';
 import { IMetaRepository } from '../../Modules/Posts/repository/IMetaRepository';
 import { MetaRepository } from '../../Modules/Posts/repository/implements/MetaRepository';
+import { IStatusRepository } from '../../Modules/Posts/repository/IStatusRepository';
+import { StatusRepository } from '../../Modules/Posts/repository/implements/StatusRepository';
 
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
@@ -81,4 +83,9 @@ container.registerSingleton<ITagsRepository>(
 container.registerSingleton<IMetaRepository>(
     "MetaRepository",
     MetaRepository
+)
+
+container.registerSingleton<IStatusRepository> (
+    "StatusRepository",
+    StatusRepository
 )

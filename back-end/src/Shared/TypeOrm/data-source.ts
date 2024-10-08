@@ -12,6 +12,7 @@ import { ArticleImage } from "../../Modules/Posts/entity/ArticleImage";
 import { S3StorageProvider } from "../container/providers/StorageProvider/Implements/S3StorageProvider";
 import { Tags } from "../../Modules/Posts/entity/Tags";
 import { Meta } from "../../Modules/Posts/entity/Meta";
+import { Status } from "../../Modules/Posts/entity/Status";
 
 export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigitalocean.com"): Promise<Connection> => {
   const defaultOptions = await getConnectionOptions();
@@ -30,7 +31,8 @@ export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigital
         ArticleImage,
         S3StorageProvider,
         Tags,
-        Meta
+        Meta,
+        Status
       ]
     })
   );
