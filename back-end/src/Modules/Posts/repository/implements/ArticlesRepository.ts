@@ -120,11 +120,18 @@ class ArticleRepository implements IArticlesRepository {
 
     async findPostByParams(
         type_id: string,
-        page?: number,
-        limit?: number,
+        page: number = 1,
+        limit: number = 10,
         status_id?: string,
-        author_id?: string
-    ): Promise<Articles[]> {
+        author_id?: string,
+        order: 'ASC' | 'DESC' = 'ASC'
+    ): Promise<{
+        posts: Articles[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }> {
         const offset = (page - 1) * limit;
     
         const postQuery = this.repository.createQueryBuilder("p")
@@ -137,9 +144,9 @@ class ArticleRepository implements IArticlesRepository {
                 "meta"
             ])
             .where("p.type = :type", { type: type_id })
-            .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins
-            .leftJoinAndSelect("p.tags", "tag") // Inclui todos os dados das tags
-            .leftJoinAndSelect("p.subjects", "subjects") // Inclui todos os dados dos subjects
+            .leftJoin("p.admins", "admin")
+            .leftJoinAndSelect("p.tags", "tag")
+            .leftJoinAndSelect("p.subjects", "subjects")
             .leftJoinAndSelect("p.meta", "meta");
     
         // Filtro por status, se fornecido
@@ -151,15 +158,31 @@ class ArticleRepository implements IArticlesRepository {
         if (author_id) {
             postQuery.andWhere("admin.id = :author_id", { author_id });
         }
-
+    
+        // Adiciona a ordenação usando o valor validado de `order`
+        const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
+        postQuery.orderBy("p.published_at", validOrder);
+    
+        // Obtem o número total de registros (antes da paginação)
+        const totalItems = await postQuery.getCount();
+    
         // Adiciona a paginação
         postQuery.skip(offset).take(limit);
-                
-        const posts = await postQuery.getMany();
-        return posts;   
-        
-    }
     
+        // Obtem os posts paginados
+        const posts = await postQuery.getMany();
+    
+        // Calcula o número total de páginas
+        const totalPages = Math.ceil(totalItems / limit);
+    
+        return {
+            posts,
+            currentPage: page,
+            totalPages,
+            totalItems,
+            pageSize: limit
+        };
+    }    
 
     async findById(id: string): Promise<Articles> {
         const query = this.repository.createQueryBuilder("p")
