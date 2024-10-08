@@ -6,7 +6,7 @@ import { IArticleImageRepository } from "../../../repository/IArticlesImage";
 import { S3StorageProvider } from "../../../../../Shared/container/providers/StorageProvider/Implements/S3StorageProvider";
 
 interface IRequest {
-    article_id: string;
+    article_id?: string;
     image_name: string;
     folder: string;
 };
