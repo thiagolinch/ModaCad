@@ -66,6 +66,7 @@ class UpdatePostController {
             return response.status(200).send()
         } catch (error) {
             response.status(400).json(error)
+            console.log(error)
         }
     }
 

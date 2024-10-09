@@ -14,6 +14,7 @@ import { UpdateUserController } from "../../../Modules/Admins/useCases/updateUse
 import { ensureAdministrador } from "../middlewares/ensureAdministrador"
 import { CreateUserController } from "../../../Modules/Admins/useCases/createUser/createUserController"
 import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmin/createAdmController"
+import { ListStaffController } from "../../../Modules/Admins/useCases/listStaf/listStafController"
 
 const adminRoute = Router()
 
@@ -25,6 +26,7 @@ const updateControler = new UpdateUserController()
 
 const profileAdminController = new AdminProfileController()
 const listUsers = new ListUsersController();
+const listStaff = new ListStaffController();
 const updateAdminAvatar = new UploadAdminAvatarController()
 
 const uploadAdminAvatar = multer(upload)
@@ -34,6 +36,9 @@ adminRoute.post("/", createUserController.handle)
 
 // CREATE STAFF
 adminRoute.post("/staff", ensureAdminAuhenticate, ensureAdministrador, createAdm.handle)
+
+// LIST STAFF
+adminRoute.get("/staff", ensureAdminAuhenticate, listStaff.handle)
 
 // UPDATE USER 
 adminRoute.put("/:id", ensureAdminAuhenticate, ensureAdministrador, updateControler.handle)

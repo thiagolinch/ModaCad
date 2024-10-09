@@ -11,6 +11,7 @@ class FilterTextoController {
         // Parâmetros de paginação
         const page = parseInt(request.query.page as string) || 1;
         const limit = parseInt(request.query.limit as string) || 10;
+        const order = request.query.order as "ASC" | "DESC"
 
         const filterTextUC = container.resolve(FilterTextosUseCase);
 
@@ -20,7 +21,8 @@ class FilterTextoController {
                 status_id,
                 author_id,
                 page,
-                limit
+                limit,
+                order
             );
 
             return response.status(200).json(subjects);
