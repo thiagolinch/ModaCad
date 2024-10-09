@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidV4 } from 'uuid';
 
 import { Admins } from "../../Admins/entity/Admins";
@@ -59,11 +59,11 @@ class Articles {
     @CreateDateColumn()
     created_at: Date
 
-    @CreateDateColumn()
+    @UpdateDateColumn()
     updated_at: Date
 
-    @CreateDateColumn()
-    published_at?: Date
+    @Column({ type: "timestamp", nullable: true })
+    published_at: Date | null;
 
     @ManyToMany(() => Tags, tag => tag.articles)
     @JoinTable({

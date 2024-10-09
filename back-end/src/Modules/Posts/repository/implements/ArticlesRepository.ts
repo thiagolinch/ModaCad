@@ -28,7 +28,6 @@ class ArticleRepository implements IArticlesRepository {
     
         return post;
     }
-    
 
     async updateFeatureImage(id: string, feature_image: string): Promise<void> {
         await this.repository.createQueryBuilder("p")
@@ -51,6 +50,7 @@ class ArticleRepository implements IArticlesRepository {
         const updatedArticle = await this.repository.save(article);
         return updatedArticle;
     }
+
     async update({
         id,
         title,
@@ -75,7 +75,12 @@ class ArticleRepository implements IArticlesRepository {
             post.feature_image = feature_image
         }
 
-        if(status) {
+        if(status != post.status) {
+            // Atualiza a data de publicação se o status for "published"
+            if (status === "published") {
+                post.published_at = new Date();
+                post.status = status
+            }
             post.status = status
         }
 
@@ -121,7 +126,6 @@ class ArticleRepository implements IArticlesRepository {
         throw new Error("Method not implemented.");
     }
 
-
     async findPostByParams(
         type_id: string,
         page: number = 1,
@@ -165,7 +169,7 @@ class ArticleRepository implements IArticlesRepository {
     
         // Adiciona a ordenação usando o valor validado de `order`
         const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
-        postQuery.orderBy("p.published_at", validOrder);
+        postQuery.orderBy("p.updated_at", validOrder);
     
         // Obtem o número total de registros (antes da paginação)
         const totalItems = await postQuery.getCount();
@@ -186,7 +190,7 @@ class ArticleRepository implements IArticlesRepository {
             totalItems,
             pageSize: limit
         };
-    }    
+    }
 
     async findById(id: string): Promise<Articles> {
         const query = this.repository.createQueryBuilder("p")
@@ -213,7 +217,6 @@ class ArticleRepository implements IArticlesRepository {
     
         return result;
     }   
-    
     
     async findByPostId(post_id: string): Promise<Articles> {
         const query = this.repository.createQueryBuilder("p")
@@ -244,6 +247,7 @@ class ArticleRepository implements IArticlesRepository {
 
         return pilulas
     }
+
     async listTextos(): Promise<Articles[]> {
         return await this.repository.find({type: "Textos"})
     }
@@ -280,15 +284,19 @@ class ArticleRepository implements IArticlesRepository {
 
             return data;
     }
+
     async list(): Promise<Articles[]> {
         return await this.repository.find()
     }
+
     async delete(id: string): Promise<void> {
         await this.repository.delete({id})
     }
+
     findByName(name: string): Promise<Articles> {
         throw new Error("Method not implemented.");
     }
+
 }
 
 export { ArticleRepository }

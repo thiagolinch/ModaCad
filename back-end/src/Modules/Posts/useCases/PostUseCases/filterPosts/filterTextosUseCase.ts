@@ -27,7 +27,7 @@ class FilterTextosUseCase {
         author_id?: string,
         page: number = 1,
         limit: number = 10,
-        order: 'ASC' | 'DESC' = 'ASC'
+        order: 'DESC' | 'ASC' = 'DESC'
     ): Promise<IResponse> {
         // Adiciona a lógica de paginação, passando `page` e `limit` ao repositório
         const texts = await this.articleRepository.findPostByParams(
