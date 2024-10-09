@@ -21,7 +21,7 @@ class AdminRepository implements IAdminsRepository {
             "admin.email",
             "admin.avatar"
         ])
-        .where("admin.role != :role", { role: 'member' })
+        .where("admin.role != :role", { role: 'membro' })
         .getMany();
     }
     async findByIds(id: string[]): Promise<Admins[]> {
