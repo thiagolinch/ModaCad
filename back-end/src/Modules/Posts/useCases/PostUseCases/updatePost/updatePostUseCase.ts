@@ -83,8 +83,12 @@ class UpdatePostUseCase {
         const post = await this.articleRepo.findById(id)
         const meta = await this.metaRepository.getbyPostId(post.post_id)
 
+        if(!meta) {
+            throw new Error("Meta não encontrada").message
+        }
+
         if(!post) {
-            throw new Error("Post dos not exists.").message
+            throw new Error("Post dos not exists.")
         }
         
         const foundTags = await this.tagsRepository.findByIds(tags);

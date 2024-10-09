@@ -103,6 +103,10 @@ class ArticleRepository implements IArticlesRepository {
             post.tags = tags
         }
 
+        if(admins) {
+            post.admins = admins
+        }
+
         if(subjects) {
             post.subjects = subjects
         }
