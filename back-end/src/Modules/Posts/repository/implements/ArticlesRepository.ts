@@ -124,18 +124,25 @@ class ArticleRepository implements IArticlesRepository {
     
         const postQuery = this.repository.createQueryBuilder("p")
             .select([
-                "p", // Seleciona todos os campos da tabela articles
+                "p.id",
+                "p.post_id",
+                "p.title",
+                "p.description",
+                "p.feature_image",
+                "p.updated_at",
                 "admin.id", // Seleciona apenas o id do admin
                 "admin.name", // Seleciona apenas o nome do admin
-                "admin.email", // Seleciona apenas o email do admin
-                "admin.avatar", // Seleciona apenas o avatar do admin
+                "admin.role",
+                "tag.id",
+                "tag.name",
+                "subjects",
                 "meta"
             ])
             .where("p.type = :type", { type: type_id })
             .leftJoin("p.admins", "admin")
-            .leftJoinAndSelect("p.tags", "tag")
-            .leftJoinAndSelect("p.subjects", "subjects")
-            .leftJoinAndSelect("p.meta", "meta");
+            .leftJoin("p.tags", "tag")
+            .leftJoin("p.subjects", "subjects")
+            .leftJoin("p.meta", "meta");
     
         // Filtro por status, se fornecido
         if (status_id) {
