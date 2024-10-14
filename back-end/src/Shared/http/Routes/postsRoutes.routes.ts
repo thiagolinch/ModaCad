@@ -13,15 +13,14 @@ import { GetImagesController } from "../../../Modules/Posts/useCases/PostUseCase
 import { DeletePostController } from "../../../Modules/Posts/useCases/PostUseCases/deletepost/deletePostController";
 import { ensureAdminCanPost } from "../middlewares/ensureCanPost";
 import { ensurCanDelete } from "../middlewares/ensurCanDelete";
-import { ListPostsController } from "../../../Modules/Posts/useCases/PostUseCases/listPosts/ListPostsController";
 import { UpdatePostController } from "../../../Modules/Posts/useCases/PostUseCases/updatePost/updatePostController";
 
 import { TextoMdcController } from "../../../Modules/Posts/useCases/PostUseCases/getTexto/textoMdcController";
 
-import { CreatePostAdminController } from "../../../Modules/Posts/useCases/PostUseCases/createPostAdmin/createPostAdmincontroller";
 import { UploadFeatureImageController } from "../../../Modules/Posts/useCases/PostUseCases/uploadFeatureImage/uploadFeatureImageController";
 import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/PostUseCases/deleteFeatureImage/deleteFeatureImageController";
 import { CreatePostSubjectController } from "../../../Modules/Posts/useCases/SubjectUseCases/createPostSubject/createPostSubjectController";
+import { LastPostController } from "../../../Modules/Posts/useCases/PostUseCases/lastPost/lastPostController";
 
 
 const postRoute = Router()
@@ -29,11 +28,11 @@ const postRoute = Router()
 const uploadArticleImageMulter = multer(upload)
 const createPost = new CreatePostController();
 const getTexto = new TextoMdcController();
-const createPostAdmin = new CreatePostAdminController();
 const updatePost = new UpdatePostController();
 const deletepost = new DeletePostController()
 const filterTexto = new FilterTextoController();
-const listPosts = new ListPostsController()
+const lastPost = new LastPostController();
+
 const uploadArticleImage = new UploadArticleImageController();
 const uploadFeatureImage = new UploadFeatureImageController();
 const deleteFeatureImage = new DeleteFeatureImageController();
@@ -43,9 +42,6 @@ const createPostSubject = new CreatePostSubjectController();
 
 // CREATE POST
 postRoute.post("/", ensureAdminAuhenticate, createPost.handle)
-
-// CREATE POST ADMIN RELATION
-postRoute.post("/admins/:id", ensureAdminAuhenticate, createPostAdmin.handle)
 
 // DELETE POST
 postRoute.delete("/:id", ensureAdminAuhenticate, ensurCanDelete, deletepost.handle)
@@ -59,20 +55,12 @@ postRoute.put("/:id", ensureAdminAuhenticate, ensureAdminCanPost, updatePost.han
 // GET TEXTO PELO ID
 postRoute.get("/:id", getTexto.handle)
 
-// UPDATE STATUS POST
+// LAST POST
+postRoute.get("/last/publish", lastPost.handle)
 
 // LIST ALL POSTS, CAN FILTER BY TYPE AND STATUS
 // baseURL/post/list?type=texto&status=&autor=
 postRoute.get("/", filterTexto.handle)
-
-// GET ALL POSTS 
-postRoute.get("/", listPosts.handle)
-
-// LIST TEXTOS BY STATUS
-// postRoute.get("/textos", listTextos.handle)
-
-// LIST PILULAS BY STATUS
-// postRoute.get("/pilulas", listPilulas.handle)
 
 // UPLOAD IMAGE TO ARTICLE
 postRoute.post("/images", ensureAdminAuhenticate, uploadArticleImageMulter.single("image"), uploadArticleImage.handle)

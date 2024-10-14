@@ -121,10 +121,6 @@ class CreatePostUseCase {
             email_only,
         });
 
-        // const meta_id = meta.id
-
-        // const post = await this.articleRepository.saveMeta(newArticle.id, meta_id)
-
         return newArticle.id;
     }
 }

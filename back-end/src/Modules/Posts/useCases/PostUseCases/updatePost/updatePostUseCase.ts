@@ -105,11 +105,12 @@ class UpdatePostUseCase {
         post.description = description
         post.visibility = visibility
         post.type = type
+
         post.status = status
         post.feature_image = feature_image
 
         await this.articleRepo.update(post)
-
+        
         await this.metaRepository.update(
             meta.id,
             og_image,

@@ -11,23 +11,6 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
-    async saveMeta(id: string, meta_id: string): Promise<Articles> {
-    
-        // Busca o post pelo ID
-        const post = await this.repository.findOne({ where: { id } });
-
-        // if (!post) {
-        //     throw new Error('Article not found');
-        // }
-    
-        // // Atualiza o campo meta_id
-        // post.meta_id = meta_id;
-    
-        // // Salva o artigo atualizado no banco
-        // await this.repository.save(post);
-    
-        return post;
-    }
 
     async updateFeatureImage(id: string, feature_image: string): Promise<void> {
         await this.repository.createQueryBuilder("p")
@@ -113,6 +96,7 @@ class ArticleRepository implements IArticlesRepository {
         }
 
         if(subjects) {
+            console.log(subjects)
             post.subjects = subjects
         }
 
@@ -120,10 +104,6 @@ class ArticleRepository implements IArticlesRepository {
 
         return post
 
-    }
-    
-    updateStatus(admin: string, post: string): Promise<void> {
-        throw new Error("Method not implemented.");
     }
 
     async findPostByParams(
@@ -242,14 +222,25 @@ class ArticleRepository implements IArticlesRepository {
         return post
     }
 
-    async listPilulas(): Promise<Articles[]> {
-        const pilulas = await this.repository.find({type: "Pilulas"})
+    async lastPost(): Promise<Articles> {
+        const post = this.repository.createQueryBuilder("p")
+        .select([
+            "p.id",
+            "p.post_id",
+            "p.title", // Seleciona todos os campos da tabela articles
+            "p.description",
+            "p.feature_image"
+        ])
+        .where("p.published_at IS NOT NULL") // Garante que só considere posts publicados
+        .andWhere("p.type = :type", { type: "texto"})
+        .andWhere("p.status = :status", { status: "published"})
+        .orderBy("p.published_at", "DESC") // Ordena pelos mais recentes publicados
+        .leftJoinAndSelect("p.tags", "tag")
+        .leftJoinAndSelect("p.subjects", "subjects")
+        .leftJoinAndSelect("p.meta", "meta")
+        .getOne(); // Retorna o último post publicado
 
-        return pilulas
-    }
-
-    async listTextos(): Promise<Articles[]> {
-        return await this.repository.find({type: "Textos"})
+        return post;
     }
 
     async create({
@@ -285,16 +276,12 @@ class ArticleRepository implements IArticlesRepository {
             return data;
     }
 
-    async list(): Promise<Articles[]> {
-        return await this.repository.find()
-    }
-
     async delete(id: string): Promise<void> {
         await this.repository.delete({id})
     }
 
-    findByName(name: string): Promise<Articles> {
-        throw new Error("Method not implemented.");
+    async findByName(name: string): Promise<Articles> {
+        return await this.repository.findOne({ title: name})
     }
 
 }

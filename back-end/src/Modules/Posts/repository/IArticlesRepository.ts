@@ -2,7 +2,6 @@ import { Admins } from "../../Admins/entity/Admins";
 import { Subjects } from "../../Assuntos/entities/Subject";
 import { Articles } from "../entity/Articles"
 import { Tags } from "../entity/Tags";
-import { DeleteFeatureImageController } from "../useCases/PostUseCases/deleteFeatureImage/deleteFeatureImageController";
 
 
 interface IArticlesRepositoryDTO {
@@ -13,6 +12,7 @@ interface IArticlesRepositoryDTO {
     content?: string;
     visibility?: string;
     status?: string;
+    published_at?: Date;
     type?: string;
     tags?: Tags[]; // IDs das tags
     subjects?: Subjects[]; // IDs dos subjects
@@ -49,8 +49,6 @@ interface IArticlesRepository {
         admins
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
-    save(data: IArticlesRepositoryDTO): Promise<Articles>;
-
     update({
         title,
         feature_image,
@@ -58,6 +56,7 @@ interface IArticlesRepository {
         content,
         visibility,
         status,
+        published_at,
         type,
         tags,
         subjects,
@@ -65,24 +64,21 @@ interface IArticlesRepository {
         admins
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
-    updateStatus(adminId: string, post: string): Promise<void>;
-    saveMeta(articleId: string, newMetaId: string): Promise<Articles>;
-
-    updateFeatureImage(id: string, feature_image: string): Promise<void>;
-    deleteFeatureImageController(id: string): Promise<void>;
-
-    list(): Promise<Articles[]>;
-    listPilulas(): Promise<Articles[]>;
-    listTextos(): Promise<Articles[]>;
-
-    findPostByParams(type_id: string, page: number, limit: number, author_id?: string, status_id?: string, order?: string): Promise<{
+    findPostByParams(
+        type_id: string,
+        page: number,
+        limit: number,
+        author_id?: string,
+        status_id?: string,
+        order?: string
+    ): Promise<{
         posts: Articles[];
         currentPage: number;
         totalPages: number;
         totalItems: number;
         pageSize: number;
     }>;
-    
+    lastPost(): Promise<Articles>;
     findById(id: string): Promise<Articles>;
     findByPostId(post_id: string): Promise<Articles>;
     findByName(name: string): Promise<Articles>
