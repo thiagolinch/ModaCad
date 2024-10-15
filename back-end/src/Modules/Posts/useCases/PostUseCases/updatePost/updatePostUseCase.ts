@@ -8,7 +8,7 @@ import { Tags } from "../../../entity/Tags";
 import { Subjects } from "../../../../Assuntos/entities/Subject";
 import { Admins } from "../../../../Admins/entity/Admins";
 
-interface ICreateArticleRequest {
+interface IupdateArticleRequest {
     id: string;
     admins?: string[];
     feature_image?: string;
@@ -79,7 +79,7 @@ class UpdatePostUseCase {
         feature_image_alt,
         feature_image_caption,
         email_only,
-    }: ICreateArticleRequest): Promise<void> {
+    }: IupdateArticleRequest): Promise<void> {
         const post = await this.articleRepo.findById(id)
         const meta = await this.metaRepository.getbyPostId(post.post_id)
 

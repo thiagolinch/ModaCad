@@ -32,7 +32,8 @@ export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigital
         S3StorageProvider,
         Tags,
         Meta,
-        Status
+        Status,
+        Plans
       ]
     })
   );
