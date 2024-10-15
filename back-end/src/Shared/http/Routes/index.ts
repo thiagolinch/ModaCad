@@ -9,6 +9,7 @@ import { userAuth } from "./userAuthenticate.routes";
 import { tagsRoute } from "./tagRoutes.routes";
 import { metaRoute } from "./metaRoutes.routes";
 import { statusRoute } from "./statusRoutes.routes";
+import { planRoute } from "./planRoutes.routes";
 
 
 const routes = Router();
@@ -22,5 +23,6 @@ routes.use("/post", postRoute)
 routes.use("/tags", tagsRoute)
 routes.use("/meta", metaRoute)
 routes.use("status", statusRoute)
+routes.use("/plan", planRoute)
 
 export { routes }   

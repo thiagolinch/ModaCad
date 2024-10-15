@@ -1,4 +1,4 @@
-import { Column, CreateDateColumn, Entity, PrimaryColumn } from "typeorm";
+import { Column, CreateDateColumn, Entity, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidV4} from 'uuid'
 
 
@@ -10,16 +10,19 @@ class Plans {
     @Column()
     title: string;
 
-    @Column()
-    topics: string;
+    @Column("text", { array: true })
+    topics: string[];
 
     @Column()
     price: string;
 
+    @Column()
+    sort: number;
+
     @CreateDateColumn()
     created_at: Date
 
-    @CreateDateColumn()
+    @UpdateDateColumn()
     updated_at: Date
 
     constructor() {
