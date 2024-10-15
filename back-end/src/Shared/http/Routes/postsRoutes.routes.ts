@@ -41,7 +41,7 @@ const createPostSubject = new CreatePostSubjectController();
 
 
 // CREATE POST
-postRoute.post("/", ensureAdminAuhenticate, createPost.handle)
+postRoute.post("/", ensureAdminAuhenticate, ensureAdminCanPost, createPost.handle)
 
 // DELETE POST
 postRoute.delete("/:id", ensureAdminAuhenticate, ensurCanDelete, deletepost.handle)

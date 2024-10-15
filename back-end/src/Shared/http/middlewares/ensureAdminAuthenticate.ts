@@ -29,6 +29,10 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
            throw new Error("Administrador nao encontrado")
         }
 
+        if(admin.role = "membro") {
+            throw new Error("Você não é um administrador com permissões.")
+        }
+
         request.admin = {
             id: admin.id,
             role: admin.role

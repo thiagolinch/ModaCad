@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
 import { AdminRepository } from "../../../Modules/Admins/repositories/implements/AdminsRepository";
-import { AdminRoleRepository } from "../../../Modules/Admins/repositories/implements/AdminRoleRepository";
-import { AdminRole } from "../../../Modules/Admins/entity/AdminRole";
 
 interface IPayload {
     subject: string;
@@ -19,7 +17,6 @@ export async function ensureAdminCanPost(request: Request, response: Response, n
         const { subject: adminId } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
-        const roleRepo = new AdminRoleRepository();
         
         const admin = await adminRepo.findById(adminId);
 
