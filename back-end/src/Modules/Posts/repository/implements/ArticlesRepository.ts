@@ -128,6 +128,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.title",
                 "p.description",
                 "p.feature_image",
+                "p.status",
                 "p.updated_at",
                 "admin.id", // Seleciona apenas o id do admin
                 "admin.name", // Seleciona apenas o nome do admin
