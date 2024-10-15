@@ -14,17 +14,12 @@ export class CreatePlanUseCase {
         price,
         sort
     }: IPlansRepositoryDTO): Promise<void> {
-        console.log("use Case init")
-        console.log(title,
-            topics,
-            price,
-            sort)
+
         await this.repository.create({
             title,
             topics,
             price,
             sort
         })
-        console.log("plano criado")
     }
 }

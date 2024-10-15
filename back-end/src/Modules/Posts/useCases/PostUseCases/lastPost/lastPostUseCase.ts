@@ -12,7 +12,6 @@ export class LastPostUseCase {
     ) {}
 
     async execute(): Promise<Articles> {
-        console.log("last post useCase")
         const post = await this.articleRepository.lastPost()
 
         return post

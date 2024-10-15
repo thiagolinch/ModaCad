@@ -15,6 +15,7 @@ import { ensureAdministrador } from "../middlewares/ensureAdministrador"
 import { CreateUserController } from "../../../Modules/Admins/useCases/createUser/createUserController"
 import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmin/createAdmController"
 import { ListStaffController } from "../../../Modules/Admins/useCases/listStaf/listStafController"
+import { DeleteUserController } from "../../../Modules/Admins/useCases/deleteUser/deleteuserController"
 
 const adminRoute = Router()
 
@@ -23,6 +24,7 @@ const uploadAvatar = multer(upload)
 const createUserController = new CreateUserController()
 const createAdm = new CreateAdmController()
 const updateControler = new UpdateUserController()
+const deleteuser = new DeleteUserController();
 
 const profileAdminController = new AdminProfileController()
 const listUsers = new ListUsersController();
@@ -44,9 +46,7 @@ adminRoute.get("/staff", ensureAdminAuhenticate, listStaff.handle)
 adminRoute.put("/:id", ensureAdminAuhenticate, ensureAdministrador, updateControler.handle)
 
 // DELETE ADMIN
-adminRoute.delete("/:id", ensureAdministrador,  () => {
-    console.log("delete member route working")
-})
+adminRoute.delete("/delete/:id", ensureAdminAuhenticate, ensureAdministrador,  deleteuser.handle)
 
 // ADMIN PROFILE
 adminRoute.get("/profile", ensureAdminAuhenticate, profileAdminController.handle);

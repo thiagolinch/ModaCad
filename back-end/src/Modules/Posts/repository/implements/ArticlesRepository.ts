@@ -96,7 +96,6 @@ class ArticleRepository implements IArticlesRepository {
         }
 
         if(subjects) {
-            console.log(subjects)
             post.subjects = subjects
         }
 
