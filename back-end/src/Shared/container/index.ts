@@ -29,6 +29,8 @@ import { IMetaRepository } from '../../Modules/Posts/repository/IMetaRepository'
 import { MetaRepository } from '../../Modules/Posts/repository/implements/MetaRepository';
 import { IStatusRepository } from '../../Modules/Posts/repository/IStatusRepository';
 import { StatusRepository } from '../../Modules/Posts/repository/implements/StatusRepository';
+import { IPlansRepository } from '../../Modules/Posts/repository/IPlansRepository';
+import { PlanRepository } from '../../Modules/Posts/repository/implements/PlanRepository';
 
 container.registerSingleton<ISubjectsRepository>(
     "SubjectRepository",
@@ -88,4 +90,9 @@ container.registerSingleton<IMetaRepository>(
 container.registerSingleton<IStatusRepository> (
     "StatusRepository",
     StatusRepository
+)
+
+container.registerSingleton<IPlansRepository> (
+    "PlanRepository",
+    PlanRepository
 )
