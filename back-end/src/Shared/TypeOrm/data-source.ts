@@ -2,7 +2,6 @@ import "reflect-metadata"
 import { Connection, createConnection, getConnectionOptions } from "typeorm";
 
 import { Subjects } from "../../Modules/Assuntos/entities/Subject"
-import { Members } from "../../Modules/Members/entities/Members";
 import { Admins } from "../../Modules/Admins/entity/Admins";
 import { AdminRole } from "../../Modules/Admins/entity/AdminRole";
 import { AdminTokens } from "../../Modules/Admins/entity/AdminToken";
@@ -22,7 +21,6 @@ export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigital
       host,
       entities: [
         Subjects,
-        Members,
         Admins,
         AdminRole,
         AdminTokens,

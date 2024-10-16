@@ -21,12 +21,17 @@ export async function ensureAdminCanPost(request: Request, response: Response, n
         const admin = await adminRepo.findById(adminId);
 
         if(admin.role == "colaborador"){
-            throw new Error("Administrador nao autorizado").message           
+            throw new Error("Administrador nao autorizado")           
         }
         
         next()
-    } catch(error) {
+    } catch (error) {
         console.error("Erro no middleware de autenticação:", error);
-        return response.status(401).json({ message: error instanceof Error ? error.message : "Token inválido" });
+
+        if (error instanceof Error && error.name === "JsonWebTokenError") {
+            return response.status(401).json({ message: "Token inválido" });
+        }
+
+        return response.status(500).json({ message: "Erro interno do servidor" });
     }
 }

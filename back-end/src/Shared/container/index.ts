@@ -5,9 +5,6 @@ import { SubjectRepository } from '../../Modules/Assuntos/repositories/implement
 
 import "./providers"
 
-import { IMembersRepository } from '../../Modules/Members/repositories/IMembersRepository';
-import { MembersRepository } from '../../Modules/Members/repositories/implements/MembersRepository';
-
 import { IAdminsRepository } from '../../Modules/Admins/repositories/IAdminsRepository';
 import { AdminRepository } from '../../Modules/Admins/repositories/implements/AdminsRepository';
 
@@ -40,11 +37,6 @@ container.registerSingleton<ISubjectsRepository>(
 container.registerSingleton<IArticlesRepository>(
     "ArticleRepository",
     ArticleRepository
-)
-
-container.registerSingleton<IMembersRepository>(
-    "MembersRepository",
-    MembersRepository
 )
 
 container.registerSingleton<IAdminsRepository>(

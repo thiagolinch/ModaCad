@@ -16,6 +16,7 @@ import { CreateUserController } from "../../../Modules/Admins/useCases/createUse
 import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmin/createAdmController"
 import { ListStaffController } from "../../../Modules/Admins/useCases/listStaf/listStafController"
 import { DeleteUserController } from "../../../Modules/Admins/useCases/deleteUser/deleteuserController"
+import { ensureAuthenticate } from "../middlewares/ensureAuthenticate"
 
 const adminRoute = Router()
 
@@ -49,7 +50,7 @@ adminRoute.put("/:id", ensureAdminAuhenticate, ensureAdministrador, updateContro
 adminRoute.delete("/delete/:id", ensureAdminAuhenticate, ensureAdministrador,  deleteuser.handle)
 
 // ADMIN PROFILE
-adminRoute.get("/profile", ensureAdminAuhenticate, profileAdminController.handle);
+adminRoute.get("/profile", ensureAuthenticate, profileAdminController.handle);
 
 // ADD AVATAR TO ADMIN
 adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAdminAuhenticate, updateAdminAvatar.handle);
