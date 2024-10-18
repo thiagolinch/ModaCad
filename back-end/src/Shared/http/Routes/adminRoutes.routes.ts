@@ -17,6 +17,8 @@ import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmi
 import { ListStaffController } from "../../../Modules/Admins/useCases/listStaf/listStafController"
 import { DeleteUserController } from "../../../Modules/Admins/useCases/deleteUser/deleteuserController"
 import { ensureAuthenticate } from "../middlewares/ensureAuthenticate"
+import { CreatePaymentController } from "../../../Modules/Admins/useCases/PagamentosUseCase/createPayment/createPaymentController"
+import { CreatePlanMPController } from "../../../Modules/Admins/useCases/PagamentosUseCase/createPlan/createPlanMPController"
 
 const adminRoute = Router()
 
@@ -31,6 +33,9 @@ const profileAdminController = new AdminProfileController()
 const listUsers = new ListUsersController();
 const listStaff = new ListStaffController();
 const updateAdminAvatar = new UploadAdminAvatarController()
+
+const paymenteCreate = new CreatePaymentController();
+const mpPlan = new CreatePlanMPController();
 
 const uploadAdminAvatar = multer(upload)
 
@@ -58,6 +63,13 @@ adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAdminAuhenticate
 // LIST ADMINS
 adminRoute.get("/users", ensureAdminAuhenticate, listUsers.handle );
 
+// PAYMENTS ROUTES TO TEST
+adminRoute.post("/payment", ensureAuthenticate,  paymenteCreate.handle)
+
+
+// CREATE PLAN TO PAYMENT
+
+adminRoute.post("/payment/plan", ensureAuthenticate, mpPlan.handle)
 
 
 export  { adminRoute };
