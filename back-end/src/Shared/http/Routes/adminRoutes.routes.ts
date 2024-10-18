@@ -63,13 +63,5 @@ adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAdminAuhenticate
 // LIST ADMINS
 adminRoute.get("/users", ensureAdminAuhenticate, listUsers.handle );
 
-// PAYMENTS ROUTES TO TEST
-adminRoute.post("/payment", ensureAuthenticate,  paymenteCreate.handle)
-
-
-// CREATE PLAN TO PAYMENT
-
-adminRoute.post("/payment/plan", ensureAuthenticate, mpPlan.handle)
-
 
 export  { adminRoute };

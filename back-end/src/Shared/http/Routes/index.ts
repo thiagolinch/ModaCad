@@ -8,6 +8,7 @@ import { tagsRoute } from "./tagRoutes.routes";
 import { metaRoute } from "./metaRoutes.routes";
 import { statusRoute } from "./statusRoutes.routes";
 import { planRoute } from "./planRoutes.routes";
+import { paymentRoute } from "./paymentsRoutes.routes";
 
 
 const routes = Router();
@@ -20,5 +21,6 @@ routes.use("/tags", tagsRoute)
 routes.use("/meta", metaRoute)
 routes.use("status", statusRoute)
 routes.use("/plan", planRoute)
+routes.use("/payment", paymentRoute)
 
 export { routes }   
