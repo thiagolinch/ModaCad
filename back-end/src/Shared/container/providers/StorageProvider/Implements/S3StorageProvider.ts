@@ -63,7 +63,7 @@ class S3StorageProvider implements IStorageProvider {
       month = `0${month}`;
     }
 
-    const dest = `content/images/${folder}/${originalName}`
+    const dest = `content/images/${folder}/${file}`
 
     const params = new PutObjectCommand({
       Bucket: process.env.AWS_BUCKET,
