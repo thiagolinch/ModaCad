@@ -7,7 +7,8 @@
   "scripts": {
     "dev": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn ./src/Shared/http/server.ts",
     "typeorm": "ts-node-dev node_modules/typeorm/cli",
-    "start": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn ./src/Shared/http/server.ts"
+    "start": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn ./src/Shared/http/server.ts",
+    "build": "esbuild src/Shared/http/server.ts --platform=node --outfile=dist/index.js --target=node16"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
@@ -50,6 +51,7 @@
     "typeorm": "0.2.41",
     "uuid": "^9.0.1",
     "vercel": "^35.1.0",
-    "webpack": "^5.91.0"
+    "webpack": "^5.91.0",
+    "esbuild": "0.23.1"
   }
 }
