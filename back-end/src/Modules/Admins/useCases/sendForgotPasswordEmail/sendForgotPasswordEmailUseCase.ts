@@ -5,41 +5,42 @@ import { AdminTokenRepository } from "../../repositories/implements/AdminTokenRe
 import { IDateProvider } from "../../../../Shared/container/providers/DateProvider/IDateProvider";
 import { IAdminsRepository } from "../../repositories/IAdminsRepository";
 import { IMailProvider } from "../../../../Shared/container/providers/MailProvider/IMailProvider";
+import 'dotenv/config';
 
 
 @injectable()
 class SendForgotPasswordUseCase {
     constructor(
         @inject("AdminTokenRepository")
-        private adminsTokenRep: AdminTokenRepository,
+        private userTokenRep: AdminTokenRepository,
         @inject("DaysJSDateProvider")
         private dayJsProvider: IDateProvider,
         @inject("AdminRepository")
-        private adminRepository: IAdminsRepository,
+        private userRepository: IAdminsRepository,
         @inject("ZohoMailProvaider")
         private zohoMailProvider: IMailProvider
     ){}
 
     async execute(email: string): Promise<any> {
-        const admin = await this.adminRepository.findByEmail(email);
+        const user = await this.userRepository.findByEmail(email);
 
-        if(!admin) {
+        if(!user) {
             throw new Error("account does not exists").message
-        }
+        };
 
         const templatePath = resolve(__dirname, "..", "..", "views", "email", "forgotPassword.hbs");
 
         const token = uuidV4();
-        const expires_date = this.dayJsProvider.addHours(3)
+        const expires_dates = this.dayJsProvider.addHours(10)
 
-        await this.adminsTokenRep.create({
+        await this.userTokenRep.create({
             refresh_token: token,
-            admin_id: admin.id,
-            expires_date
+            admin_id: user.id,
+            expires_date: expires_dates
         });
 
         const variables = {
-            name: admin.name,
+            name: user.name,
             link: `${process.env.FORGOT_MAIL_URL}${token}`
         }
 

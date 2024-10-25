@@ -29,13 +29,13 @@ class ZohoMailProvaider implements IMailProvider {
 
         const templateHTML = templateParse(variables);
 
-        const message = await this.client.sendMail({
+        await this.client.sendMail({
             to,
             from: "ModaCad <programmer@modacad.com.br",
             subject: subject,
             html: templateHTML
 
-        });
+        })
     }
 
 }

@@ -33,9 +33,9 @@ class ResetUserPasswordUseCase {
 
         const user = await this.userRepository.findById(adminToken.admin_id)
 
-       user.password = await hash(password, 9);
+       const passwordHash = await hash(password, 9);
 
-        await this.userRepository.create(user);
+        await this.userRepository.updatePassword(user.id, passwordHash);
 
         await this.usersTokenRep.deleteById(adminToken.id)
     }

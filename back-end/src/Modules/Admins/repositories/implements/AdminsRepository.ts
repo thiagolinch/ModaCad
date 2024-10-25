@@ -30,12 +30,12 @@ class AdminRepository implements IAdminsRepository {
 
     async update(
         id: string,
-        name: string,
-        cellphone: string,
-        email: string,
-        role: string,
-        status_id: string,
-        plan_id: string
+        name?: string,
+        cellphone?: string,
+        email?: string,
+        role?: string,
+        status_id?: string,
+        plan_id?: string
     ): Promise<void> {
         const user = await this.repository.findOne({id})
 
@@ -63,6 +63,15 @@ class AdminRepository implements IAdminsRepository {
         }
 
         await this.repository.save(user)
+    }
+
+    async updatePassword(id: string, password: string): Promise<void> {
+        const user = await this.repository.findOne({id});
+
+        user.password = password
+
+        await this.repository.save(user)
+
     }
 
     async listUsers(role: string, status_id?: string, plan_id?: string): Promise<Admins[]> {

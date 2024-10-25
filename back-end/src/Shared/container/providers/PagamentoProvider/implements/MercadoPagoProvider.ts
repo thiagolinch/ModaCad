@@ -8,7 +8,7 @@ interface IRequest {
     payment_method_id: string,
     token?: string;
     mail: string;
-}
+};
 
 interface IResponse {
 
