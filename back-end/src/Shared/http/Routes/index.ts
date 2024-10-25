@@ -9,6 +9,7 @@ import { userAuth } from "./userAuthenticate.routes";
 import { tagsRoute } from "./tagRoutes.routes";
 import { metaRoute } from "./metaRoutes.routes";
 import { statusRoute } from "./statusRoutes.routes";
+import { passwordRoutes } from "./password.routes";
 
 
 const routes = Router();
@@ -16,6 +17,7 @@ const routes = Router();
 routes.use("/subjects", subjectsRoute)
 routes.use("/members", memberRoutes)
 routes.use("/auth", userAuth)
+routes.use("/password", passwordRoutes);
 routes.use("/admins", adminRoute)
 routes.use("/admin-session", authenticateAdminRoutes)
 routes.use("/post", postRoute)
