@@ -2,6 +2,9 @@ import { compare } from "bcryptjs";
 import { sign } from "jsonwebtoken";
 import { inject, injectable } from "tsyringe";
 import { IAdminsRepository } from "../../repositories/IAdminsRepository";
+import auth from "../../../../Config/auth";
+import { IDateProvider } from "../../../../Shared/container/providers/DateProvider/IDateProvider";
+import { IAdminTokensRepository } from "../../repositories/IAdminTokenRepository";
 
 
 interface Iresponse {
@@ -17,11 +20,16 @@ interface Iresponse {
 class CreateSessionAdminUseCase {
     constructor(
         @inject("AdminRepository")
-        private adminRepo: IAdminsRepository
+        private adminRepo: IAdminsRepository,
+        @inject("DaysJSDateProvider")
+        private dateProvider: IDateProvider,
+        @inject("AdminTokenRepository")
+        private adminToken: IAdminTokensRepository
     ) {}
 
     async execute(email: string, password:string): Promise<Iresponse> {
-        const admin = await this.adminRepo.findByEmail(email)
+        const admin = await this.adminRepo.findByEmail(email);
+        const { expires_in_token, secret, secret_refresh_token, expires_in_refresh_token, expires_refresh_token_days } = auth;
 
         if(!admin){
             throw new Error("E-mail or password invalid").message
@@ -32,11 +40,25 @@ class CreateSessionAdminUseCase {
         if(!passwordMatch){
             throw new Error("E-mail or password invalid").message
         }
+        
         const token = sign({
             subject: admin.id,
             role: admin.role.toString,
-            expiresIn: "1d"
-        }, "88f1c14bd2a14b42fad21d64739889e9")
+            expiresIn: expires_in_token
+        }, secret)
+
+        const refresh_token_expires_date = this.dateProvider.addDays(expires_refresh_token_days);
+
+        const refresh_token = sign({ email }, secret_refresh_token, {
+            subject: admin.id,
+            expiresIn: expires_in_refresh_token
+        });
+
+        await this.adminToken.create({
+            admin_id: admin.id,
+            expires_date: refresh_token_expires_date,
+            refresh_token: refresh_token
+        })
 
         const tokenResponse: Iresponse = {
             admin: {
