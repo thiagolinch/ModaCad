@@ -58,7 +58,7 @@ adminRoute.delete("/delete/:id", ensureAdminAuhenticate, ensureAdministrador,  d
 adminRoute.get("/profile", ensureAuthenticate, profileAdminController.handle);
 
 // ADD AVATAR TO ADMIN
-adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAdminAuhenticate, updateAdminAvatar.handle);
+adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAuthenticate, updateAdminAvatar.handle);
 
 // LIST ADMINS
 adminRoute.get("/users", ensureAdminAuhenticate, listUsers.handle );
