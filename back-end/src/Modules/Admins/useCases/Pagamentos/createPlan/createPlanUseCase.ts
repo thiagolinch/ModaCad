@@ -1,7 +1,23 @@
 import { inject, injectable } from "tsyringe";
 import { IMercadoPagoProvider } from "../../../../../Shared/container/providers/PagamentoProvider/IMercadoPagoProvider";
 
-
+interface IRequest {
+    id?: string;
+    reason?: string;
+    frequency?: number;
+    frequency_type?: string;
+    transaction_amount: number;
+    payment_method_id: string;
+    currency_id: string;
+    token?: string;
+    repetitions?: number;
+    back_url: string;
+    mail: string;
+    free_trial?: {
+        frequency: number;
+        frequency_type: string;
+    };
+}
 
 @injectable()
 export class CreatePlanMPUseCase {
@@ -11,7 +27,7 @@ export class CreatePlanMPUseCase {
     ) {}
 
     async execute(
-        reason,
+        reason: string,
         frequency: number,
         frequency_type: string,
         transaction_amount: number,

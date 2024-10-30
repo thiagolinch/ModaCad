@@ -32,7 +32,7 @@ interface IArticlesRepositoryDTO {
     feature_image_alt?: string;
     feature_image_caption?: string;
     email_only?: string;
-
+    canonicalUrl?: string;
 }
 
 interface IArticlesRepository {
@@ -46,7 +46,8 @@ interface IArticlesRepository {
         tags,
         subjects,
         images,
-        admins
+        admins,
+        canonicalUrl
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
     update({
@@ -61,7 +62,8 @@ interface IArticlesRepository {
         tags,
         subjects,
         images,
-        admins
+        admins,
+        canonicalUrl
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
     findPostByParams(

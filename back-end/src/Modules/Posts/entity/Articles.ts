@@ -42,6 +42,21 @@ class Articles {
     @Column()
     visibility?: string;
 
+    @Column()
+    slug: string;
+
+    @Column()
+    plaintext: string;
+
+    @Column()
+    mobiledoc: string;
+
+    @Column()
+    featured: string;
+
+    @Column()
+    canonicalUrl: string;
+
     @ManyToMany(() => Admins, admin => admin.posts)
     @JoinTable({
         name: "post_admin", // Tabela de junção entre articles e admins

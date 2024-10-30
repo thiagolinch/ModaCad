@@ -27,7 +27,7 @@ export class CreatePlanMPController {
                 currency_id,
                 repetitions,
                 back_url
-            )
+           )
             return res.status(201).json(data)
         } catch (error) {
             return res.status(400).json(error)

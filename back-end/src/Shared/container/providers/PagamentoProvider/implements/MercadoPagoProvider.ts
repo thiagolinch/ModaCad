@@ -1,49 +1,82 @@
+
+
 import MercadoPagoConfig, { Payment, PreApprovalPlan } from "mercadopago";
 import { IMercadoPagoProvider } from "../IMercadoPagoProvider";
 
-interface IRequest {
-    id: string,
-    transaction_amount: number,
-    description: string,
-    payment_method_id: string,
-    token?: string;
-    mail: string;
-};
-
 interface IResponse {
+    id: string;
+    status: string;
+    // outros campos relevantes
+}
 
+interface IRequest {
+    id?: string;
+    reason?: string;
+    frequency?: number;
+    frequency_type?: string;
+    transaction_amount: number;
+    payment_method_id: string;
+    currency_id: string;
+    token?: string;
+    repetitions?: number;
+    back_url: string;
+    mail: string;
+    free_trial?: {
+        frequency: number;
+        frequency_type: string;
+    };
 }
 
 export class MercadoPagoProvider implements IMercadoPagoProvider {
     private mercadoPg = new MercadoPagoConfig({
-        accessToken: process.env.MP_ACCESS_TOKEN_TEST,
+        accessToken: process.env.MP_ACCESS_TOKEN,
         options: { timeout: 5000 }
     });
 
-    async create({
-        transaction_amount,
-        description,
-        payment_method_id,
-        token,
-        mail
-    }: IRequest): Promise<IResponse> {
+    async create(
+        transaction_amount: number,
+        description: string,
+        installments?: number,
+        payment_method_id?: string,
+        issuer_id?: number,
+        token?: string,
+        email?: string,
+        doc_type?: string,
+        doc_number?: string
+    ): Promise<any> {
+        try {
+            if (!this.mercadoPg.accessToken) {
+                throw new Error("Access token not set");
+            }
 
-        const body = {
-            transaction_amount,
-            description,
-            payment_method_id,
-            token,
-            payer: {
-                email: mail
-            },
+            const body = {
+                transaction_amount: transaction_amount,
+                token: token,
+                description: description,
+                installments: installments,
+                payment_method_id,
+                issuer_id,
+                payer: {
+                  email,
+                  identification: {
+                    type: doc_type,
+                    number: doc_number,
+                  },
+                },
+              };
+
+            const client = new Payment(this.mercadoPg);
+            const pay = await client.create({ body });
+
+            return pay;
+        } catch (error) {
+            console.error("Error creating payment:", error);
+            throw new Error(`Error creating payment: ${error.message}`);
         }
-        const client = new Payment(this.mercadoPg)
-        const pay = await client.create({body})
-
-        return pay
     }
 
-    async createPlan(reason: string,
+    async createPlan(
+        reason: string,
         frequency: number,
         frequency_type: string,
         transaction_amount: number,
@@ -51,22 +84,37 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         repetitions: number,
         back_url: string
     ): Promise<any> {
-        const preApprovalPlan = new PreApprovalPlan(this.mercadoPg)
-        const body = {
-            reason,
-            auto_recurring: {
-                frequency,
-                frequency_type,
-                transaction_amount,
-                currency_id,
-                repetitions
-            },
-            back_url
-        };
+        try {
+            const preApprovalPlan = new PreApprovalPlan(this.mercadoPg);
+            const body = {
+                reason,
+                auto_recurring: {
+                    frequency,
+                    frequency_type,
+                    transaction_amount,
+                    currency_id,
+                    repetitions,
+                },
+                back_url
+            };
 
-        const data = await preApprovalPlan.create({body})
-
-        return data;
+            const data = await preApprovalPlan.create({ body });
+            return data;
+        } catch (error) {
+            console.error("Error creating plan:", error);
+            throw new Error(`Error creating plan: ${error.message}`);
+        }
     }
 
+    async getPayment(id: string): Promise<any> {
+        try {
+            const client = new Payment(this.mercadoPg);
+            const payment = await client.get({ id });
+
+            return payment
+        } catch (error) {
+            console.error("Error fetching payment:", error);
+            throw new Error(`Error fetching payment: ${error.message}`);
+        }
+    }
 }
