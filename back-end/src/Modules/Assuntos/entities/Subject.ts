@@ -13,6 +13,9 @@ class Subjects {
     @Column()
     name: string;
 
+    @Column()
+    sort: number;
+
     @ManyToMany(() => Articles, article => article.subjects)
     articles: Articles[];
 

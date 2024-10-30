@@ -32,6 +32,7 @@ interface ICreateArticleRequest {
     feature_image_alt?: string;
     feature_image_caption?: string;
     email_only?: string;
+    canonicalUrl?: string;
 }
 
 @injectable()
@@ -77,7 +78,9 @@ class CreatePostUseCase {
         feature_image_alt,
         feature_image_caption,
         email_only,
+        canonicalUrl
     }: ICreateArticleRequest): Promise<string> {
+        const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
        
         // 1. Criar o artigo
         const article = new Articles();
@@ -88,6 +91,7 @@ class CreatePostUseCase {
         article.visibility = visibility;
         article.status = status;
         article.type = type;
+        article.canonicalUrl = cannonical
 
         // 2. Buscar as Tags no banco de dados
         const foundTags = await this.tagsRepository.findByIds(tags);

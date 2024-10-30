@@ -2,8 +2,6 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 
 import { AdminRepository } from "../../../Modules/Admins/repositories/implements/AdminsRepository";
-import { AdminRoleRepository } from "../../../Modules/Admins/repositories/implements/AdminRoleRepository";
-import { AdminRole } from "../../../Modules/Admins/entity/AdminRole";
 
 interface IPayload {
     subject: string;
@@ -19,17 +17,21 @@ export async function ensureAdminCanPost(request: Request, response: Response, n
         const { subject: adminId } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
-        const roleRepo = new AdminRoleRepository();
         
         const admin = await adminRepo.findById(adminId);
 
         if(admin.role == "colaborador"){
-            throw new Error("Administrador nao autorizado").message           
+            throw new Error("Administrador nao autorizado")           
         }
         
         next()
-    } catch(error) {
+    } catch (error) {
         console.error("Erro no middleware de autenticação:", error);
-        return response.status(401).json({ message: error instanceof Error ? error.message : "Token inválido" });
+
+        if (error instanceof Error && error.name === "JsonWebTokenError") {
+            return response.status(401).json({ message: "Token inválido" });
+        }
+
+        return response.status(500).json({ message: "Erro interno do servidor" });
     }
 }

@@ -6,6 +6,7 @@ import { ListPlansController } from "../../../Modules/Posts/useCases/PlansUseCas
 import { UpdatePlanController } from "../../../Modules/Posts/useCases/PlansUseCases/UpdatePlan/updatePlanController";
 import { DeletePlanController } from "../../../Modules/Posts/useCases/PlansUseCases/DeletePlan/deletePlanController";
 import { ViewPlanController } from "../../../Modules/Posts/useCases/PlansUseCases/ViewPlan/viewPlanController";
+import { ensureAdministrador } from "../middlewares/ensureAdministrador";
 
 
 const planRoute = Router()
@@ -17,13 +18,13 @@ const deleteController = new DeletePlanController();
 const viewPlan = new ViewPlanController();
 
 // CREATE NEW PLAN
-planRoute.post("/create", ensureAdminAuhenticate, ensureAdminCanPost, create.handle)
+planRoute.post("/create", ensureAdminAuhenticate, ensureAdministrador, create.handle)
 
 // UPDATE PLAN
-planRoute.patch("/update/:id", ensureAdminAuhenticate, ensureAdminCanPost, update.handle)
+planRoute.patch("/update/:id", ensureAdminAuhenticate, ensureAdministrador, update.handle)
 
 // DELETE PLAN
-planRoute.delete("/delete/:id", ensureAdminAuhenticate, ensureAdminCanPost, deleteController.handle)
+planRoute.delete("/delete/:id", ensureAdminAuhenticate, ensureAdministrador, deleteController.handle)
 
 // LIST PLANS
 planRoute.get("/list", list.handle)

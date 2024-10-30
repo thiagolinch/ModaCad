@@ -45,7 +45,8 @@ class ArticleRepository implements IArticlesRepository {
         type,
         tags,
         subjects,
-        admins
+        admins,
+        canonicalUrl
         }: IArticlesRepositoryDTO
     ): Promise<Articles> {
         const post = await this.repository.findOne({id})
@@ -96,8 +97,11 @@ class ArticleRepository implements IArticlesRepository {
         }
 
         if(subjects) {
-            console.log(subjects)
             post.subjects = subjects
+        }
+
+        if(canonicalUrl) {
+            post.canonicalUrl = canonicalUrl
         }
 
         await this.repository.save(post)
@@ -261,7 +265,8 @@ class ArticleRepository implements IArticlesRepository {
         type,
         tags,
         subjects,
-        admins
+        admins,
+        canonicalUrl
         }: IArticlesRepositoryDTO): Promise<Articles> {
             const post = this.repository.create({
                 title,
@@ -273,7 +278,8 @@ class ArticleRepository implements IArticlesRepository {
                 type,
                 tags,
                 subjects,
-                admins
+                admins,
+                canonicalUrl
             })
 
             await this.repository.save(post)

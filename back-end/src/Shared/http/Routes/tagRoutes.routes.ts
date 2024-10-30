@@ -18,7 +18,7 @@ const getTag = new GetTagController();
 const listTags = new ListTagsController();
 
 // CREATE TAG
-tagsRoute.post("/", createTagControler.handle)
+tagsRoute.post("/", ensureAdministrador, createTagControler.handle)
 
 // DELETE TAG
 tagsRoute.delete("/:id", ensureAdministrador, deleteTag.handle)
