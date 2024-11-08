@@ -2,6 +2,7 @@ node_modules/
 dist/
 .vercel
 back-end/.env
+.env
 src/Modules\Admins\useCases\uploadAdminAvatar
 src/utils/certs
 src/utils/*.crt
