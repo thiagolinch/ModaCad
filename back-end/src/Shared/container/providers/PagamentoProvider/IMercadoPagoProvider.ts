@@ -28,9 +28,7 @@ interface IMercadoPagoProvider {
         description: string,
         payment_method_id?: string,
         token?: string,
-		email?: string,
-        doc_type?: string,
-        doc_number?: string
+		email?: string
     ): Promise<IResponse>;
 
     createPlan(

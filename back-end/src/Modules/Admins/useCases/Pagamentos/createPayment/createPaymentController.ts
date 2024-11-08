@@ -19,13 +19,13 @@ export class CreatePaymentController {
 
 
         try {
-            const paymentResponse = await useCase.execute({
+            const paymentResponse = await useCase.execute(
                 id,
                 transaction_amount,
                 description,
                 payment_method_id,
                 token
-            })
+            )
             return res.status(201).json(paymentResponse);
         } catch (error) {
             res.status(500).json({ error: error.message });
