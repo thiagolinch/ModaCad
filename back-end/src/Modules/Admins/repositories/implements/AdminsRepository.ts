@@ -3,8 +3,6 @@ import { Admins } from "../../entity/Admins";
 import { IAdminsRepository, IAdminsRepositoryDTO } from "../IAdminsRepository";
 
 
-
-
 class AdminRepository implements IAdminsRepository {
     private repository: Repository<Admins>
 
@@ -61,6 +59,14 @@ class AdminRepository implements IAdminsRepository {
         if(plan_id){
             user.plan = plan_id
         }
+
+        await this.repository.save(user)
+    }
+
+    async updatePayment(paymnt_id: string, id: string): Promise<void> {
+        const user = await this.repository.findOne({id})
+
+        user.payment_id = paymnt_id
 
         await this.repository.save(user)
     }
@@ -123,7 +129,31 @@ class AdminRepository implements IAdminsRepository {
     }
 
     async findById(id: string): Promise<Admins> {
-        return await this.repository.findOne({id})
+        // return await this.repository.findOne({id})
+
+        const profile = await this.repository.createQueryBuilder("u")
+        .select([
+            "u.id",
+            "u.name",
+            "u.email",
+            "u.avatar",
+            "u.role",
+            "status.id",
+            "status.name",
+            "u.cellphone",
+            "u.payment_id",
+            "u.payment_created_at",
+            "u.payment_updated_at",
+            "plan.id",
+            "plan.title",
+            "plan.price"
+        ])
+        .where({id})
+        .leftJoin("u.plans", "plan")
+        .leftJoin("u.status_id", "status")
+        .getOne();
+
+        return profile
     }
 
     async findByEmail(email: string): Promise<Admins> {

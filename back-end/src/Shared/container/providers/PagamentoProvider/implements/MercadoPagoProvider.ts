@@ -1,6 +1,6 @@
 
 
-import MercadoPagoConfig, { Payment, PreApprovalPlan } from "mercadopago";
+import MercadoPagoConfig, { CardToken, Payment, PreApproval, PreApprovalPlan } from "mercadopago";
 import { IMercadoPagoProvider } from "../IMercadoPagoProvider";
 
 interface IResponse {
@@ -36,13 +36,9 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
     async create(
         transaction_amount: number,
         description: string,
-        installments?: number,
         payment_method_id?: string,
-        issuer_id?: number,
         token?: string,
         email?: string,
-        doc_type?: string,
-        doc_number?: string
     ): Promise<any> {
         try {
             if (!this.mercadoPg.accessToken) {
@@ -50,18 +46,12 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
             }
 
             const body = {
-                transaction_amount: transaction_amount,
-                token: token,
-                description: description,
-                installments: installments,
+                transaction_amount,
+                token,
+                description,
                 payment_method_id,
-                issuer_id,
                 payer: {
-                  email,
-                  identification: {
-                    type: doc_type,
-                    number: doc_number,
-                  },
+                  email
                 },
               };
 
@@ -82,10 +72,11 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         transaction_amount: number,
         currency_id: string,
         repetitions: number,
-        back_url: string
+        back_url: string,
+        email: string
     ): Promise<any> {
         try {
-            const preApprovalPlan = new PreApprovalPlan(this.mercadoPg);
+            const preApprovalPlan = new PreApproval(this.mercadoPg);
             const body = {
                 reason,
                 auto_recurring: {
@@ -95,8 +86,10 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
                     currency_id,
                     repetitions,
                 },
-                back_url
-            };
+                back_url,
+                payer_email: email
+            };             
+              
 
             const data = await preApprovalPlan.create({ body });
             return data;

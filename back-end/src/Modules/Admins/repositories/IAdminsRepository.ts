@@ -9,8 +9,9 @@ interface IAdminsRepositoryDTO {
     password: string,
     role?: string,
     avatar?: string,
-    status_id?: string,
-    plan_id?: string
+    status?: string,
+    plan_id?: string,
+    payment_id?: string
 }
 
 interface IAdminsRepository {
@@ -25,6 +26,7 @@ interface IAdminsRepository {
         plan_id: string
     ): Promise<void>;
     updatePassword(id: string, password: string): Promise<void>;
+    updatePayment(paymnt_id: string, id: string): Promise<void> 
 
     findById(id: string): Promise<Admins>
     findByIds(id: string[]): Promise<Admins[]>

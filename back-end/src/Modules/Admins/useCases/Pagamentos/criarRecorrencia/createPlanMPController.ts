@@ -7,6 +7,7 @@ import { CreatePlanMPUseCase } from "./createPlanUseCase";
 export class CreatePlanMPController {
 
     async handle(req: Request, res: Response): Promise<Response> {
+        const {id} = req.admin
         const {
             reason,
             frequency,
@@ -14,7 +15,7 @@ export class CreatePlanMPController {
             transaction_amount,
             currency_id,
             repetitions,
-            back_url
+            back_url,
         } = req.body;
         const useCase = container.resolve(CreatePlanMPUseCase)
 
@@ -26,7 +27,8 @@ export class CreatePlanMPController {
                 transaction_amount,
                 currency_id,
                 repetitions,
-                back_url
+                back_url,
+                id
            )
             return res.status(201).json(data)
         } catch (error) {

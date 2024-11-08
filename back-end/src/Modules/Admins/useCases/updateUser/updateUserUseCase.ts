@@ -15,7 +15,7 @@ class UpdateUserUseCase {
         cellphone: string,
         email: string,
         role: string,
-        status_id: string,
+        status: string,
         plan_id: string
     ): Promise<void> {
         const user = await this.admRepo.findById(id)
@@ -30,7 +30,7 @@ class UpdateUserUseCase {
             cellphone,
             email,
             role,
-            status_id,
+            status,
             plan_id
         )
 
