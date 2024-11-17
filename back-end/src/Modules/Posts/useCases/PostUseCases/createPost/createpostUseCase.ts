@@ -10,6 +10,8 @@ import { Tags } from "../../../entity/Tags";
 
 interface ICreateArticleRequest {
     admins: string[];
+    editors?: string[];
+    curadors?: string[];
     title?: string;
     feature_image?: string;
     description?: string;
@@ -33,6 +35,7 @@ interface ICreateArticleRequest {
     feature_image_caption?: string;
     email_only?: string;
     canonicalUrl?: string;
+    published_at?: Date;
 }
 
 @injectable()
@@ -56,6 +59,8 @@ class CreatePostUseCase {
 
     async execute({
         admins,
+        curadors,
+        editors,
         title,
         feature_image,
         description,
@@ -78,8 +83,10 @@ class CreatePostUseCase {
         feature_image_alt,
         feature_image_caption,
         email_only,
-        canonicalUrl
+        canonicalUrl,
+        published_at
     }: ICreateArticleRequest): Promise<string> {
+        console.log("use case")
         const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
        
         // 1. Criar o artigo
@@ -92,6 +99,7 @@ class CreatePostUseCase {
         article.status = status;
         article.type = type;
         article.canonicalUrl = cannonical
+        article.published_at = published_at
 
         // 2. Buscar as Tags no banco de dados
         const foundTags = await this.tagsRepository.findByIds(tags);
@@ -100,6 +108,12 @@ class CreatePostUseCase {
         // 3. Buscar os Admins no banco de dados
         const foundAdmin = await this.adminRepository.findByIds(admins);
         article.admins = foundAdmin;
+
+        const foundEditor = await this.adminRepository.findByIds(editors);
+        article.editors = foundEditor;
+
+        const foundCurador = await this.adminRepository.findByIds(curadors);
+        article.curadors = foundCurador;
 
         // 4. Buscar os Subjects no banco de dados
         const foundSubjects = await this.subjectsRepository.findByIds(subjects);
@@ -122,7 +136,7 @@ class CreatePostUseCase {
             frontmatter,
             feature_image_alt,
             feature_image_caption,
-            email_only,
+            email_only
         });
 
         return newArticle.id;

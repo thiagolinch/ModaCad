@@ -32,6 +32,10 @@ class UpdatePostController {
             feature_image_alt,
             feature_image_caption,
             email_only,
+            canonicalUrl,
+            published_at,
+            editors,
+            curadors
         } = request.body;
         
         const useCase = container.resolve(UpdatePostUseCase)
@@ -62,6 +66,10 @@ class UpdatePostController {
                 feature_image_alt,
                 feature_image_caption,
                 email_only,
+                canonicalUrl,
+                published_at,
+                editors,
+                curadors
             })
             return response.status(200).send()
         } catch (error) {

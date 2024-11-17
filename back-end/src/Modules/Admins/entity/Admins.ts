@@ -57,8 +57,14 @@ class Admins {
     plans: Plans;
 
     @ManyToMany(() => Articles, article => article.admins)
-    @JoinTable()
-    posts: Articles[];
+    postsAsAdmin: Articles[];
+
+    @ManyToMany(() => Articles, article => article.editors)
+    postsAsEditor: Articles[];
+
+    @ManyToMany(() => Articles, article => article.curadors)
+    postsAsCurador: Articles[];
+
 
     @CreateDateColumn()
     created_at: Date

@@ -5,6 +5,7 @@ import { CreatePostUseCase } from "./createpostUseCase";
 
 class CreatePostController {
     async handle(request: Request, response: Response): Promise<Response> {
+        console.log("controller")
         const { id } = request.admin;
         const {
             admins,
@@ -30,6 +31,10 @@ class CreatePostController {
             feature_image_alt,
             feature_image_caption,
             email_only,
+            canonicalUrl,
+            published_at,
+            editors,
+            curadors
         } = request.body;
 
         const createPostUseCase = container.resolve(CreatePostUseCase);
@@ -46,6 +51,8 @@ class CreatePostController {
                 tags,
                 subjects,
                 admins,
+                editors,
+                curadors,
                 og_image,
                 og_title,
                 og_description,
@@ -59,6 +66,8 @@ class CreatePostController {
                 feature_image_alt,
                 feature_image_caption,
                 email_only,
+                canonicalUrl,
+                published_at
             });
     
             return response.status(200).json(articleId)

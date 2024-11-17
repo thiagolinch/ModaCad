@@ -11,6 +11,8 @@ import { Admins } from "../../../../Admins/entity/Admins";
 interface IupdateArticleRequest {
     id: string;
     admins?: string[];
+    editors?: string[];
+    curadors?: string[];
     feature_image?: string;
     title?: string;
     description?: string;
@@ -33,6 +35,8 @@ interface IupdateArticleRequest {
     feature_image_alt?: string;
     feature_image_caption?: string;
     email_only?: string;
+    canonicalUrl?: string;
+    published_at?: Date;
 }
 
 @injectable()
@@ -79,7 +83,13 @@ class UpdatePostUseCase {
         feature_image_alt,
         feature_image_caption,
         email_only,
+        canonicalUrl,
+        published_at,
+        editors,
+        curadors
     }: IupdateArticleRequest): Promise<void> {
+        const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
+
         const post = await this.articleRepo.findById(id)
         const meta = await this.metaRepository.getbyPostId(post.post_id)
 
@@ -97,6 +107,12 @@ class UpdatePostUseCase {
         const foundAdmin = await this.adminRepository.findByIds(admins);
         post.admins = foundAdmin;
 
+        const foundEditor = await this.adminRepository.findByIds(editors);
+        post.editors = foundEditor;
+
+        const foundCurador = await this.adminRepository.findByIds(curadors);
+        post.curadors = foundCurador;
+
         const foundSubjects = await this.subjectsRepository.findByIds(subjects);
         post.subjects = foundSubjects;
 
@@ -105,6 +121,8 @@ class UpdatePostUseCase {
         post.description = description
         post.visibility = visibility
         post.type = type
+        post.canonicalUrl = cannonical
+        post.published_at = published_at
 
         post.status = status
         post.feature_image = feature_image

@@ -17,6 +17,8 @@ interface IArticlesRepositoryDTO {
     tags?: Tags[]; // IDs das tags
     subjects?: Subjects[]; // IDs dos subjects
     admins: Admins[]; // IDs dos admins
+    editors?: Admins[];
+    curadors?: Admins[];
     images?: string[];
     meta_id?: string;
     og_image?: string;
@@ -47,7 +49,10 @@ interface IArticlesRepository {
         subjects,
         images,
         admins,
-        canonicalUrl
+        canonicalUrl,
+        published_at,
+        editors,
+        curadors
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
     update({
@@ -63,7 +68,9 @@ interface IArticlesRepository {
         subjects,
         images,
         admins,
-        canonicalUrl
+        canonicalUrl,
+        editors,
+        curadors
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
     findPostByParams(

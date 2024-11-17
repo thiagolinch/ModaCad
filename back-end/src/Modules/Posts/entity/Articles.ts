@@ -57,7 +57,7 @@ class Articles {
     @Column()
     canonicalUrl: string;
 
-    @ManyToMany(() => Admins, admin => admin.posts)
+    @ManyToMany(() => Admins, admin => admin.postsAsAdmin)
     @JoinTable({
         name: "post_admin", // Tabela de junção entre articles e admins
         joinColumn: {
@@ -70,12 +70,40 @@ class Articles {
         }
     })
     admins: Admins[];
+    
+    @ManyToMany(() => Admins, admin => admin.postsAsEditor)
+    @JoinTable({
+        name: "post_editor", // Tabela de junção entre articles e admins
+        joinColumn: {
+            name: "post_id", // Coluna que referencia articles
+            referencedColumnName: "post_id",
+        },
+        inverseJoinColumn: {
+            name: "admin_id", // Coluna que referencia admins
+            referencedColumnName: "id",
+        }
+    })
+    editors: Admins[];
+    
+    @ManyToMany(() => Admins, admin => admin.postsAsCurador)
+    @JoinTable({
+        name: "post_curador", // Tabela de junção entre articles e admins
+        joinColumn: {
+            name: "post_id", // Coluna que referencia articles
+            referencedColumnName: "post_id",
+        },
+        inverseJoinColumn: {
+            name: "admin_id", // Coluna que referencia admins
+            referencedColumnName: "id",
+        }
+    })
+    curadors: Admins[];
 
     @CreateDateColumn()
-    created_at: Date
+    created_at: Date;
 
     @UpdateDateColumn()
-    updated_at: Date
+    updated_at: Date;
 
     @Column({ type: "timestamp", nullable: true })
     published_at: Date | null;
@@ -108,7 +136,6 @@ class Articles {
     })
     subjects: Subjects[];
 
- // Relação One-to-One com a entidade Meta
     @ManyToMany(() => Meta, meta => meta.article)
     @JoinTable({
         name: "posts_meta",
@@ -132,4 +159,4 @@ class Articles {
     }
 }
 
-export { Articles }
+export { Articles };
