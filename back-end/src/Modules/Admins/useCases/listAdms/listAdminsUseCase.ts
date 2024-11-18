@@ -11,9 +11,10 @@ class ListUsersUseCase {
     ) {}
 
     async execute(role: string, plan_id?: string, status_id?: string): Promise<Admins[]> {
-        const admins = await this.adminRepo.listUsers(role, plan_id, status_id)
+
+        const data = await this.adminRepo.listUsers(role, plan_id, status_id)
         
-        return admins;
+        return data;
     }
 
 }

@@ -81,27 +81,54 @@ class AdminRepository implements IAdminsRepository {
     }
 
     async listUsers(role: string, status_id?: string, plan_id?: string): Promise<Admins[]> {
-        const userQuery = this.repository.createQueryBuilder("u")
-        .select([
-            "u.id",
-            "u.name",
-            "u.email",
-            "u.avatar",
-            "u.role",
-            "u.cellphone"
-        ])
-        .where("u.role = :role", {role})
+        
+        
+        if(role) {
+            const userQuery = this.repository.createQueryBuilder("u")
+            .select([
+                "u.id",
+                "u.name",
+                "u.email",
+                "u.avatar",
+                "u.role",
+                "u.cellphone"
+            ])
+            .where("u.role = :role", {role})
 
-        if(status_id) {
-            userQuery.andWhere("u.status = :status_id", {status_id})
+            if(status_id) {
+                userQuery.andWhere("u.status = :status_id", {status_id})
+            }
+    
+            if(plan_id) {
+                userQuery.andWhere("u.plan = :plan_id", { plan_id })
+            }
+    
+            const users = userQuery.getMany()
+            return users
+        } else {
+            const userQuery = this.repository.createQueryBuilder("u")
+            .select([
+                "u.id",
+                "u.name",
+                "u.email",
+                "u.avatar",
+                "u.role",
+                "u.cellphone"
+            ])
+            
+            if(status_id) {
+                userQuery.andWhere("u.status = :status_id", {status_id})
+            }
+    
+            if(plan_id) {
+                userQuery.andWhere("u.plan = :plan_id", { plan_id })
+            }
+    
+            const users = userQuery.getMany()
+            return users
         }
 
-        if(plan_id) {
-            userQuery.andWhere("u.plan = :plan_id", { plan_id })
-        }
-
-        const users = userQuery.getMany()
-        return users
+        
     }
 
     async updateAvatar({ id, name, cellphone, email, password, role, avatar }: IAdminsRepositoryDTO): Promise<void> {

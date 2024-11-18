@@ -13,9 +13,38 @@ class ArticleRepository implements IArticlesRepository {
     }
 
     async findByCanonicalUrl(canonicalUrl: string): Promise<Articles> {
-        const data = await this.repository.findOne({canonicalUrl})
-
-        return data
+        const query = this.repository.createQueryBuilder("p")
+        .select([
+            "p",
+            "admin.id",
+            "admin.role",
+            "admin.name",
+            "admin.email",
+            "admin.avatar",
+            "editors.id",
+            "editors.role",
+            "editors.name",
+            "curators.id",
+            "curators.role",
+            "curators.name",
+            "meta.id",
+            "meta.meta_title"
+        ])
+        .where("p.canonicalUrl = :canonicalUrl", { canonicalUrl })
+        .leftJoinAndSelect("p.admins", "admin") // Relação com post_admin
+        .leftJoinAndSelect("p.editors", "editors") // Relação com post_editor
+        .leftJoinAndSelect("p.curadors", "curators") // Relação com post_curador
+        .leftJoinAndSelect("p.tags", "tag")
+        .leftJoinAndSelect("p.subjects", "subjects")
+        .leftJoinAndSelect("p.meta", "meta");
+    
+        const result = await query.getOne();
+    
+        if (!result) {
+            throw new Error("Article not found");
+        }
+    
+        return result;
     }
 
     async updateFeatureImage(id: string, feature_image: string): Promise<void> {

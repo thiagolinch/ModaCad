@@ -6,9 +6,9 @@ import { ListUsersUseCase } from "./listAdminsUseCase";
 class ListUsersController {
 
     async handle(request: Request, response: Response): Promise<Response> {
-        const status_id = request.query.status
-        const plan_id = request.query.plan
-        const role = request.query.role
+        const status_id = request.query.status as string | undefined;
+        const plan_id = request.query.plan as string | undefined;
+        const role = request.query.role as string | undefined;
         const listAdm = container.resolve(ListUsersUseCase)
 
         try {
