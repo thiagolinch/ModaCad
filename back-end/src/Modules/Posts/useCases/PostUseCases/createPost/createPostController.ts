@@ -5,7 +5,6 @@ import { CreatePostUseCase } from "./createpostUseCase";
 
 class CreatePostController {
     async handle(request: Request, response: Response): Promise<Response> {
-        console.log("controller")
         const { id } = request.admin;
         const {
             admins,

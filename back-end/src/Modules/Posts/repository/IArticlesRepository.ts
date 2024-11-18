@@ -87,6 +87,7 @@ interface IArticlesRepository {
         totalItems: number;
         pageSize: number;
     }>;
+    findByCanonicalUrl(url: string): Promise<Articles>;
     lastPost(): Promise<Articles>;
     findById(id: string): Promise<Articles>;
     findByPostId(post_id: string): Promise<Articles>;

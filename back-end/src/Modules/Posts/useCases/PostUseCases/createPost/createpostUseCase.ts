@@ -86,8 +86,14 @@ class CreatePostUseCase {
         canonicalUrl,
         published_at
     }: ICreateArticleRequest): Promise<string> {
-        console.log("use case")
         const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
+
+        const canonicalExists = await this.articleRepository.findByCanonicalUrl(cannonical)
+
+        if (canonicalExists) {
+            throw new Error("Canonical URL já inserida em outro post").message
+        }
+
        
         // 1. Criar o artigo
         const article = new Articles();

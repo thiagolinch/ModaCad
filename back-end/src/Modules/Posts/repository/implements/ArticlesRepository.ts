@@ -12,6 +12,12 @@ class ArticleRepository implements IArticlesRepository {
         this.repository = getRepository(Articles)
     }
 
+    async findByCanonicalUrl(canonicalUrl: string): Promise<Articles> {
+        const data = await this.repository.findOne({canonicalUrl})
+
+        return data
+    }
+
     async updateFeatureImage(id: string, feature_image: string): Promise<void> {
         await this.repository.createQueryBuilder("p")
         .update()
@@ -214,7 +220,8 @@ class ArticleRepository implements IArticlesRepository {
             "curators.id",
             "curators.role",
             "curators.name",
-            "meta"
+            "meta.id",
+            "meta.meta_title"
         ])
         .where("p.id = :id", { id })
         .leftJoinAndSelect("p.admins", "admin") // Relação com post_admin
@@ -248,7 +255,8 @@ class ArticleRepository implements IArticlesRepository {
             "curador.id",
             "curador.name",
             "curador.avatar",
-            "meta",
+            "meta.id",
+            "meta.meta_title",
             "tag",
             "subjects"
         ])
