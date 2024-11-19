@@ -15,12 +15,14 @@ import { ensureAdminCanPost } from "../middlewares/ensureCanPost";
 import { ensurCanDelete } from "../middlewares/ensurCanDelete";
 import { UpdatePostController } from "../../../Modules/Posts/useCases/PostUseCases/updatePost/updatePostController";
 
-import { TextoMdcController } from "../../../Modules/Posts/useCases/PostUseCases/getTexto/textoMdcController";
+import { TextoMdcController } from "../../../Modules/Posts/useCases/PostUseCases/getTextoById/textoMdcController";
 
 import { UploadFeatureImageController } from "../../../Modules/Posts/useCases/PostUseCases/uploadFeatureImage/uploadFeatureImageController";
 import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/PostUseCases/deleteFeatureImage/deleteFeatureImageController";
 import { CreatePostSubjectController } from "../../../Modules/Posts/useCases/SubjectUseCases/createPostSubject/createPostSubjectController";
 import { LastPostController } from "../../../Modules/Posts/useCases/PostUseCases/lastPost/lastPostController";
+import { GetTextoByUrlController } from "../../../Modules/Posts/useCases/PostUseCases/getTextoByUrl/getTextoByUrlController";
+import { userCanAccess } from "../middlewares/userCanAccess";
 
 
 const postRoute = Router()
@@ -28,6 +30,7 @@ const postRoute = Router()
 const uploadArticleImageMulter = multer(upload)
 const createPost = new CreatePostController();
 const getTexto = new TextoMdcController();
+const textoByUrl = new GetTextoByUrlController();
 const updatePost = new UpdatePostController();
 const deletepost = new DeletePostController()
 const filterTexto = new FilterTextoController();
@@ -53,7 +56,10 @@ postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAdminCanPost, crea
 postRoute.put("/:id", ensureAdminAuhenticate, ensureAdminCanPost, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:id", getTexto.handle)
+postRoute.get("/:id", userCanAccess, getTexto.handle)
+
+// GET TEXTO PELA URL
+postRoute.get("/blog/:url", textoByUrl.handle)
 
 // LAST POST
 postRoute.get("/last/publish", lastPost.handle)

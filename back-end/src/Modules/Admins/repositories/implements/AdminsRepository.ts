@@ -3,8 +3,6 @@ import { Admins } from "../../entity/Admins";
 import { IAdminsRepository, IAdminsRepositoryDTO } from "../IAdminsRepository";
 
 
-
-
 class AdminRepository implements IAdminsRepository {
     private repository: Repository<Admins>
 
@@ -65,6 +63,15 @@ class AdminRepository implements IAdminsRepository {
         await this.repository.save(user)
     }
 
+    async updatePayment(paymnt_id: string, id: string): Promise<void> {
+        const user = await this.repository.findOne({id})
+
+        user.payment_id = paymnt_id
+        user.subscription_created_at = new Date();
+
+        await this.repository.save(user)
+    }
+
     async updatePassword(id: string, password: string): Promise<void> {
         const user = await this.repository.findOne({id});
 
@@ -74,7 +81,24 @@ class AdminRepository implements IAdminsRepository {
 
     }
 
-    async listUsers(role: string, status_id?: string, plan_id?: string): Promise<Admins[]> {
+    async listUsers(
+        role: string,
+        page: number = 1,
+        plan_id: string,
+        status_id: string,
+        order: 'ASC' | 'DESC' = 'ASC',
+        limit: number = 10
+    ): Promise<{
+        users: Admins[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }> {
+        
+        if(role) {
+            const offset = (page - 1) * limit;
+        
         const userQuery = this.repository.createQueryBuilder("u")
         .select([
             "u.id",
@@ -82,9 +106,19 @@ class AdminRepository implements IAdminsRepository {
             "u.email",
             "u.avatar",
             "u.role",
-            "u.cellphone"
+            "status.id",
+            "status.name",
+            "u.cellphone",
+            "u.payment_id",
+            "u.payment_created_at",
+            "u.subscription_created_at",
+            "u.created_at",
+            "plan.id",
+            "plan.title",
         ])
         .where("u.role = :role", {role})
+        .leftJoin("u.plans", "plan")
+        .leftJoin("u.status_id", "status")
 
         if(status_id) {
             userQuery.andWhere("u.status = :status_id", {status_id})
@@ -94,8 +128,85 @@ class AdminRepository implements IAdminsRepository {
             userQuery.andWhere("u.plan = :plan_id", { plan_id })
         }
 
-        const users = userQuery.getMany()
-        return users
+        // Calcula total de registros antes da paginação
+        const totalItems = await userQuery.getCount();
+    
+        // Ordena globalmente
+        const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
+        userQuery.orderBy("u.created_at", validOrder);
+    
+        // Adiciona paginação
+        userQuery.skip(offset).take(limit);
+    
+        // Executa a consulta com ordenação total e paginação
+        const users = await userQuery.getMany();
+    
+        // Calcula total de páginas
+        const totalPages = Math.ceil(totalItems / limit);
+    
+        return {
+            users,
+            currentPage: page,
+            totalPages,
+            totalItems,
+            pageSize: limit,
+        };
+        }else {
+            
+            const offset = (page - 1) * limit;
+        
+            const userQuery = this.repository.createQueryBuilder("u")
+            .select([
+                "u.id",
+                "u.name",
+                "u.email",
+                "u.avatar",
+                "u.role",
+                "status.id",
+                "status.name",
+                "u.cellphone",
+                "u.payment_id",
+                "u.payment_created_at",
+                "u.subscription_created_at",
+                "u.created_at",
+                "plan.id",
+                "plan.title",
+            ])
+            .leftJoin("u.plans", "plan")
+            .leftJoin("u.status_id", "status")
+
+            if(status_id) {
+                userQuery.andWhere("u.status = :status_id", {status_id})
+            }
+
+            if(plan_id) {
+                userQuery.andWhere("u.plan = :plan_id", { plan_id })
+            }
+
+            // Calcula total de registros antes da paginação
+            const totalItems = await userQuery.getCount();
+        
+            // Ordena globalmente
+            const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
+            userQuery.orderBy("u.created_at", validOrder);
+        
+            // Adiciona paginação
+            userQuery.skip(offset).take(limit);
+        
+            // Executa a consulta com ordenação total e paginação
+            const users = await userQuery.getMany();
+        
+            // Calcula total de páginas
+            const totalPages = Math.ceil(totalItems / limit);
+        
+            return {
+                users,
+                currentPage: page,
+                totalPages,
+                totalItems,
+                pageSize: limit,
+            };
+        }
     }
 
     async updateAvatar({ id, name, cellphone, email, password, role, avatar }: IAdminsRepositoryDTO): Promise<void> {
@@ -123,7 +234,32 @@ class AdminRepository implements IAdminsRepository {
     }
 
     async findById(id: string): Promise<Admins> {
-        return await this.repository.findOne({id})
+        // return await this.repository.findOne({id})
+
+        const profile = await this.repository.createQueryBuilder("u")
+        .select([
+            "u.id",
+            "u.name",
+            "u.email",
+            "u.avatar",
+            "u.role",
+            "status.id",
+            "status.name",
+            "u.cellphone",
+            "u.payment_id",
+            "u.payment_created_at",
+            "u.payment_updated_at",
+            "u.subscription_created_at",
+            "plan.id",
+            "plan.title",
+            "plan.price"
+        ])
+        .where({id})
+        .leftJoin("u.plans", "plan")
+        .leftJoin("u.status_id", "status")
+        .getOne();
+
+        return profile
     }
 
     async findByEmail(email: string): Promise<Admins> {

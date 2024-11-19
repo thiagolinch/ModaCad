@@ -1,6 +1,5 @@
-
-
-import MercadoPagoConfig, { Payment, PreApprovalPlan } from "mercadopago";
+import 'dotenv/config';
+import MercadoPagoConfig, { CardToken, Payment, PreApproval, PreApprovalPlan } from "mercadopago";
 import { IMercadoPagoProvider } from "../IMercadoPagoProvider";
 
 interface IResponse {
@@ -28,47 +27,38 @@ interface IRequest {
 }
 
 export class MercadoPagoProvider implements IMercadoPagoProvider {
-    private mercadoPg = new MercadoPagoConfig({
-        accessToken: process.env.MP_ACCESS_TOKEN,
-        options: { timeout: 5000 }
-    });
+    private mercadoPg = new MercadoPagoConfig({ accessToken: process.env.MP_ACCSS_TOKEN });
 
     async create(
         transaction_amount: number,
         description: string,
-        installments?: number,
+        email: string,
         payment_method_id?: string,
-        issuer_id?: number,
         token?: string,
-        email?: string,
-        doc_type?: string,
-        doc_number?: string
     ): Promise<any> {
         try {
             if (!this.mercadoPg.accessToken) {
                 throw new Error("Access token not set");
             }
 
-            const body = {
-                transaction_amount: transaction_amount,
-                token: token,
-                description: description,
-                installments: installments,
-                payment_method_id,
-                issuer_id,
-                payer: {
-                  email,
-                  identification: {
-                    type: doc_type,
-                    number: doc_number,
-                  },
-                },
-              };
+            const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCSS_TOKEN });
+            const payment = new Payment(client);
 
-            const client = new Payment(this.mercadoPg);
-            const pay = await client.create({ body });
+            const pay = await payment.create({
+                body: { 
+                    transaction_amount,
+                    description,
+                    payment_method_id,
+                    payer: {
+                        email,
+                    }
+                },
+            
+            });
+            
 
             return pay;
+
         } catch (error) {
             console.error("Error creating payment:", error);
             throw new Error(`Error creating payment: ${error.message}`);
@@ -82,10 +72,11 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         transaction_amount: number,
         currency_id: string,
         repetitions: number,
-        back_url: string
+        back_url: string,
+        email: string
     ): Promise<any> {
         try {
-            const preApprovalPlan = new PreApprovalPlan(this.mercadoPg);
+            const preApprovalPlan = new PreApproval(this.mercadoPg);
             const body = {
                 reason,
                 auto_recurring: {
@@ -95,8 +86,10 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
                     currency_id,
                     repetitions,
                 },
-                back_url
-            };
+                back_url,
+                payer_email: email
+            };             
+              
 
             const data = await preApprovalPlan.create({ body });
             return data;

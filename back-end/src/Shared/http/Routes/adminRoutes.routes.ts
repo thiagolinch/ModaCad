@@ -18,7 +18,7 @@ import { ListStaffController } from "../../../Modules/Admins/useCases/listStaf/l
 import { DeleteUserController } from "../../../Modules/Admins/useCases/deleteUser/deleteuserController"
 import { ensureAuthenticate } from "../middlewares/ensureAuthenticate"
 import { CreatePaymentController } from "../../../Modules/Admins/useCases/Pagamentos/createPayment/createPaymentController"
-import { CreatePlanMPController } from "../../../Modules/Admins/useCases/Pagamentos/createPlan/createPlanMPController"
+import { CreatePlanMPController } from "../../../Modules/Admins/useCases/Pagamentos/criarRecorrencia/createPlanMPController"
 
 const adminRoute = Router()
 

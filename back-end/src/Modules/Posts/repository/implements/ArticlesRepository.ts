@@ -12,6 +12,41 @@ class ArticleRepository implements IArticlesRepository {
         this.repository = getRepository(Articles)
     }
 
+    async findByCanonicalUrl(canonicalUrl: string): Promise<Articles> {
+        const query = this.repository.createQueryBuilder("p")
+        .select([
+            "p",
+            "admin.id",
+            "admin.role",
+            "admin.name",
+            "admin.email",
+            "admin.avatar",
+            "editors.id",
+            "editors.role",
+            "editors.name",
+            "curators.id",
+            "curators.role",
+            "curators.name",
+            "meta.id",
+            "meta.meta_title"
+        ])
+        .where("p.canonicalUrl = :canonicalUrl", { canonicalUrl })
+        .leftJoinAndSelect("p.admins", "admin") // Relação com post_admin
+        .leftJoinAndSelect("p.editors", "editors") // Relação com post_editor
+        .leftJoinAndSelect("p.curadors", "curators") // Relação com post_curador
+        .leftJoinAndSelect("p.tags", "tag")
+        .leftJoinAndSelect("p.subjects", "subjects")
+        .leftJoinAndSelect("p.meta", "meta");
+    
+        const result = await query.getOne();
+    
+        if (!result) {
+            throw new Error("Article not found");
+        }
+    
+        return result;
+    }
+
     async updateFeatureImage(id: string, feature_image: string): Promise<void> {
         await this.repository.createQueryBuilder("p")
         .update()
@@ -46,7 +81,10 @@ class ArticleRepository implements IArticlesRepository {
         tags,
         subjects,
         admins,
-        canonicalUrl
+        canonicalUrl,
+        published_at,
+        editors,
+        curadors
         }: IArticlesRepositoryDTO
     ): Promise<Articles> {
         const post = await this.repository.findOne({id})
@@ -102,6 +140,18 @@ class ArticleRepository implements IArticlesRepository {
 
         if(canonicalUrl) {
             post.canonicalUrl = canonicalUrl
+        }
+
+        if(published_at) {
+            post.published_at = published_at
+        }
+
+        if(editors) {
+            post.editors = editors
+        }
+
+        if(curadors) {
+            post.curadors = curadors
         }
 
         await this.repository.save(post)
@@ -186,21 +236,30 @@ class ArticleRepository implements IArticlesRepository {
 
     async findById(id: string): Promise<Articles> {
         const query = this.repository.createQueryBuilder("p")
-            .select([
-                "p", // Seleciona todos os campos de articles
-                "admin.id", // Seleciona o id de admin
-                "admin.role",
-                "admin.name", // Seleciona o nome de admin
-                "admin.email", // Seleciona o email de admin
-                "admin.avatar", // Seleciona o avatar de admin
-                "meta"
-            ])
-            .where("p.id = :id", { id })
-            .leftJoin("p.admins", "admin") // Faz o join com a tabela admins
-            .leftJoinAndSelect("p.tags", "tag") // Faz o join com a tabela tags
-            .leftJoinAndSelect("p.subjects", "subjects") // Faz o join com a tabela subjects
-            .leftJoinAndSelect("p.meta", "meta"); // Faz o join com a tabela de meta
-        
+        .select([
+            "p",
+            "admin.id",
+            "admin.role",
+            "admin.name",
+            "admin.email",
+            "admin.avatar",
+            "editors.id",
+            "editors.role",
+            "editors.name",
+            "curators.id",
+            "curators.role",
+            "curators.name",
+            "meta.id",
+            "meta.meta_title"
+        ])
+        .where("p.id = :id", { id })
+        .leftJoinAndSelect("p.admins", "admin") // Relação com post_admin
+        .leftJoinAndSelect("p.editors", "editors") // Relação com post_editor
+        .leftJoinAndSelect("p.curadors", "curators") // Relação com post_curador
+        .leftJoinAndSelect("p.tags", "tag")
+        .leftJoinAndSelect("p.subjects", "subjects")
+        .leftJoinAndSelect("p.meta", "meta");
+    
         const result = await query.getOne();
     
         if (!result) {
@@ -208,7 +267,7 @@ class ArticleRepository implements IArticlesRepository {
         }
     
         return result;
-    }   
+    }
     
     async findByPostId(post_id: string): Promise<Articles> {
         const query = this.repository.createQueryBuilder("p")
@@ -219,12 +278,21 @@ class ArticleRepository implements IArticlesRepository {
             "admin.name", // Seleciona apenas o nome do admin
             "admin.email", // Seleciona apenas o email do admin
             "admin.avatar", // Seleciona apenas o avatar do admin
-            "meta",
+            "editor.id",
+            "editor.name",
+            "editor.avatar",
+            "curador.id",
+            "curador.name",
+            "curador.avatar",
+            "meta.id",
+            "meta.meta_title",
             "tag",
             "subjects"
         ])
         .where("p.post_id = :post_id", {post_id})
         .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins
+        .leftJoin("p.editors", "editor")
+        .leftJoin("p.curadors", "curador")
         .leftJoinAndSelect("p.tags", "tag") // Inclui todos os dados das tags
         .leftJoinAndSelect("p.subjects", "subjects") // Inclui todos os dados dos subjects
         .leftJoinAndSelect("p.meta", "meta");
@@ -266,7 +334,10 @@ class ArticleRepository implements IArticlesRepository {
         tags,
         subjects,
         admins,
-        canonicalUrl
+        canonicalUrl,
+        published_at,
+        editors,
+        curadors
         }: IArticlesRepositoryDTO): Promise<Articles> {
             const post = this.repository.create({
                 title,
@@ -279,7 +350,10 @@ class ArticleRepository implements IArticlesRepository {
                 tags,
                 subjects,
                 admins,
-                canonicalUrl
+                canonicalUrl,
+                published_at,
+                editors,
+                curadors
             })
 
             await this.repository.save(post)

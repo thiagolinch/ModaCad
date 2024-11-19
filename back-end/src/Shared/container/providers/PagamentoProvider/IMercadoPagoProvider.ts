@@ -26,13 +26,9 @@ interface IMercadoPagoProvider {
     create(
         transaction_amount: number,
         description: string,
-        installments?: number,
         payment_method_id?: string,
-        issuer_id?: number,
         token?: string,
-		email?: string,
-        doc_type?: string,
-        doc_number?: string
+		email?: string
     ): Promise<IResponse>;
 
     createPlan(
@@ -42,7 +38,8 @@ interface IMercadoPagoProvider {
         transaction_amount: number,
         currency_id: string,
         repetitions: number,
-        back_url: string
+        back_url: string,
+        email: string
     ): Promise<any>;
 
     getPayment(id: string): Promise<any>;

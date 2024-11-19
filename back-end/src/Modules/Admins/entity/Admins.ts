@@ -1,8 +1,9 @@
-import { Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 import { AdminRole } from "./AdminRole";
 import { Plans } from "../../Posts/entity/Plans";
 import { Articles } from "../../Posts/entity/Articles";
+import { Status } from "../../Posts/entity/Status";
 
 @Entity("admins")//admins
 class Admins {
@@ -26,6 +27,15 @@ class Admins {
     password: string;
 
     @Column()
+    payment_id: string;
+
+    @CreateDateColumn()
+    payment_created_at: Date
+
+    @UpdateDateColumn()
+    payment_updated_at: Date
+
+    @Column()
     role?: string;
 
     @ManyToOne(() => AdminRole)
@@ -35,6 +45,10 @@ class Admins {
     @Column()
     status: string;
 
+    @OneToOne(() => Status)
+    @JoinColumn({ name: "status" }) // Usando status_id como chave estrangeira
+    status_id: Status;
+
     @Column()
     plan: string
 
@@ -42,9 +56,18 @@ class Admins {
     @JoinColumn({name: "plan"})
     plans: Plans;
 
+    @CreateDateColumn()
+    subscription_created_at: Date
+
     @ManyToMany(() => Articles, article => article.admins)
-    @JoinTable()
-    posts: Articles[];
+    postsAsAdmin: Articles[];
+
+    @ManyToMany(() => Articles, article => article.editors)
+    postsAsEditor: Articles[];
+
+    @ManyToMany(() => Articles, article => article.curadors)
+    postsAsCurador: Articles[];
+
 
     @CreateDateColumn()
     created_at: Date
@@ -56,9 +79,25 @@ class Admins {
         if(!this.id){
             this.id = uuidV4()
             this.role = "membro"
+            this.plan = "4da04ec5-ebde-4386-9cf8-43891f839ad1"
+            this.status = "180e645d-c5d5-42c4-8bef-61f225050e3a"
+            this.subscription_created_at = new Date();
         }
     }
     
+    @BeforeInsert()
+    setPaymentCreatedAt() {
+        if (this.payment_id) {
+            this.payment_created_at = new Date();
+        }
+    }
+
+    @BeforeUpdate()
+    setPaymentUpdatedAt() {
+        if (this.payment_id) {
+            this.payment_updated_at = new Date();
+        }
+    }
 }
 
 
