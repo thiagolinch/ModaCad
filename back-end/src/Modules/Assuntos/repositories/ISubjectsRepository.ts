@@ -2,18 +2,19 @@ import { Subjects } from "../entities/Subject"
 
 interface ISubjectsRepositoryDTO {
     id?: string,
-    name: string
+    name: string,
+    sort: number
 }
 
 
 interface ISubjectsRepository {
 
-    create(name: string): Promise<Subjects>;
+    create(name: string, sort: number): Promise<Subjects>;
     delete(name: string): Promise<void>;
     findById(id: string): Promise<Subjects>;
     findByIds(ids: string[]): Promise<Subjects[]>;
     findByName(name: string): Promise<Subjects>;
-    updateTag(id: string, name: string): Promise<void>;
+    updateTag(id: string, name: string, sort: number): Promise<void>;
     listTags(): Promise<Subjects[]>;
 }
 
