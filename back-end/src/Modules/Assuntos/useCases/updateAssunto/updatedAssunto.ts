@@ -1,16 +1,18 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
+import { UpdateSubjectUseCase } from "./updateAssuntoUseCase";
 
-import { CreateSubjectUseCase } from "./createAssuntoUseCase";
 
 
-class CreateAssuntoController {
+class UpdateAssuntoController {
     async handle(request: Request, response: Response): Promise<Response> {
+        const { id } = request.params;
         const {name, sort} = request.body
-        const createSubjectUseCase =  container.resolve(CreateSubjectUseCase)
+        const useCase =  container.resolve(UpdateSubjectUseCase)
 
         try {
-            const tag = await createSubjectUseCase.execute({
+            const tag = await useCase.execute({
+                id,
                 name,
                 sort
             })
@@ -22,4 +24,4 @@ class CreateAssuntoController {
     }
 }
 
-export { CreateAssuntoController }
+export { UpdateAssuntoController }
