@@ -22,6 +22,7 @@ import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/Po
 import { CreatePostSubjectController } from "../../../Modules/Posts/useCases/SubjectUseCases/createPostSubject/createPostSubjectController";
 import { LastPostController } from "../../../Modules/Posts/useCases/PostUseCases/lastPost/lastPostController";
 import { GetTextoByUrlController } from "../../../Modules/Posts/useCases/PostUseCases/getTextoByUrl/getTextoByUrlController";
+import { userCanAccess } from "../middlewares/userCanAccess";
 
 
 const postRoute = Router()
@@ -55,7 +56,7 @@ postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAdminCanPost, crea
 postRoute.put("/:id", ensureAdminAuhenticate, ensureAdminCanPost, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:id", getTexto.handle)
+postRoute.get("/:id", userCanAccess, getTexto.handle)
 
 // GET TEXTO PELA URL
 postRoute.get("/blog/:url", textoByUrl.handle)

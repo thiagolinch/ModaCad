@@ -88,7 +88,6 @@ class UpdatePostUseCase {
         editors,
         curadors
     }: IupdateArticleRequest): Promise<void> {
-
         const post = await this.articleRepo.findById(id)
         const meta = await this.metaRepository.getbyPostId(post.post_id)
 
@@ -100,6 +99,8 @@ class UpdatePostUseCase {
             throw new Error("Post dos not exists.")
         }
         
+        const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
+
         const foundTags = await this.tagsRepository.findByIds(tags);
         post.tags = foundTags;
         
@@ -121,7 +122,7 @@ class UpdatePostUseCase {
         post.visibility = visibility
         post.type = type
         
-        post.canonicalUrl = canonicalUrl
+        post.canonicalUrl = cannonical
 
         post.published_at = published_at
 
