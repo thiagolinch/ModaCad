@@ -88,7 +88,6 @@ class UpdatePostUseCase {
         editors,
         curadors
     }: IupdateArticleRequest): Promise<void> {
-        const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
 
         const post = await this.articleRepo.findById(id)
         const meta = await this.metaRepository.getbyPostId(post.post_id)
@@ -121,7 +120,9 @@ class UpdatePostUseCase {
         post.description = description
         post.visibility = visibility
         post.type = type
-        post.canonicalUrl = cannonical
+        
+        post.canonicalUrl = canonicalUrl
+
         post.published_at = published_at
 
         post.status = status

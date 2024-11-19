@@ -33,8 +33,21 @@ interface IAdminsRepository {
     findByEmail(email: string): Promise<Admins>
     findStaff(): Promise<Admins[]>
 
-    listUsers(role: string, plan_id?: string, status_id?: string): Promise<Admins[]>
-
+    listUsers(
+        role: string,
+        page: number,
+        plan_id: string,
+        status_id: string, 
+        order: string,
+        limit: number
+    ): Promise<{
+        users: Admins[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }>;
+    
     delete(id: string): Promise<void>
     updateAvatar(data: IAdminsRepositoryDTO): Promise<void>;
 }

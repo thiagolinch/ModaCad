@@ -56,6 +56,9 @@ class Admins {
     @JoinColumn({name: "plan"})
     plans: Plans;
 
+    @CreateDateColumn()
+    subscription_created_at: Date
+
     @ManyToMany(() => Articles, article => article.admins)
     postsAsAdmin: Articles[];
 
@@ -76,12 +79,15 @@ class Admins {
         if(!this.id){
             this.id = uuidV4()
             this.role = "membro"
+            this.plan = "4da04ec5-ebde-4386-9cf8-43891f839ad1"
+            this.status = "180e645d-c5d5-42c4-8bef-61f225050e3a"
+            this.subscription_created_at = new Date();
         }
     }
     
     @BeforeInsert()
     setPaymentCreatedAt() {
-        if (this.payment_id && !this.payment_created_at) {
+        if (this.payment_id) {
             this.payment_created_at = new Date();
         }
     }

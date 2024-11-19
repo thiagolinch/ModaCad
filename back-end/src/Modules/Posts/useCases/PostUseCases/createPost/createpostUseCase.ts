@@ -86,14 +86,6 @@ class CreatePostUseCase {
         canonicalUrl,
         published_at
     }: ICreateArticleRequest): Promise<string> {
-        const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
-
-        const canonicalExists = await this.articleRepository.findByCanonicalUrl(cannonical)
-
-        if (canonicalExists) {
-            throw new Error("Canonical URL já inserida em outro post").message
-        }
-
        
         // 1. Criar o artigo
         const article = new Articles();
@@ -104,7 +96,20 @@ class CreatePostUseCase {
         article.visibility = visibility;
         article.status = status;
         article.type = type;
-        article.canonicalUrl = cannonical
+
+        if(canonicalUrl === '') {
+            article.canonicalUrl = ''
+        } else {
+            const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
+            const canonicalExists = await this.articleRepository.findByCanonicalUrl(cannonical)
+
+            if(canonicalExists) {
+                console.log("canonical url ja existe, escolha outra")
+                throw new Error("Canonical Url ja existe, escolha outra").message
+            }
+            article.canonicalUrl = cannonical
+        }
+
         article.published_at = published_at
 
         // 2. Buscar as Tags no banco de dados
@@ -124,7 +129,7 @@ class CreatePostUseCase {
         // 4. Buscar os Subjects no banco de dados
         const foundSubjects = await this.subjectsRepository.findByIds(subjects);
         article.subjects = foundSubjects;
-        
+
         const newArticle = await this.articleRepository.create(article);
         const post_id = newArticle.post_id
 
@@ -146,6 +151,7 @@ class CreatePostUseCase {
         });
 
         return newArticle.id;
+        
     }
 }
 
