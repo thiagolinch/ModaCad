@@ -11,14 +11,14 @@ class CreateSubjectUseCase {
         private TagsRepository: ISubjectsRepository
     ){}
 
-    async execute ({ name }: ISubjectsRepositoryDTO): Promise<Subjects> {
+    async execute ({ name, sort }: ISubjectsRepositoryDTO): Promise<Subjects> {
         const tagExists = await this.TagsRepository.findByName(name)
 
         if(tagExists) {
             throw new Error("This tag already exists").message
         }
 
-        const tag = await this.TagsRepository.create(name)
+        const tag = await this.TagsRepository.create(name, sort)
 
         return tag;
     }

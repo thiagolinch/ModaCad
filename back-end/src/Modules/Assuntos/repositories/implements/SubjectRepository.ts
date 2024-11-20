@@ -16,11 +16,11 @@ class SubjectRepository implements ISubjectsRepository {
     }
 
     async listTags(): Promise<Subjects[]> {
-        return await this.repository.find()
+        return await this.repository.find({ order: { sort: `ASC` } })
     }
 
-    async delete(name: string): Promise<void> {
-        await this.repository.delete({name})
+    async delete(id: string): Promise<void> {
+        await this.repository.delete({id})
     }
     
     async findById(id: string): Promise<Subjects> {

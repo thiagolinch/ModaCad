@@ -99,58 +99,58 @@ class AdminRepository implements IAdminsRepository {
         if(role) {
             const offset = (page - 1) * limit;
         
-        const userQuery = this.repository.createQueryBuilder("u")
-        .select([
-            "u.id",
-            "u.name",
-            "u.email",
-            "u.avatar",
-            "u.role",
-            "status.id",
-            "status.name",
-            "u.cellphone",
-            "u.payment_id",
-            "u.payment_created_at",
-            "u.subscription_created_at",
-            "u.created_at",
-            "plan.id",
-            "plan.title",
-        ])
-        .where("u.role = :role", {role})
-        .leftJoin("u.plans", "plan")
-        .leftJoin("u.status_id", "status")
+            const userQuery = this.repository.createQueryBuilder("u")
+            .select([
+                "u.id",
+                "u.name",
+                "u.email",
+                "u.avatar",
+                "u.role",
+                "status.id",
+                "status.name",
+                "u.cellphone",
+                "u.payment_id",
+                "u.payment_created_at",
+                "u.subscription_created_at",
+                "u.created_at",
+                "plan.id",
+                "plan.title",
+            ])
+            .where("u.role = :role", {role})
+            .leftJoin("u.plans", "plan")
+            .leftJoin("u.status_id", "status")
 
-        if(status_id) {
-            userQuery.andWhere("u.status = :status_id", {status_id})
-        }
+            if(status_id) {
+                userQuery.andWhere("u.status = :status_id", {status_id})
+            }
 
-        if(plan_id) {
-            userQuery.andWhere("u.plan = :plan_id", { plan_id })
-        }
+            if(plan_id) {
+                userQuery.andWhere("u.plan = :plan_id", { plan_id })
+            }
 
-        // Calcula total de registros antes da paginação
-        const totalItems = await userQuery.getCount();
-    
-        // Ordena globalmente
-        const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
-        userQuery.orderBy("u.created_at", validOrder);
-    
-        // Adiciona paginação
-        userQuery.skip(offset).take(limit);
-    
-        // Executa a consulta com ordenação total e paginação
-        const users = await userQuery.getMany();
-    
-        // Calcula total de páginas
-        const totalPages = Math.ceil(totalItems / limit);
-    
-        return {
-            users,
-            currentPage: page,
-            totalPages,
-            totalItems,
-            pageSize: limit,
-        };
+            // Calcula total de registros antes da paginação
+            const totalItems = await userQuery.getCount();
+        
+            // Ordena globalmente
+            const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
+            userQuery.orderBy("u.created_at", validOrder);
+        
+            // Adiciona paginação
+            userQuery.skip(offset).take(limit);
+        
+            // Executa a consulta com ordenação total e paginação
+            const users = await userQuery.getMany();
+        
+            // Calcula total de páginas
+            const totalPages = Math.ceil(totalItems / limit);
+        
+            return {
+                users,
+                currentPage: page,
+                totalPages,
+                totalItems,
+                pageSize: limit,
+            };
         }else {
             
             const offset = (page - 1) * limit;
@@ -172,6 +172,7 @@ class AdminRepository implements IAdminsRepository {
                 "plan.id",
                 "plan.title",
             ])
+            .where("u.role = :role", {role: 'membro'})
             .leftJoin("u.plans", "plan")
             .leftJoin("u.status_id", "status")
 

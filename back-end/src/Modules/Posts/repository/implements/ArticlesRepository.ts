@@ -208,13 +208,13 @@ class ArticleRepository implements IArticlesRepository {
         if (author_id) {
             postQuery.andWhere("admin.id = :author_id", { author_id });
         }
+
+        // Obtem o número total de registros (antes da paginação)
+        const totalItems = await postQuery.getCount();
     
         // Adiciona a ordenação usando o valor validado de `order`
         const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
         postQuery.orderBy("p.updated_at", validOrder);
-    
-        // Obtem o número total de registros (antes da paginação)
-        const totalItems = await postQuery.getCount();
     
         // Adiciona a paginação
         postQuery.skip(offset).take(limit);

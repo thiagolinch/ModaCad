@@ -12,13 +12,8 @@ class UpdateSubjectUseCase {
     ){}
 
     async execute ({ name, sort, id }: ISubjectsRepositoryDTO): Promise<void> {
-        const tagExists = await this.TagsRepository.findByName(name)
 
-        if(tagExists) {
-            throw new Error("This tag already exists").message
-        }
-
-        const tag = await this.TagsRepository.updateTag(id, name, sort)
+        await this.TagsRepository.updateTag(id, name, sort)
     }
 
 }
