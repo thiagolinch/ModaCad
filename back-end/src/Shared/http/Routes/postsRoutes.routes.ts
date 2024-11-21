@@ -56,7 +56,7 @@ postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAdminCanPost, crea
 postRoute.put("/:id", ensureAdminAuhenticate, ensureAdminCanPost, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:id", getTexto.handle)
+postRoute.get("/:id", userCanAccess, getTexto.handle)
 
 // GET TEXTO PELA URL
 postRoute.get("/blog/:url", textoByUrl.handle)
