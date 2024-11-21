@@ -46,6 +46,10 @@ interface IAdminsRepository {
         totalPages: number;
         totalItems: number;
         pageSize: number;
+        totalMembros: number;
+        totalAdministradores: number;
+        totalAssinantes: number;
+        totalExAssinantes: number;
     }>;
     
     delete(id: string): Promise<void>

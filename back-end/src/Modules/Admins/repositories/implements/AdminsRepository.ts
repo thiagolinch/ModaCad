@@ -94,9 +94,26 @@ class AdminRepository implements IAdminsRepository {
         totalPages: number;
         totalItems: number;
         pageSize: number;
+        totalMembros: number;
+        totalAdministradores: number;
+        totalAssinantes: number;
+        totalExAssinantes: number;
     }> {
         
         if(role) {
+
+            const totalMembros = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'membro' })
+            .getCount();
+            console.log(totalMembros)
+
+            const totalAdministradores = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'administrador'})
+            .getCount();
+
+            const totalAssinantes = 10;
+            const totalExAssinantes = 0
+
             const offset = (page - 1) * limit;
         
             const userQuery = this.repository.createQueryBuilder("u")
@@ -150,10 +167,30 @@ class AdminRepository implements IAdminsRepository {
                 totalPages,
                 totalItems,
                 pageSize: limit,
+                totalMembros,
+                totalAdministradores,
+                totalAssinantes,
+                totalExAssinantes
             };
         }else {
             
             const offset = (page - 1) * limit;
+
+            const totalMembros = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'membro' })
+            .getCount();
+            
+            const totalAdministradores = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'administrador'})
+            .getCount();
+
+            const totalAssinantes = await this.repository.createQueryBuilder('m')
+            .where('m.role = :role', {role: 'membro'})
+            .andWhere('m.plan != :plan', {plan: ''})
+            .getCount();
+
+
+            const totalExAssinantes = 0
         
             const userQuery = this.repository.createQueryBuilder("u")
             .select([
@@ -206,6 +243,10 @@ class AdminRepository implements IAdminsRepository {
                 totalPages,
                 totalItems,
                 pageSize: limit,
+                totalAdministradores,
+                totalMembros,
+                totalAssinantes,
+                totalExAssinantes
             };
         }
     }
