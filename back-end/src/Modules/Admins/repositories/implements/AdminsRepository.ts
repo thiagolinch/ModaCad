@@ -260,6 +260,17 @@ class AdminRepository implements IAdminsRepository {
         .setParameters({id})
         .execute();
     }
+
+    async updatePlan(user: IAdminsRepositoryDTO, role: string, plan_id: string): Promise<void> {
+        const data = await this.repository.findOne(user.id)
+        
+        data.role = role
+        data.plan = plan_id
+
+        await this.repository.save(data)
+        
+    }
+
     async create({ name, cellphone, email, password, role, avatar }: IAdminsRepositoryDTO): Promise<Admins> {
         const admin =  this.repository.create({
             name,
