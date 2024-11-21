@@ -24,7 +24,7 @@ export class TagsRepository implements ITagsRepository {
     }
 
     async list(): Promise<Tags[]> {
-        return await this.repository.find({ order: {created_at: "DESC"}})
+        return await this.repository.find({ order: {name: "ASC"}})
     }
 
     async getById(id: string): Promise<Tags> {
