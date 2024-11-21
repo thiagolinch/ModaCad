@@ -27,6 +27,7 @@ interface IAdminsRepository {
     ): Promise<void>;
     updatePassword(id: string, password: string): Promise<void>;
     updatePayment(paymnt_id: string, id: string): Promise<void> 
+    updatePlan(user: IAdminsRepositoryDTO, role: string, plan_id: string): Promise<void>;
 
     findById(id: string): Promise<Admins>
     findByIds(id: string[]): Promise<Admins[]>

@@ -30,6 +30,8 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
         }
 
         const access = admin.role;
+        const payd = admin.payment_id !== null
+        console.log(payd)
         
         const postRepo = new ArticleRepository()
         const post = await postRepo.findById(postId.id)
@@ -54,7 +56,7 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
             return next();
         }
 
-        if(post.visibility === access) {
+        if(post.visibility === access && payd === true) {
             request.admin = {
                 id: admin.id,
                 role: admin.role,
@@ -63,7 +65,7 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
 
             return next();
         } else {
-            throw new Error("Para visualizar este post mude para o plano Pago.").message
+            throw new Error("Para visualizar este post mude para o plano Pago. Caso já seja um assinante verifique se seu pagamento está em dia.").message
         }
 
 
