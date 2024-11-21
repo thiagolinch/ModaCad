@@ -28,6 +28,8 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
         if (!admin) {
             return response.status(404).json({ message: "Administrador não encontrado" });
         }
+
+        const access = admin.role;
         
         const postRepo = new ArticleRepository()
         const post = await postRepo.findById(postId.id)
@@ -50,41 +52,21 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
             };
 
             return next();
-
         }
-        
-        if (post.visibility === 'basico') {
-            if (admin.plan !== '') {
-                request.admin = {
-                    id: admin.id,
-                    role: admin.role,
-                    plan: admin.plans.title
-                };
 
-                return next();
-            }  else {
-                throw new Error("Esse post precisa de acesso basic para ser visto").message
-            }
-        } 
+        if(post.visibility === access) {
+            request.admin = {
+                id: admin.id,
+                role: admin.role,
+                plan: admin.plans.title
+            };
 
-        if (post.visibility === '') {
-            if(!admin.plans)  {
-                throw new Error("Esse post precisa de acesso pro para ser visto e você ainda não assinou um plano com a gente, que tal dar uma olhada?").message
-;
-            } else {
-                if(admin.plans.title !== 'Básico') {
-                    request.admin = {
-                        id: admin.id,
-                        role: admin.role,
-                        plan: admin.plans.title
-                    };
-
-                    return next()
-                } else {
-                    throw new Error("Esse post precisa de acesso pro para ser visto").message
-                }
-            }
+            return next();
+        } else {
+            throw new Error("Para visualizar este post mude para o plano Pago.").message
         }
+
+
 
     } catch (error) {
         console.error("Erro no middleware de autenticação:", error);
