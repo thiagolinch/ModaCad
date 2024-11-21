@@ -184,7 +184,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.description",
                 "p.feature_image",
                 "p.status",
-                "p.updated_at",
+                "p.published_at",
                 "admin.id", // Seleciona apenas o id do admin
                 "admin.name", // Seleciona apenas o nome do admin
                 "admin.role",
@@ -214,7 +214,7 @@ class ArticleRepository implements IArticlesRepository {
     
         // Adiciona a ordenação usando o valor validado de `order`
         const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
-        postQuery.orderBy("p.updated_at", validOrder);
+        postQuery.orderBy("p.published_at", validOrder);
     
         // Adiciona a paginação
         postQuery.skip(offset).take(limit);
