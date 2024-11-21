@@ -17,6 +17,7 @@ class CreateAdmUseCase {
     async execute({
         name,
         email,
+        role,
         password,
         cellphone
     }: IAdminsRepositoryDTO): Promise<Admins> {
@@ -24,10 +25,13 @@ class CreateAdmUseCase {
 
         if(adminExists) {
             throw new Error("This admin account already exists!").message
-
         }
         
-        const role = 'membro'
+        let userRole = role
+
+        if(!role) {
+            userRole = 'membro'
+        }
 
         const passwordCrypt = await hash(password, 8)
 
@@ -36,7 +40,7 @@ class CreateAdmUseCase {
             email,
             password: passwordCrypt,
             cellphone,
-            role
+            role: userRole
         })
 
         return admin
