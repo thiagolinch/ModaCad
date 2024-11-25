@@ -27,7 +27,7 @@ interface IRequest {
 }
 
 export class MercadoPagoProvider implements IMercadoPagoProvider {
-    private mercadoPg = new MercadoPagoConfig({ accessToken: process.env.MP_ACCSS_TOKEN });
+    private mercadoPg = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN_TEST });
 
     async create(
         transaction_amount: number,
@@ -41,7 +41,7 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
                 throw new Error("Access token not set");
             }
 
-            const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCSS_TOKEN });
+            const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN_TEST });
             const payment = new Payment(client);
 
             const pay = await payment.create({
@@ -65,6 +65,41 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         }
     }
 
+    /* async createPlan(
+        reason: string,
+        frequency: number,
+        frequency_type: string,
+        transaction_amount: number,
+        currency_id: string,
+        repetitions: number,
+        back_url: string,
+        email: string
+    ): Promise<any> {
+        try {
+            const preApprovalPlan = new PreApprovalPlan(this.mercadoPg);
+            const body = {
+                reason,
+                auto_recurring: {
+                    frequency,
+                    frequency_type,
+                    transaction_amount,
+                    currency_id,
+                    repetitions,
+                },
+                back_url
+            };             
+              
+
+            const data = await preApprovalPlan.create({ body });
+
+            console.log(data)
+            return data
+        } catch (error) {
+            console.error("Error creating plan:", error);
+            throw new Error(`Error creating plan: ${error.message}`);
+        }
+    } */
+
     async createPlan(
         reason: string,
         frequency: number,
@@ -78,20 +113,15 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         try {
             const preApprovalPlan = new PreApproval(this.mercadoPg);
             const body = {
-                reason,
-                auto_recurring: {
-                    frequency,
-                    frequency_type,
-                    transaction_amount,
-                    currency_id,
-                    repetitions,
-                },
-                back_url,
-                payer_email: email
+                preapproval_plan_id: '2c9380849342d22c01935092a4390547',
+                payer_email: 'thglinchin18@gmail.com',
+                back_url: "https://api-modacad-72uqj.ondigitalocean.app/payment/notification"
             };             
               
 
             const data = await preApprovalPlan.create({ body });
+            console.log(data.init_point)
+            
             return data;
         } catch (error) {
             console.error("Error creating plan:", error);
