@@ -48,7 +48,7 @@ interface IAdminsRepository {
         totalItems: number;
         pageSize: number;
         totalMembros: number;
-        totalAdministradores: number;
+        totalStaff: number;
         totalAssinantes: number;
         totalExAssinantes: number;
     }>;
