@@ -95,7 +95,7 @@ class AdminRepository implements IAdminsRepository {
         totalItems: number;
         pageSize: number;
         totalMembros: number;
-        totalAdministradores: number;
+        totalStaff: number;
         totalAssinantes: number;
         totalExAssinantes: number;
     }> {
@@ -105,14 +105,26 @@ class AdminRepository implements IAdminsRepository {
             const totalMembros = await this.repository.createQueryBuilder('a')
             .where('a.role = :role', {role: 'membro' })
             .getCount();
-            console.log(totalMembros)
-
-            const totalAdministradores = await this.repository.createQueryBuilder('a')
+            
+            const adms = await this.repository.createQueryBuilder('a')
             .where('a.role = :role', {role: 'administrador'})
             .getCount();
+            const editores = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'editor'})
+            .getCount()
+            const autor = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'autor'})
+            .getCount()
 
-            const totalAssinantes = 10;
-            const totalExAssinantes = 0
+            const totalStaff = editores + autor + adms
+
+            const totalAssinantes = await this.repository.createQueryBuilder('m')
+            .where('m.role = :role', {role: 'assinante'})
+            .getCount();
+
+            const totalExAssinantes = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'ex-assinante'})
+            .getCount();
 
             const offset = (page - 1) * limit;
         
@@ -168,7 +180,7 @@ class AdminRepository implements IAdminsRepository {
                 totalItems,
                 pageSize: limit,
                 totalMembros,
-                totalAdministradores,
+                totalStaff,
                 totalAssinantes,
                 totalExAssinantes
             };
@@ -180,17 +192,25 @@ class AdminRepository implements IAdminsRepository {
             .where('a.role = :role', {role: 'membro' })
             .getCount();
             
-            const totalAdministradores = await this.repository.createQueryBuilder('a')
+            const adms = await this.repository.createQueryBuilder('a')
             .where('a.role = :role', {role: 'administrador'})
             .getCount();
+            const editores = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'editor'})
+            .getCount()
+            const autor = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'autor'})
+            .getCount()
+
+            const totalStaff = editores + autor + adms
 
             const totalAssinantes = await this.repository.createQueryBuilder('m')
-            .where('m.role = :role', {role: 'membro'})
-            .andWhere('m.plan != :plan', {plan: ''})
+            .where('m.role = :role', {role: 'assinante'})
             .getCount();
 
-
-            const totalExAssinantes = 0
+            const totalExAssinantes = await this.repository.createQueryBuilder('a')
+            .where('a.role = :role', {role: 'ex-assinante'})
+            .getCount()
         
             const userQuery = this.repository.createQueryBuilder("u")
             .select([
@@ -243,7 +263,7 @@ class AdminRepository implements IAdminsRepository {
                 totalPages,
                 totalItems,
                 pageSize: limit,
-                totalAdministradores,
+                totalStaff,
                 totalMembros,
                 totalAssinantes,
                 totalExAssinantes
