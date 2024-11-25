@@ -13,7 +13,7 @@ class CreateAdmController {
             password,
             cellphone,
             role
-        } = request.body
+        } = request.body;
         const createAdminUseCase = container.resolve(CreateAdmUseCase)
 
         try {

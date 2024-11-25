@@ -14,13 +14,25 @@ export class PlanRepository implements IPlansRepository {
         title,
         topics,
         price,
-        sort
+        sort,
+        description,
+        frequency,
+        frequency_type,
+        transaction_amount,
+        currency_id,
+        repetitions
     }: IPlansRepositoryDTO): Promise<void> {
         const plan = this.repository.create({
             title,
             topics,
             price,
-            sort
+            sort,
+            description,
+            frequency,
+            frequency_type,
+            transaction_amount,
+            currency_id,
+            repetitions
         })
         await this.repository.save(plan)
     }
@@ -29,7 +41,13 @@ export class PlanRepository implements IPlansRepository {
         title,
         topics,
         price,
-        sort
+        sort,
+        description,
+        frequency,
+        frequency_type,
+        transaction_amount,
+        currency_id,
+        repetitions
     }: IPlansRepositoryDTO): Promise<Plans> {
         const plan = await this.repository.findOne({id})
 
@@ -49,6 +67,26 @@ export class PlanRepository implements IPlansRepository {
             plan.sort = sort
         }
 
+        if(description) {
+            plan.description = description
+        }
+
+        if(frequency) {
+            plan.frequency = frequency
+        }
+
+        if(frequency_type) {
+            plan.frequency_type = frequency_type
+        }
+
+        if(currency_id) {
+            plan.currency_id = currency_id
+        }
+
+        if(repetitions) {
+            plan.repetitions = repetitions
+        }
+
         await this.repository.save(plan)
 
         return plan;
@@ -57,9 +95,12 @@ export class PlanRepository implements IPlansRepository {
         await this.repository.delete({id})
     }
     async list(): Promise<Plans[]> {
-        return await this.repository.createQueryBuilder("plan")
-        .orderBy("plan.sort", "ASC")
-        .getMany()
+        return await this.repository.find({
+            order: {
+                sort: 'ASC'
+            }
+        });
+
     }
     async findById(id: string): Promise<Plans> {
         return await this.repository.findOne({id})

@@ -12,14 +12,26 @@ export class CreatePlanUseCase {
         title,
         topics,
         price,
-        sort
+        sort,
+        description,
+        frequency,
+        frequency_type,
+        transaction_amount,
+        currency_id,
+        repetitions
     }: IPlansRepositoryDTO): Promise<void> {
 
         await this.repository.create({
             title,
             topics,
             price,
-            sort
+            sort,
+            description,
+            frequency,
+            frequency_type,
+            transaction_amount,
+            currency_id,
+            repetitions
         })
     }
 }
