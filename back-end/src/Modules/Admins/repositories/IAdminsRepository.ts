@@ -32,7 +32,22 @@ interface IAdminsRepository {
     findById(id: string): Promise<Admins>
     findByIds(id: string[]): Promise<Admins[]>
     findByEmail(email: string): Promise<Admins>
-    findStaff(): Promise<Admins[]>
+    
+    listStaff(
+        page: number,         
+        order: string,
+        limit: number
+    ): Promise<{
+        staffs: Admins[];
+        currentPage: number;
+        totalPages: number;
+        pageSize: number;
+        totalStaff: number;
+        totalAdministradores: number;
+        totalEditores: number;
+        totalAutores: number;
+        totalColaboradores: number
+    }>
 
     listUsers(
         role: string,
