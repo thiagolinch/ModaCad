@@ -6,7 +6,6 @@ import { ArticleRepository } from "../../../Modules/Posts/repository/implements/
 interface IPayload {
     subject: string;
     role: string;
-    plan: string;
 }
 
 async function userCanAccess(request: Request, response: Response, next: NextFunction) {
@@ -30,8 +29,6 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
         }
 
         const access = admin.role;
-        const payd = admin.payment_id !== null
-        console.log(payd)
         
         const postRepo = new ArticleRepository()
         const post = await postRepo.findById(postId.id)
@@ -39,8 +36,7 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
         if(admin.role === 'administrador') {
             request.admin = {
                 id: admin.id,
-                role: admin.role,
-                plan: admin.plans.title
+                role: admin.role
             };
 
             return next();
@@ -49,18 +45,19 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
         if(post.visibility === 'publico') {
             request.admin = {
                 id: admin.id,
-                role: admin.role,
-                plan: admin.plans.title
+                role: admin.role
             };
 
             return next();
         }
 
+
+        const payd = admin.payment_id !== null
+
         if(post.visibility === access && payd === true) {
             request.admin = {
                 id: admin.id,
-                role: admin.role,
-                plan: admin.plans.title
+                role: admin.role
             };
 
             return next();
