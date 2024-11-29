@@ -3,10 +3,10 @@ import { Admins } from "../entity/Admins"
 
 interface IAdminsRepositoryDTO {
     id?: string,
-    name: string,
-    cellphone: string,
+    name?: string,
+    cellphone?: string,
     email: string,
-    password: string,
+    password?: string,
     role?: string,
     avatar?: string,
     status?: string,
@@ -16,6 +16,7 @@ interface IAdminsRepositoryDTO {
 
 interface IAdminsRepository {
     create(data: IAdminsRepositoryDTO): Promise<Admins>;
+    createStaff(email: string, password: string, role: string): Promise<void>;
     update(
         id: string,
         name: string,

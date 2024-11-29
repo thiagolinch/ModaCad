@@ -76,12 +76,14 @@ class Admins {
     updated_at: Date
 
     constructor() {
-        if(!this.id){
+        if(this.role == ''){
             this.id = uuidV4()
             this.role = "membro"
             this.plan = "4da04ec5-ebde-4386-9cf8-43891f839ad1"
             this.status = "180e645d-c5d5-42c4-8bef-61f225050e3a"
             this.subscription_created_at = new Date();
+        }else {
+            this.id = uuidV4()
         }
     }
     

@@ -9,6 +9,15 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
+    async createStaff(email: string, password: string, role: string): Promise<void> {
+        const staff = this.repository.create({
+            email,
+            password,
+            role
+        })
+
+        await this.repository.save(staff)
+    }
     
     async listStaff(
         page: number = 1,
