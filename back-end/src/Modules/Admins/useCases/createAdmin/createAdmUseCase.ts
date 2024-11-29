@@ -25,7 +25,7 @@ class CreateAdmUseCase {
         const adminExists = await this.adminRepository.findByEmail(email)
 
         if(adminExists) {
-            throw new Error("This admin account already exists!").message
+            throw new Error("This admin account already exists!")
 
         }
 
