@@ -25,6 +25,7 @@ class FilterTextosUseCase {
         type_id: string,
         status_id?: string,
         author_id?: string,
+        visibility?: string,
         page: number = 1,
         limit: number = 10,
         order: 'DESC' | 'ASC' = 'DESC'
@@ -36,6 +37,7 @@ class FilterTextosUseCase {
             limit,
             status_id,
             author_id,
+            visibility,
             order
         );
     

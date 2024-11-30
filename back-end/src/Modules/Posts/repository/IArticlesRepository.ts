@@ -79,6 +79,7 @@ interface IArticlesRepository {
         limit: number,
         author_id?: string,
         status_id?: string,
+        visibility?: string,
         order?: string
     ): Promise<{
         posts: Articles[];

@@ -7,6 +7,7 @@ class FilterTextoController {
         const type_id = request.query.type as string | undefined;
         const status_id = request.query.statusId as string | undefined;
         const author_id = request.query.authorId as string | undefined;
+        const visibility = request.query.visibility as string | undefined;
 
         // Parâmetros de paginação
         const page = parseInt(request.query.page as string) || 1;
@@ -20,6 +21,7 @@ class FilterTextoController {
                 type_id,
                 status_id,
                 author_id,
+                visibility,
                 page,
                 limit,
                 order

@@ -166,6 +166,7 @@ class ArticleRepository implements IArticlesRepository {
         limit: number = 10,
         status_id?: string,
         author_id?: string,
+        visibility?: string,
         order: 'ASC' | 'DESC' = 'ASC'
     ): Promise<{
         posts: Articles[];
@@ -208,6 +209,10 @@ class ArticleRepository implements IArticlesRepository {
         // Filtro pelo ID do admin, se fornecido
         if (author_id) {
             postQuery.andWhere("admin.id = :author_id", { author_id });
+        }
+
+        if (visibility) {
+            postQuery.andWhere("p.visibility = :visibility", { visibility })
         }
 
         // Obtem o número total de registros (antes da paginação)
