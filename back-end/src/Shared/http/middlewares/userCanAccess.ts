@@ -33,7 +33,7 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
         const postRepo = new ArticleRepository()
         const post = await postRepo.findById(postId.id)
 
-        if(admin.role === 'administrador') {
+        if(admin.role === 'administrador'||'editor'||'colaborador'||'autor') {
             request.admin = {
                 id: admin.id,
                 role: admin.role
