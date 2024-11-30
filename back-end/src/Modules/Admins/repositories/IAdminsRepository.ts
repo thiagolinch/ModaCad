@@ -3,10 +3,10 @@ import { Admins } from "../entity/Admins"
 
 interface IAdminsRepositoryDTO {
     id?: string,
-    name: string,
-    cellphone: string,
+    name?: string,
+    cellphone?: string,
     email: string,
-    password: string,
+    password?: string,
     role?: string,
     avatar?: string,
     status?: string,
@@ -16,6 +16,7 @@ interface IAdminsRepositoryDTO {
 
 interface IAdminsRepository {
     create(data: IAdminsRepositoryDTO): Promise<Admins>;
+    createStaff(email: string, password: string, role: string): Promise<void>;
     update(
         id: string,
         name: string,
@@ -32,7 +33,22 @@ interface IAdminsRepository {
     findById(id: string): Promise<Admins>
     findByIds(id: string[]): Promise<Admins[]>
     findByEmail(email: string): Promise<Admins>
-    findStaff(): Promise<Admins[]>
+    
+    listStaff(
+        page: number,         
+        order: string,
+        limit: number
+    ): Promise<{
+        staffs: Admins[];
+        currentPage: number;
+        totalPages: number;
+        pageSize: number;
+        totalStaff: number;
+        totalAdministradores: number;
+        totalEditores: number;
+        totalAutores: number;
+        totalColaboradores: number
+    }>
 
     listUsers(
         role: string,

@@ -1,0 +1,55 @@
+<style>
+    .container {
+    width: 800px;
+    font-family: Arial, Helvetica, sans-serif;
+    }
+    .grid {
+        display: grid;
+        justify-content: center;
+        color: black
+    }
+    span {
+    margin: 10px 10px;
+    display: block;
+    }
+    paragraph {
+        margin-top: 10px;
+        font-weight: bold;
+    }
+</style>
+
+<div class="container">
+    <img src="https://imgur.com/DN2Nbhu.png"/>
+
+    <span>Olá, {{email}} </span>
+
+    <br>
+
+    <span>
+        Bem vindo a familia ModaCad!
+    </span>
+    
+    <div class="grid">
+        <span>
+            Agora você faz parte do TIME. Para seu primeiro acesso use a senha abaixo e lembre-se de trocar assim que entrar viu!
+            Ficamos muito felizes em ter você conosco para crescermos mais e mais!
+            
+        </span>
+        <p class="paragraph">
+            {{senha}}
+        </p>
+
+        <span>
+            Use o link abaixo para acessar o nosso Dashboard!
+        </span>
+        <a href={{link}}>{{link}}</a>
+        <span>
+            Obrigado!
+        </span>
+    </div>
+
+    
+    <h3>
+        Equipe | <strong>ModaCAD</strong>
+    </h3>
+</div>

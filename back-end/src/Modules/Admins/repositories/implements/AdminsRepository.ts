@@ -9,19 +9,85 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
-    async findStaff(): Promise<Admins[]> {
-        return await this.repository
-        .createQueryBuilder("admin")
+    async createStaff(email: string, password: string, role: string): Promise<void> {
+        const staff = this.repository.create({
+            email,
+            password,
+            role
+        })
+
+        await this.repository.save(staff)
+    }
+    
+    async listStaff(
+        page: number = 1,
+        order: 'ASC' | 'DESC' = 'ASC',
+        limit: number = 10
+    ): Promise<{
+        staffs: Admins[];
+        currentPage: number;
+        totalPages: number;
+        pageSize: number;
+        totalStaff: number;
+        totalAdministradores: number;
+        totalEditores: number;
+        totalAutores: number;
+        totalColaboradores: number
+    }> {
+        const offset = (page - 1) * limit;
+
+        const totalAdministradores = await this.repository.createQueryBuilder('a')
+        .where('a.role = :role', {role: 'administrador'}).getCount();
+
+        const totalEditores = await this.repository.createQueryBuilder('a')
+        .where('a.role = :role', {role: 'editor'}).getCount();
+
+        const totalAutores = await this.repository.createQueryBuilder('a')
+        .where('a.role = :role', {role: 'autor'}).getCount();
+
+        const totalColaboradores = await this.repository.createQueryBuilder('a')
+        .where('a.role = :role', {role: 'colaborador'}).getCount();
+
+        const staffQuery = this.repository.createQueryBuilder("admin")
         .select([
             "admin.id",
             "admin.name",
             "admin.role",
             "admin.email",
-            "admin.avatar"
+            "admin.avatar",
+            "admin.created_at"
         ])
-        .where("admin.role != :role", { role: 'membro' })
-        .getMany();
+        .where("admin.role IN (:...roles)", { roles: ['administrador', 'editor', 'autor', 'colaborador'] });
+
+        // Calcula total de registros antes da paginação
+        const totalStaff = await staffQuery.getCount();
+
+        // Ordena globalmente
+        const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
+        staffQuery.orderBy("admin.created_at", validOrder);
+    
+        // Adiciona paginação
+        staffQuery.skip(offset).take(limit);
+    
+        // Executa a consulta com ordenação total e paginação
+        const staffs = await staffQuery.getMany();
+    
+        // Calcula total de páginas
+        const totalPages = Math.ceil(totalStaff / limit);
+    
+        return {
+            staffs,
+            currentPage: page,
+            totalPages,
+            pageSize: limit,
+            totalStaff,
+            totalAdministradores,
+            totalEditores,
+            totalAutores,
+            totalColaboradores,
+        };
     }
+
     async findByIds(id: string[]): Promise<Admins[]> {
         return await this.repository.findByIds(id)
     }

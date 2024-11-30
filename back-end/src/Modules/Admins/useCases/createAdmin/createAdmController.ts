@@ -8,16 +8,13 @@ class CreateAdmController {
 
     async handle(request: Request, response: Response): Promise<Response> {
         const {
-            name,
             email,
-            password,
-            cellphone,
             role
         } = request.body;
         const createAdminUseCase = container.resolve(CreateAdmUseCase)
 
         try {
-            const admin = await createAdminUseCase.execute({name, email, password, cellphone, role})
+            const admin = await createAdminUseCase.execute({email, role})
             return response.status(201).json(admin)
         } catch (error) {
             return response.status(400).json(error)
