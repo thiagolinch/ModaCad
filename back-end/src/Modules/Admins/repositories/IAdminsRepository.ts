@@ -23,8 +23,8 @@ interface IAdminsRepository {
         cellphone: string,
         email: string,
         role: string,
-        status_id: string,
-        plan_id: string
+        status_id?: string,
+        plan_id?: string
     ): Promise<void>;
     updatePassword(id: string, password: string): Promise<void>;
     updatePayment(paymnt_id: string, id: string): Promise<void> 

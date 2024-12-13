@@ -110,10 +110,6 @@ class AdminRepository implements IAdminsRepository {
             user.cellphone = cellphone
         }
         if(email){
-            const emailExist = await this.repository.findOne({email})
-            if(emailExist){
-                throw new Error("E-mail ja cadastrado.").message
-            }   
             user.email = email
         }
         if(role){

@@ -20,6 +20,7 @@ import { ensureAuthenticate } from "../middlewares/ensureAuthenticate"
 import { CreatePaymentController } from "../../../Modules/Admins/useCases/Pagamentos/createPayment/createPaymentController"
 import { CreatePlanMPController } from "../../../Modules/Admins/useCases/Pagamentos/criarRecorrencia/createPlanMPController"
 import { UserGetPlanController } from "../../../Modules/Admins/useCases/userGetPlan/userGetPlanController"
+import { GetUserByIdController } from "../../../Modules/Admins/useCases/getUseById/getUseByIdController"
 
 const adminRoute = Router()
 
@@ -29,6 +30,8 @@ const createUserController = new CreateUserController()
 const createAdm = new CreateAdmController()
 const updateControler = new UpdateUserController()
 const deleteuser = new DeleteUserController();
+
+const getUserById = new GetUserByIdController();
 
 const profileAdminController = new AdminProfileController()
 const listUsers = new ListUsersController();
@@ -52,6 +55,9 @@ adminRoute.get("/staff", ensureAdminAuhenticate, listStaff.handle)
 
 // UPDATE USER 
 adminRoute.put("/:id", ensureAdminAuhenticate, ensureAdministrador, updateControler.handle)
+
+// GET USER BY ID
+adminRoute.get("/user/:id", ensureAdminAuhenticate, ensureAdministrador, getUserById.handle)
 
 // UPDATE USER PLAN
 adminRoute.put("/new-plan/:id", ensureAuthenticate, updatePlan.handle)

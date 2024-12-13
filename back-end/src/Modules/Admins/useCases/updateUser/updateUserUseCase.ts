@@ -24,14 +24,17 @@ class UpdateUserUseCase {
             throw new Error("Usuário não encontrado").message
         }
 
+        user.name = name
+        user.email = email
+        user.cellphone = cellphone
+        user.role = role
+
         await this.admRepo.update(
             id,
             name,
             cellphone,
             email,
-            role,
-            status,
-            plan_id
+            role
         )
 
     }
