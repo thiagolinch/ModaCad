@@ -1,383 +1,190 @@
 import { getRepository, Repository } from "typeorm";
-import { IAdminsRepository } from "../../../Admins/repositories/IAdminsRepository";
-import { Articles } from "../../entity/Articles";
 import { IArticlesRepository, IArticlesRepositoryDTO } from "../IArticlesRepository";
-import { Admins } from "../../../Admins/entity/Admins";
+import { Articles } from "../../entity/Articles";
 
+interface FindPostParams {
+    type_id: string;
+    page?: number;
+    limit?: number;
+    status_id?: string;
+    subject_id?: string;
+    author_id?: string;
+    visibility?: string;
+    order?: 'ASC' | 'DESC';
+}
 
 class ArticleRepository implements IArticlesRepository {
-    private repository: Repository<Articles>
+    private repository: Repository<Articles>;
 
     constructor() {
-        this.repository = getRepository(Articles)
+        this.repository = getRepository(Articles);
+    }
+
+    private throwIfNotFound(entity: Articles | undefined, message = "Article not found"): Articles {
+        if (!entity) {
+            throw new Error(message);
+        }
+        return entity;
     }
 
     async findByCanonicalUrl(canonicalUrl: string): Promise<Articles> {
-        const query = this.repository.createQueryBuilder("p")
-        .select([
-            "p",
-            "admin.id",
-            "admin.role",
-            "admin.name",
-            "admin.email",
-            "admin.avatar",
-            "editors.id",
-            "editors.role",
-            "editors.name",
-            "curators.id",
-            "curators.role",
-            "curators.name",
-            "meta.id",
-            "meta.meta_title"
-        ])
-        .where("p.canonicalUrl = :canonicalUrl", { canonicalUrl })
-        .leftJoinAndSelect("p.admins", "admin") // Relação com post_admin
-        .leftJoinAndSelect("p.editors", "editors") // Relação com post_editor
-        .leftJoinAndSelect("p.curadors", "curators") // Relação com post_curador
-        .leftJoinAndSelect("p.tags", "tag")
-        .leftJoinAndSelect("p.subjects", "subjects")
-        .leftJoinAndSelect("p.meta", "meta");
-    
-        const result = await query.getOne();
-    
-        if (!result) {
-            throw new Error("Article not found");
-        }
-    
-        return result;
+        const article = await this.repository
+            .createQueryBuilder("p")
+            .select([
+                "p",
+                "admin.id", "admin.role", "admin.name", "admin.email", "admin.avatar",
+                "editors.id", "editors.role", "editors.name",
+                "curators.id", "curators.role", "curators.name",
+                "meta.id", "meta.meta_title",
+            ])
+            .where("p.canonicalUrl = :canonicalUrl", { canonicalUrl })
+            .leftJoinAndSelect("p.admins", "admin")
+            .leftJoinAndSelect("p.editors", "editors")
+            .leftJoinAndSelect("p.curadors", "curators")
+            .leftJoinAndSelect("p.tags", "tag")
+            .leftJoinAndSelect("p.subjects", "subjects")
+            .leftJoinAndSelect("p.meta", "meta")
+            .getOne();
+
+        return this.throwIfNotFound(article);
     }
 
     async updateFeatureImage(id: string, feature_image: string): Promise<void> {
-        await this.repository.createQueryBuilder("p")
-        .update()
-        .set({feature_image})
-        .where("id = :id")
-        .setParameters({id})
-        .execute()
+        await this.repository.update(id, { feature_image });
     }
 
     async deleteFeatureImageController(id: string): Promise<void> {
-        const post = await this.repository.findOne({id})
+        const post = await this.repository.findOne(id);
+        if (!post) throw new Error("Article not found");
 
-        post.feature_image = null
-
-        await this.repository.save(post)
+        post.feature_image = null;
+        await this.repository.save(post);
     }
 
     async save(article: Articles): Promise<Articles> {
-        const updatedArticle = await this.repository.save(article);
-        return updatedArticle;
+        return await this.repository.save(article);
     }
 
-    async update({
-        id,
-        title,
-        feature_image,
-        description,
-        content,
-        visibility,
-        status,
-        type,
-        tags,
-        subjects,
-        admins,
-        canonicalUrl,
-        published_at,
-        editors,
-        curadors
-        }: IArticlesRepositoryDTO
-    ): Promise<Articles> {
-        const post = await this.repository.findOne({id})
+    async update(data: IArticlesRepositoryDTO): Promise<Articles> {
+        const post = await this.repository.findOne(data.id);
+        const updatedPost = { ...post, ...data, published_at: data.status === "published" ? new Date() : post?.published_at };
 
-        if(title) {
-            post.title = title
-        }
-
-        if(feature_image) {
-            post.feature_image = feature_image
-        }
-
-        if(status != post.status) {
-            // Atualiza a data de publicação se o status for "published"
-            if (status === "published") {
-                post.published_at = new Date();
-                post.status = status
-            }
-            post.status = status
-        }
-
-        if(description) {
-            post.description = description
-        }
-
-        if(content) {
-            post.content = content
-        }       
-
-        if(type) {
-            post.type = type
-        }
-
-        if(visibility) {
-            post.visibility = visibility
-        }
-
-        if(status) {
-            post.status = status
-        }
-
-        if(tags) {
-            post.tags = tags
-        }
-
-        if(admins) {
-            post.admins = admins
-        }
-
-        if(subjects) {
-            post.subjects = subjects
-        }
-
-        if(canonicalUrl) {
-            post.canonicalUrl = canonicalUrl
-        }
-
-        if(published_at) {
-            post.published_at = published_at
-        }
-
-        if(editors) {
-            post.editors = editors
-        }
-
-        if(curadors) {
-            post.curadors = curadors
-        }
-
-        await this.repository.save(post)
-
-        return post
-
+        return this.throwIfNotFound(await this.repository.save(updatedPost));
     }
 
-    async findPostByParams(
-        type_id: string,
-        page: number = 1,
-        limit: number = 10,
-        status_id?: string,
-        author_id?: string,
-        visibility?: string,
-        order: 'ASC' | 'DESC' = 'ASC'
-    ): Promise<{
+    async findPostByParams(params: FindPostParams): Promise<{
         posts: Articles[];
         currentPage: number;
         totalPages: number;
         totalItems: number;
         pageSize: number;
     }> {
+        const { type_id, page = 1, limit = 10, status_id, subject_id, author_id, visibility, order } = params;
+        const validOrder = order.toUpperCase() === "ASC" ? "ASC" : "DESC";
         const offset = (page - 1) * limit;
-    
-        const postQuery = this.repository.createQueryBuilder("p")
+
+        const query = this.repository
+            .createQueryBuilder("p")
             .select([
-                "p.id",
-                "p.post_id",
-                "p.title",
-                "p.description",
-                "p.feature_image",
-                "p.status",
-                "p.visibility",
-                "p.published_at",
-                "admin.id", // Seleciona apenas o id do admin
-                "admin.name", // Seleciona apenas o nome do admin
-                "admin.role",
-                "tag.id",
-                "tag.name",
-                "subjects",
-                "meta"
+                "p.id", "p.post_id", "p.title", "p.description", "p.feature_image", "p.status", "p.visibility", "p.published_at",
+                "admin.id", "admin.name", "admin.role",
+                "tag.id", "tag.name",
+                "subjects", "meta",
             ])
-            .where("p.type = :type", { type: type_id })
+            .where("p.type = :type_id", { type_id })
             .leftJoin("p.admins", "admin")
             .leftJoin("p.tags", "tag")
             .leftJoin("p.subjects", "subjects")
-            .leftJoin("p.meta", "meta");
-    
-        // Filtro por status, se fornecido
-        if (status_id) {
-            postQuery.andWhere("p.status = :status_id", { status_id });
-        }
-    
-        // Filtro pelo ID do admin, se fornecido
-        if (author_id) {
-            postQuery.andWhere("admin.id = :author_id", { author_id });
-        }
+            .leftJoin("p.meta", "meta")
+            .orderBy("p.published_at", validOrder);
 
-        if (visibility) {
-            postQuery.andWhere("p.visibility = :visibility", { visibility })
-        }
+        if (status_id) query.andWhere("p.status = :status_id", { status_id });
+        if (author_id) query.andWhere("admin.id = :author_id", { author_id });
+        if (visibility) query.andWhere("p.visibility = :visibility", { visibility });
+        if (subject_id) query.andWhere("subjects.id = :subject_id", { subject_id });
 
-        // Obtem o número total de registros (antes da paginação)
-        const totalItems = await postQuery.getCount();
-    
-        // Adiciona a ordenação usando o valor validado de `order`
-        const validOrder = order.toUpperCase() === "DESC" ? "DESC" : "ASC";
-        postQuery.orderBy("p.published_at", validOrder);
-    
-        // Adiciona a paginação
-        postQuery.skip(offset).take(limit);
-    
-        // Obtem os posts paginados
-        const posts = await postQuery.getMany();
-    
-        // Calcula o número total de páginas
-        const totalPages = Math.ceil(totalItems / limit);
-    
+        const totalItems = await query.getCount();
+        const posts = await query.skip(offset).take(limit).getMany();
+
         return {
             posts,
             currentPage: page,
-            totalPages,
+            totalPages: Math.ceil(totalItems / limit),
             totalItems,
-            pageSize: limit
+            pageSize: limit,
         };
     }
 
     async findById(id: string): Promise<Articles> {
-        const query = this.repository.createQueryBuilder("p")
-        .select([
-            "p",
-            "admin.id",
-            "admin.role",
-            "admin.name",
-            "admin.email",
-            "admin.avatar",
-            "editors.id",
-            "editors.role",
-            "editors.name",
-            "curators.id",
-            "curators.role",
-            "curators.name",
-            "meta.id",
-            "meta.meta_title"
-        ])
-        .where("p.id = :id", { id })
-        .leftJoinAndSelect("p.admins", "admin") // Relação com post_admin
-        .leftJoinAndSelect("p.editors", "editors") // Relação com post_editor
-        .leftJoinAndSelect("p.curadors", "curators") // Relação com post_curador
-        .leftJoinAndSelect("p.tags", "tag")
-        .leftJoinAndSelect("p.subjects", "subjects")
-        .leftJoinAndSelect("p.meta", "meta");
-    
-        const result = await query.getOne();
-    
-        if (!result) {
-            throw new Error("Article not found");
-        }
-    
-        return result;
+        const article = await this.repository
+            .createQueryBuilder("p")
+            .select([
+                "p", "admin.id", "admin.role", "admin.name", "admin.email", "admin.avatar",
+                "editors.id", "editors.role", "editors.name",
+                "curators.id", "curators.role", "curators.name",
+                "meta.id", "meta.meta_title",
+            ])
+            .where("p.id = :id", { id })
+            .leftJoinAndSelect("p.admins", "admin")
+            .leftJoinAndSelect("p.editors", "editors")
+            .leftJoinAndSelect("p.curadors", "curators")
+            .leftJoinAndSelect("p.tags", "tag")
+            .leftJoinAndSelect("p.subjects", "subjects")
+            .leftJoinAndSelect("p.meta", "meta")
+            .getOne();
+
+        return this.throwIfNotFound(article);
     }
-    
+
     async findByPostId(post_id: string): Promise<Articles> {
-        const query = this.repository.createQueryBuilder("p")
-        .select([
-            "p", // Seleciona todos os campos da tabela articles
-            "admin.id", // Seleciona apenas o id do admin
-            "admin.role",
-            "admin.name", // Seleciona apenas o nome do admin
-            "admin.email", // Seleciona apenas o email do admin
-            "admin.avatar", // Seleciona apenas o avatar do admin
-            "editor.id",
-            "editor.name",
-            "editor.avatar",
-            "curador.id",
-            "curador.name",
-            "curador.avatar",
-            "meta.id",
-            "meta.meta_title",
-            "tag",
-            "subjects"
-        ])
-        .where("p.post_id = :post_id", {post_id})
-        .leftJoin("p.admins", "admin") // Faz o join com a tabela de admins
-        .leftJoin("p.editors", "editor")
-        .leftJoin("p.curadors", "curador")
-        .leftJoinAndSelect("p.tags", "tag") // Inclui todos os dados das tags
-        .leftJoinAndSelect("p.subjects", "subjects") // Inclui todos os dados dos subjects
-        .leftJoinAndSelect("p.meta", "meta");
+        const article = await this.repository
+            .createQueryBuilder("p")
+            .select([
+                "p", "admin.id", "admin.role", "admin.name", "admin.email", "admin.avatar",
+                "editor.id", "editor.name", "editor.avatar",
+                "curador.id", "curador.name", "curador.avatar",
+                "meta.id", "meta.meta_title", "tag", "subjects",
+            ])
+            .where("p.post_id = :post_id", { post_id })
+            .leftJoin("p.admins", "admin")
+            .leftJoin("p.editors", "editor")
+            .leftJoin("p.curadors", "curador")
+            .leftJoinAndSelect("p.tags", "tag")
+            .leftJoinAndSelect("p.subjects", "subjects")
+            .leftJoinAndSelect("p.meta", "meta")
+            .getOne();
 
-        const post = query.getOne()
-
-        return post
+        return this.throwIfNotFound(article);
     }
 
     async lastPost(): Promise<Articles> {
-        const post = this.repository.createQueryBuilder("p")
-        .select([
-            "p.id",
-            "p.post_id",
-            "p.title", // Seleciona todos os campos da tabela articles
-            "p.description",
-            "p.feature_image"
-        ])
-        .where("p.published_at IS NOT NULL") // Garante que só considere posts publicados
-        .andWhere("p.type = :type", { type: "texto"})
-        .andWhere("p.status = :status", { status: "published"})
-        .orderBy("p.published_at", "DESC") // Ordena pelos mais recentes publicados
-        .leftJoinAndSelect("p.tags", "tag")
-        .leftJoinAndSelect("p.subjects", "subjects")
-        .leftJoinAndSelect("p.meta", "meta")
-        .getOne(); // Retorna o último post publicado
+        const post = await this.repository
+            .createQueryBuilder("p")
+            .select(["p.id", "p.post_id", "p.title", "p.description", "p.feature_image"])
+            .where("p.published_at IS NOT NULL")
+            .andWhere("p.type = :type", { type: "texto" })
+            .andWhere("p.status = :status", { status: "published" })
+            .orderBy("p.published_at", "DESC")
+            .leftJoinAndSelect("p.tags", "tag")
+            .leftJoinAndSelect("p.subjects", "subjects")
+            .leftJoinAndSelect("p.meta", "meta")
+            .getOne();
 
-        return post;
+        return this.throwIfNotFound(post);
     }
 
-    async create({
-        title,
-        feature_image,
-        description,
-        content,
-        visibility,
-        status,
-        type,
-        tags,
-        subjects,
-        admins,
-        canonicalUrl,
-        published_at,
-        editors,
-        curadors
-        }: IArticlesRepositoryDTO): Promise<Articles> {
-            const post = this.repository.create({
-                title,
-                feature_image,
-                description,
-                content,
-                visibility,
-                status,
-                type,
-                tags,
-                subjects,
-                admins,
-                canonicalUrl,
-                published_at,
-                editors,
-                curadors
-            })
-
-            await this.repository.save(post)
-            const id = post.id
-
-            const data = this.repository.findOne({id})
-
-            return data;
+    async create(data: IArticlesRepositoryDTO): Promise<Articles> {
+        const post = this.repository.create(data);
+        return await this.repository.save(post);
     }
 
     async delete(id: string): Promise<void> {
-        await this.repository.delete({id})
+        await this.repository.delete(id);
     }
 
     async findByName(name: string): Promise<Articles> {
-        return await this.repository.findOne({ title: name})
+        return await this.repository.findOne({ title: name });
     }
-
 }
 
-export { ArticleRepository }
+export { ArticleRepository };
