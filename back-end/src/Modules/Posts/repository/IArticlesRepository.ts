@@ -3,6 +3,17 @@ import { Subjects } from "../../Assuntos/entities/Subject";
 import { Articles } from "../entity/Articles"
 import { Tags } from "../entity/Tags";
 
+interface FindPostParamsDTO {
+    type_id: string;
+    page?: number;
+    limit?: number;
+    status_id?: string;
+    subject_id?: string;
+    author_id?: string;
+    visibility?: string;
+    order?: 'ASC' | 'DESC';
+}
+
 
 interface IArticlesRepositoryDTO {
     id?: string;
@@ -73,21 +84,24 @@ interface IArticlesRepository {
         curadors
     }: IArticlesRepositoryDTO): Promise<Articles>;
 
-    findPostByParams(
-        type_id: string,
-        page: number,
-        limit: number,
-        author_id?: string,
-        status_id?: string,
-        visibility?: string,
-        order?: string
-    ): Promise<{
+    findPostByParams(params: FindPostParamsDTO): Promise<{
         posts: Articles[];
         currentPage: number;
         totalPages: number;
         totalItems: number;
         pageSize: number;
     }>;
+    searchPostsByTerm(
+        term: string,
+        page?: number,
+        limit?: number,
+        order?: 'ASC' | 'DESC'
+    ): Promise<{
+        posts: Articles[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;}>;
     findByCanonicalUrl(url: string): Promise<Articles>;
     lastPost(): Promise<Articles>;
     findById(id: string): Promise<Articles>;
@@ -98,4 +112,4 @@ interface IArticlesRepository {
 
 }
 
-export {IArticlesRepository, IArticlesRepositoryDTO}
+export {IArticlesRepository, IArticlesRepositoryDTO, FindPostParamsDTO}

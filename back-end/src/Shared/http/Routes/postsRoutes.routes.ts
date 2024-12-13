@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { CreatePostController } from "../../../Modules/Posts/useCases/PostUseCases/createPost/createPostController";
 
-import upload from "../../../Config/upload"
+import upload from "../../../Config/upload";
 
 import { ensureAdminAuhenticate } from "../middlewares/ensureAdminAuthenticate";
 import { FilterTextoController } from "../../../Modules/Posts/useCases/PostUseCases/filterPosts/filterTextosController";
@@ -22,7 +22,7 @@ import { DeleteFeatureImageController } from "../../../Modules/Posts/useCases/Po
 import { CreatePostSubjectController } from "../../../Modules/Posts/useCases/SubjectUseCases/createPostSubject/createPostSubjectController";
 import { LastPostController } from "../../../Modules/Posts/useCases/PostUseCases/lastPost/lastPostController";
 import { GetTextoByUrlController } from "../../../Modules/Posts/useCases/PostUseCases/getTextoByUrl/getTextoByUrlController";
-import { userCanAccess } from "../middlewares/userCanAccess";
+import { SearchPostController } from "../../../Modules/Posts/useCases/PostUseCases/searchByTerm/SearchByTermController";
 
 
 const postRoute = Router()
@@ -34,6 +34,7 @@ const textoByUrl = new GetTextoByUrlController();
 const updatePost = new UpdatePostController();
 const deletepost = new DeletePostController()
 const filterTexto = new FilterTextoController();
+const searchPost = new SearchPostController();
 const lastPost = new LastPostController();
 
 const uploadArticleImage = new UploadArticleImageController();
@@ -56,7 +57,7 @@ postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAdminCanPost, crea
 postRoute.put("/:id", ensureAdminAuhenticate, ensureAdminCanPost, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:id", userCanAccess, getTexto.handle)
+postRoute.get("/:id", getTexto.handle)
 
 // GET TEXTO PELA URL
 postRoute.get("/blog/:url", textoByUrl.handle)
@@ -67,6 +68,9 @@ postRoute.get("/last/publish", lastPost.handle)
 // LIST ALL POSTS, CAN FILTER BY TYPE AND STATUS
 // baseURL/post/list?type=texto&status=&autor=
 postRoute.get("/", filterTexto.handle)
+
+// SEARCH 
+postRoute.post("/search", searchPost.handle);
 
 // UPLOAD IMAGE TO ARTICLE
 postRoute.post("/images", ensureAdminAuhenticate, uploadArticleImageMulter.single("image"), uploadArticleImage.handle)
