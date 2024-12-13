@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { Brackets, getRepository, Repository } from "typeorm";
 import { IArticlesRepository, IArticlesRepositoryDTO } from "../IArticlesRepository";
 import { Articles } from "../../entity/Articles";
 
@@ -114,6 +114,59 @@ class ArticleRepository implements IArticlesRepository {
             pageSize: limit,
         };
     }
+
+    async searchPostsByTerm(
+        term: string,
+        page = 1,
+        limit = 10,
+        order: 'ASC' | 'DESC' = 'DESC'
+    ): Promise<{
+        posts: Articles[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }> {
+        const validOrder = order.toUpperCase() === "ASC" ? "ASC" : "DESC";
+        const offset = (page - 1) * limit;
+    
+        const query = this.repository
+            .createQueryBuilder("p")
+            .select([
+                "p.id",
+                "p.title",
+                "p.published_at",
+                "p.status",
+                "p.type"
+            ])
+            .leftJoin("p.admins", "admin")
+            .leftJoin("p.tags", "tag")
+            .leftJoin("p.subjects", "subjects")
+            .where("p.status = :status", { status: "published" })
+            .andWhere(
+                new Brackets((qb) => {
+                    qb.where("p.title ILIKE :term", { term: `%${term}%` })
+                        .orWhere("unaccent(p.description) ILIKE unaccent(:term)", { term: `%${term}%` })
+                        .orWhere("unaccent(p.content) ILIKE unaccent(:term)", { term: `%${term}%` })
+                        .orWhere("unaccent(tag.name) ILIKE unaccent(:term)", { term: `%${term}%` })
+                        .orWhere("unaccent(subjects.name) ILIKE unaccent(:term)", { term: `%${term}%` })
+                })
+            )
+            .orderBy("p.published_at", validOrder);
+    
+        const totalItems = await query.getCount();
+        const posts = await query.skip(offset).take(limit).getMany();
+    
+        return {
+            posts,
+            currentPage: page,
+            totalPages: Math.ceil(totalItems / limit),
+            totalItems,
+            pageSize: limit,
+        };
+    }
+    
+    
 
     async findById(id: string): Promise<Articles> {
         const article = await this.repository
