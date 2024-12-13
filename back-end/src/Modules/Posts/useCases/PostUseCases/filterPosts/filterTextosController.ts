@@ -6,6 +6,7 @@ class FilterTextoController {
     async handle(request: Request, response: Response): Promise<Response> {
         const type_id = request.query.type as string | undefined;
         const status_id = request.query.statusId as string | undefined;
+        const subjectId = request.query.subjectId as string | undefined;
         const author_id = request.query.authorId as string | undefined;
         const visibility = request.query.visibility as string | undefined;
 
@@ -20,6 +21,7 @@ class FilterTextoController {
             const subjects = await filterTextUC.execute(
                 type_id,
                 status_id,
+                subjectId,
                 author_id,
                 visibility,
                 page,
