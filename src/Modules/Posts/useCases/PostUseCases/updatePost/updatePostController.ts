@@ -37,7 +37,10 @@ class UpdatePostController {
             editors,
             curadors
         } = request.body;
-        
+        const postStatus = request.postStatus;
+
+        console.log("status do post: ", status)
+        console.log("status do midd: ", postStatus)
         const useCase = container.resolve(UpdatePostUseCase)
 
         try {

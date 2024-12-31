@@ -4,7 +4,7 @@ import { Articles } from "../entity/Articles"
 import { Tags } from "../entity/Tags";
 
 interface FindPostParamsDTO {
-    type_id: string;
+    type_id?: string;
     page?: number;
     limit?: number;
     status_id?: string;
@@ -23,7 +23,7 @@ interface IArticlesRepositoryDTO {
     content?: string;
     visibility?: string;
     status?: string;
-    published_at?: Date;
+    published_at?: Date | null;
     type?: string;
     tags?: Tags[]; // IDs das tags
     subjects?: Subjects[]; // IDs dos subjects
@@ -91,6 +91,13 @@ interface IArticlesRepository {
         totalItems: number;
         pageSize: number;
     }>;
+    postBySubject(params: FindPostParamsDTO): Promise<{
+        posts: Articles[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }>
     searchPostsByTerm(
         term: string,
         page?: number,

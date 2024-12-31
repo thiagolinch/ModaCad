@@ -105,7 +105,7 @@ class Articles {
     @UpdateDateColumn()
     updated_at: Date;
 
-    @Column({ type: "timestamp", nullable: true })
+    @Column({ type: "timestamp" })
     published_at: Date | null;
 
     @ManyToMany(() => Tags, tag => tag.articles)
