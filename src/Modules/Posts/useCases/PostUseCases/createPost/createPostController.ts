@@ -6,6 +6,7 @@ import { CreatePostUseCase } from "./createpostUseCase";
 class CreatePostController {
     async handle(request: Request, response: Response): Promise<Response> {
         const { id } = request.admin;
+
         const {
             admins,
             title,
@@ -35,6 +36,8 @@ class CreatePostController {
             editors,
             curadors
         } = request.body;
+        const postStatus = request.postStatus
+        console.log(postStatus)
 
         const createPostUseCase = container.resolve(CreatePostUseCase);
 

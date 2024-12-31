@@ -23,6 +23,7 @@ import { CreatePostSubjectController } from "../../../Modules/Posts/useCases/Sub
 import { LastPostController } from "../../../Modules/Posts/useCases/PostUseCases/lastPost/lastPostController";
 import { GetTextoByUrlController } from "../../../Modules/Posts/useCases/PostUseCases/getTextoByUrl/getTextoByUrlController";
 import { SearchPostController } from "../../../Modules/Posts/useCases/PostUseCases/searchByTerm/SearchByTermController";
+import { validatePostPermissions } from "../middlewares/validatePostPermissions";
 
 
 const postRoute = Router()
@@ -45,16 +46,16 @@ const createPostSubject = new CreatePostSubjectController();
 
 
 // CREATE POST
-postRoute.post("/", ensureAdminAuhenticate, ensureAdminCanPost, createPost.handle)
+postRoute.post("/", ensureAdminAuhenticate, validatePostPermissions, createPost.handle)
 
 // DELETE POST
 postRoute.delete("/:id", ensureAdminAuhenticate, ensurCanDelete, deletepost.handle)
 
 // CREATE POST SUBJECTS
-postRoute.post("/subjects/:id", ensureAdminAuhenticate, ensureAdminCanPost, createPostSubject.handle)
+postRoute.post("/subjects/:id", ensureAdminAuhenticate, validatePostPermissions, createPostSubject.handle)
 
 // UPDATE POST
-postRoute.put("/:id", ensureAdminAuhenticate, ensureAdminCanPost, updatePost.handle)
+postRoute.put("/:id", ensureAdminAuhenticate, validatePostPermissions, updatePost.handle)
 
 // GET TEXTO PELO ID
 postRoute.get("/:id", getTexto.handle)
@@ -70,7 +71,11 @@ postRoute.get("/last/publish", lastPost.handle)
 postRoute.get("/", filterTexto.handle)
 
 // SEARCH 
+// baseUrl/post/search?term=&limit=&order=&page=
 postRoute.post("/search", searchPost.handle);
+
+// POST BY SUBJECT
+postRoute.get("/subject")
 
 // UPLOAD IMAGE TO ARTICLE
 postRoute.post("/images", ensureAdminAuhenticate, uploadArticleImageMulter.single("image"), uploadArticleImage.handle)
