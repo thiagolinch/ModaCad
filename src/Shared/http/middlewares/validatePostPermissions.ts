@@ -2,6 +2,8 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { AdminRepository } from "../../../Modules/Admins/repositories/implements/AdminsRepository";
 import { AdminRoleRepository } from "../../../Modules/Admins/repositories/implements/AdminRoleRepository";
+import { ArticleRepository } from "../../../Modules/Posts/repository/implements/ArticlesRepository";
+import { Articles } from "Modules/Posts/entity/Articles";
 
 const CONFIG = {
     TOKEN_SECRET: "88f1c14bd2a14b42fad21d64739889e9",
@@ -16,6 +18,7 @@ const CONFIG = {
 
 interface IPayload {
     subject: string;
+    role: string;
 }
 
 export async function validatePostPermissions(
@@ -24,6 +27,7 @@ export async function validatePostPermissions(
     next: NextFunction
 ) {
     const authHeader = req.headers.authorization;
+    const {id} = req.params;
 
     if (!authHeader) {
         return res.status(401).json({ message: CONFIG.ERROR_MESSAGES.TOKEN_MISSING });
@@ -38,6 +42,9 @@ export async function validatePostPermissions(
         const adminRepo = new AdminRepository();
         const adminRoleRepo = new AdminRoleRepository();
 
+        // Busca info do post se ja existente
+        const postRepo = new ArticleRepository();
+
         const admin = await adminRepo.findById(userId);
         if (!admin) {
             return res.status(404).json({ message: CONFIG.ERROR_MESSAGES.USER_NOT_FOUND });
@@ -49,22 +56,68 @@ export async function validatePostPermissions(
             return res.status(404).json({ message: CONFIG.ERROR_MESSAGES.ROLE_NOT_FOUND });
         }
 
-        // Lógica de definição de status do post
-        const action = req.body.status; // Recebido da API
-        let postStatus = "draft"; // Valor padrão
+        let post: Articles;
 
-        if (["autor", "curador"].includes(role.name) && action === "published") {
-            return res.status(400).json({message: CONFIG.ERROR_MESSAGES.USER_NOT_ALLOWED})
-        } else if (["editor", "administrador"].includes(role.name) && action === "published") {
-            postStatus = "published";
+        if(id) {
+            post = await postRepo.findById(id)
+        }
+
+        // Lógica de definição de status do post
+        let postStatus = post?.status || ""; // Default status
+        const method = req.method;
+
+        // Verifica permissões e métodos
+        if (["autor", "curador"].includes(role.name)) {
+            if (method === "POST") {
+                postStatus = "draft"; // Criação sempre como rascunho
+            }
+
+            if (method === "PATCH") {
+                postStatus = role.name === "autor" ? "pendente: curador" : "pendente: editor";
+            }
+
+            if (method === "PUT") {
+                console.log(post.status)
+                if (post.status === "published") {
+                    return res.status(403).json({ message: CONFIG.ERROR_MESSAGES.USER_NOT_ALLOWED });
+                }
+
+                if (post?.status === "draft" || (post?.status === "pendente: curador" && role.name === "curador")) {
+                    next();
+                    return;
+                }
+            }
+
+            if (method === "DELETE") {
+                return res.status(403).json({ message: CONFIG.ERROR_MESSAGES.USER_NOT_ALLOWED });
+            }
+            
+        } else if (["editor", "administrador"].includes(role.name)) {
+            if (method === "POST") {
+                postStatus = "draft";
+            }
+
+            if (method === "PATCH") {
+                post?.status === 'published' ? postStatus = 'pendente: editor' : postStatus = 'published'
+            }
+
+            if (method === "PUT") {
+                next();
+                return;
+            }
+
+            if (method === "DELETE" && role.name === "editor") {
+                return res.status(403).json({ message: CONFIG.ERROR_MESSAGES.USER_NOT_ALLOWED });
+            }
         }
 
         // Substitui o status no body da requisição
         req.postStatus = postStatus;
-        req.body.userRole = role.name; // Passa o cargo para o controller também, se necessário
+        req.body.userRole = role.name;
 
         next();
     } catch (error) {
-        return res.status(401).json({ message: CONFIG.ERROR_MESSAGES.TOKEN_INVALID });
+        console.log(error)
+        return res.status(401).json({ message: CONFIG.ERROR_MESSAGES.TOKEN_INVALID, error });
     }
 }

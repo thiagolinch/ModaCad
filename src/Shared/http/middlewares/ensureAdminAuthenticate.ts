@@ -40,7 +40,7 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
         console.error("Erro no middleware de autenticação:", error);
 
         if (error instanceof Error && error.name === "JsonWebTokenError") {
-            return response.status(401).json({ message: "Token inválido" });
+            return response.status(401).json({ message: error });
         }
 
         return response.status(500).json({ message: "Erro interno do servidor" });

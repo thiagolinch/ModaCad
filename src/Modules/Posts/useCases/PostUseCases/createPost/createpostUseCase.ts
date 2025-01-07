@@ -9,7 +9,7 @@ import { Meta } from "../../../entity/Meta";
 import { Tags } from "../../../entity/Tags";
 
 interface ICreateArticleRequest {
-    admins: string[];
+    admins?: string[];
     editors?: string[];
     curadors?: string[];
     title?: string;

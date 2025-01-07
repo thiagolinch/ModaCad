@@ -1,8 +1,6 @@
 import { Brackets, getRepository, Repository } from "typeorm";
-import { IAdminsRepository } from "../../../Admins/repositories/IAdminsRepository";
 import { Articles } from "../../entity/Articles";
 import { FindPostParamsDTO, IArticlesRepository, IArticlesRepositoryDTO } from "../IArticlesRepository";
-import { Admins } from "../../../Admins/entity/Admins";
 
 
 class ArticleRepository implements IArticlesRepository {
@@ -232,6 +230,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.description",
                 "p.feature_image",
                 "p.status",
+                "p.type",
                 "p.visibility",
                 "p.published_at",
                 "admin.id", // Seleciona apenas o id do admin
@@ -269,7 +268,8 @@ class ArticleRepository implements IArticlesRepository {
         const totalItems = await postQuery.getCount();
 
         // Adiciona a ordenação usando o valor validado de `order`
-        const validOrder = params.order.toUpperCase() === "DESC" ? "DESC" : "ASC";
+        const validOrder = params.order.toUpperCase() === "ASC" ? "ASC" : "DESC";
+        console.log("validOrder: ", validOrder)
         postQuery.orderBy("p.published_at", validOrder);
 
         // Adiciona a paginação
