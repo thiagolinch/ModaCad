@@ -414,6 +414,7 @@ class ArticleRepository implements IArticlesRepository {
 
             await this.repository.save(post)
             const id = post.id
+            console.log("post id after create: ", id)
 
             const data = this.repository.findOne({id})
 

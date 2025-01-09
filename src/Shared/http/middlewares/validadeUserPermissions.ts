@@ -40,8 +40,13 @@ export async function validadeUserPermission( req: Request, res: Response, next:
             console.log("Visibilidade: ", postVisibility)
         }
 
+        // Verificação para usuários padrão
+        if (postVisibility === "public") {
+            return next(); // Acesso permitido
+        }
+
         if(!authHeader) {
-            if(post && post.visibility === 'publico') {
+            if(post && post.visibility === 'public') {
                 return next();
             }
             return res.status(401).json({ message: CONFIG.ERROR_MESSAGES.TOKEN_MISSING})    
@@ -73,11 +78,6 @@ export async function validadeUserPermission( req: Request, res: Response, next:
             return next();
         }
         console.log("status: ",user.status_id.name)
-
-        // Verificação para usuários padrão
-        if (postVisibility === "publico") {
-            return next(); // Acesso permitido
-        }
 
         if (postVisibility === "assinantes" && user.status_id.name === "ativo") {
             return next(); // Apenas assinantes ativos podem acessar
