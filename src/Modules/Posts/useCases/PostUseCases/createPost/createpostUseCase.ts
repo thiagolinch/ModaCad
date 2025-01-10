@@ -9,7 +9,7 @@ import { Meta } from "../../../entity/Meta";
 import { Tags } from "../../../entity/Tags";
 
 interface ICreateArticleRequest {
-    admins: string[];
+    admins?: string[];
     editors?: string[];
     curadors?: string[];
     title?: string;
@@ -89,46 +89,36 @@ class CreatePostUseCase {
        
         // 1. Criar o artigo
         const article = new Articles();
-        article.title = title;
-        article.feature_image = feature_image;
-        article.description = description;
-        article.content = content;
-        article.visibility = visibility;
-        article.status = status;
-        article.type = type;
+        article.title = title || '';
+        article.feature_image = feature_image || '';
+        article.description = description || '';
+        article.content = content || '';
+        article.visibility = visibility || '';
+        article.status = status || '';
+        article.type = type || '';
 
-        if(canonicalUrl === '') {
-            article.canonicalUrl = ''
-        } else {
-            const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
-            const canonicalExists = await this.articleRepository.findByCanonicalUrl(cannonical)
+        const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
+        article.canonicalUrl = cannonical || '';
 
-            if(canonicalExists) {
-                console.log("canonical url ja existe, escolha outra")
-                throw new Error("Canonical Url ja existe, escolha outra").message
-            }
-            article.canonicalUrl = cannonical
-        }
-
-        article.published_at = published_at
+        article.published_at = published_at || null;
 
         // 2. Buscar as Tags no banco de dados
         const foundTags = await this.tagsRepository.findByIds(tags);
-        article.tags = foundTags;
+        article.tags = foundTags || null;
 
         // 3. Buscar os Admins no banco de dados
         const foundAdmin = await this.adminRepository.findByIds(admins);
-        article.admins = foundAdmin;
+        article.admins = foundAdmin || null;
 
         const foundEditor = await this.adminRepository.findByIds(editors);
-        article.editors = foundEditor;
+        article.editors = foundEditor || null;
 
         const foundCurador = await this.adminRepository.findByIds(curadors);
-        article.curadors = foundCurador;
+        article.curadors = foundCurador || null;
 
         // 4. Buscar os Subjects no banco de dados
         const foundSubjects = await this.subjectsRepository.findByIds(subjects);
-        article.subjects = foundSubjects;
+        article.subjects = foundSubjects || null;
 
         const newArticle = await this.articleRepository.create(article);
         const post_id = newArticle.post_id

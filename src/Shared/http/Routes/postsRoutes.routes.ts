@@ -1,4 +1,4 @@
-import { Router } from "express";
+import { Request, Response, Router } from "express";
 import { CreatePostController } from "../../../Modules/Posts/useCases/PostUseCases/createPost/createPostController";
 
 import upload from "../../../Config/upload";
@@ -24,6 +24,8 @@ import { LastPostController } from "../../../Modules/Posts/useCases/PostUseCases
 import { GetTextoByUrlController } from "../../../Modules/Posts/useCases/PostUseCases/getTextoByUrl/getTextoByUrlController";
 import { SearchPostController } from "../../../Modules/Posts/useCases/PostUseCases/searchByTerm/SearchByTermController";
 import { validatePostPermissions } from "../middlewares/validatePostPermissions";
+import { validatePostEditionPermissions } from "../middlewares/validatePostEditionPermissions";
+import { validadeUserPermission } from "../middlewares/validadeUserPermissions";
 
 
 const postRoute = Router()
@@ -48,17 +50,24 @@ const createPostSubject = new CreatePostSubjectController();
 // CREATE POST
 postRoute.post("/", ensureAdminAuhenticate, validatePostPermissions, createPost.handle)
 
+// PATH TO POST A POST
+postRoute.patch("/:id", ensureAdminAuhenticate, validatePostPermissions, function(req: Request, res: Response) {
+    const id = req.params
+    const status = req.postStatus
+    res.status(200).json({ message: status })
+})
+
 // DELETE POST
-postRoute.delete("/:id", ensureAdminAuhenticate, ensurCanDelete, deletepost.handle)
+postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, deletepost.handle)
 
 // CREATE POST SUBJECTS
-postRoute.post("/subjects/:id", ensureAdminAuhenticate, validatePostPermissions, createPostSubject.handle)
+// postRoute.post("/subjects/:id", ensureAdminAuhenticate, validatePostPermissions, createPostSubject.handle)
 
 // UPDATE POST
 postRoute.put("/:id", ensureAdminAuhenticate, validatePostPermissions, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:id", getTexto.handle)
+postRoute.get("/:id", validadeUserPermission, getTexto.handle)
 
 // GET TEXTO PELA URL
 postRoute.get("/blog/:url", textoByUrl.handle)

@@ -37,7 +37,6 @@ class CreatePostController {
             curadors
         } = request.body;
         const postStatus = request.postStatus
-        console.log(postStatus)
 
         const createPostUseCase = container.resolve(CreatePostUseCase);
 
@@ -48,7 +47,7 @@ class CreatePostController {
                 description,
                 content,
                 visibility,
-                status,
+                status: postStatus,
                 type,
                 tags,
                 subjects,
@@ -74,6 +73,7 @@ class CreatePostController {
     
             return response.status(200).json(articleId)
         } catch (error) {
+            console.log("create post controller: ", error)
             return response.status(400).json({error})
         }
     }
