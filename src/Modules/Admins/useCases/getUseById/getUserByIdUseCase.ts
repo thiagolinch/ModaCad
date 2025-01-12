@@ -1,4 +1,4 @@
-import { Admins } from "../../../../Modules/Admins/entity/Admins";
+import { Admins } from "../../entity/Admins";
 import { IAdminsRepository } from "../../repositories/IAdminsRepository";
 import { inject, injectable } from "tsyringe";
 

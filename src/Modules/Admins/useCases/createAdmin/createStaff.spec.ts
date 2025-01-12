@@ -1,6 +1,6 @@
 import "reflect-metadata"; // Required for tsyringe
-import { CreateAdmUseCase } from "../createAdmin/createAdmUseCase";
-import { CreateAdmController } from "../createAdmin/createAdmController";
+import { CreateAdmUseCase } from "./createAdmUseCase";
+import { CreateAdmController } from "./createAdmController";
 import { IAdminsRepository } from "../../repositories/IAdminsRepository";
 import { IAdminRoleRepository } from "../../repositories/IAdminRole";
 import { IMailProvider } from "../../../../Shared/container/providers/MailProvider/IMailProvider";
