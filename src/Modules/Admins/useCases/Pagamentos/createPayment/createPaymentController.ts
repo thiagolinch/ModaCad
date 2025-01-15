@@ -9,10 +9,7 @@ export class CreatePaymentController {
     async handle(req: Request, res: Response): Promise<Response> {
         const {id} = req.admin;
         const {
-            transaction_amount,
-            description,
-            payment_method_id,
-            token
+            plan_id
         } = req.body;
         const useCase = container.resolve(CreatepaymenteUseCase)
 
@@ -21,10 +18,7 @@ export class CreatePaymentController {
         try {
             const paymentResponse = await useCase.execute(
                 id,
-                transaction_amount,
-                description,
-                payment_method_id,
-                token
+                plan_id
             )
             return res.status(201).json(paymentResponse);
         } catch (error) {

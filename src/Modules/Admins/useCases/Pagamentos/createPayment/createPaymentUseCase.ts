@@ -1,6 +1,7 @@
 import { inject, injectable } from "tsyringe";
 import { IAdminsRepository } from "../../../repositories/IAdminsRepository";
 import { IMercadoPagoProvider } from "../../../../../Shared/container/providers/PagamentoProvider/IMercadoPagoProvider";
+import { IPlansRepository } from "../../../../Posts/repository/IPlansRepository";
 
 interface IResponse {
 
@@ -12,28 +13,27 @@ export class CreatepaymenteUseCase {
     constructor(
         @inject("AdminRepository")
         private admRepo: IAdminsRepository,
+        @inject("PlanRepository")
+        private planRepo: IPlansRepository,
         @inject("MPagoProvider")
         private mpRepo: IMercadoPagoProvider
     ) {}
 
     async execute(
         id: string,
-        transaction_amount: number,
-        description: string,
-        payment_method_id?: string,
-        token?: string,
-        doc_type?: string,
-        doc_number?: string
+        plan_id: string
     ): Promise<IResponse> {
         const user = await this.admRepo.findById(id)
-        const email = user.email
+        const plan = await this.planRepo.findById(plan_id)
 
         const response = await this.mpRepo.create(
-            transaction_amount,
-            description,
-            email,
-            payment_method_id,
-            token
+            plan.price,
+            plan.description,
+            user.email,
+            user.name,
+            1,
+            plan.title,
+            plan.id
         )
 
         return response

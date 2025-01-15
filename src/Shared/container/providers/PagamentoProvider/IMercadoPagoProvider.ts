@@ -18,7 +18,7 @@ interface IRequest {
 }
 
 interface IResponse {
-
+    payment_url: string
 }
 
 
@@ -26,9 +26,12 @@ interface IMercadoPagoProvider {
     create(
         transaction_amount: number,
         description: string,
+		email: string,
+        user_name: string,
+        quantity?: number,
+        title?: string,
         payment_method_id?: string,
-        token?: string,
-		email?: string
+        mp_plan_id?: string
     ): Promise<IResponse>;
 
     createPlan(

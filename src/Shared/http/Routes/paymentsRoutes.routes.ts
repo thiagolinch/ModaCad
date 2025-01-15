@@ -14,9 +14,10 @@ const createPlan = new CreatePlanMPController();
 const getPay = new GetPaymentController();
 const updateUser = new UpdateUserPaymentController();
 
+
 paymentRoute.post("/create", ensureAuthenticate, createPay.handle);
 paymentRoute.post("/plan", ensureAuthenticate, createPlan.handle);
-paymentRoute.get("/:id", ensureAuthenticate, getPay.handle)
-paymentRoute.post("/notification", ensureAuthenticate, updateUser.handle)
+paymentRoute.get("/:id", ensureAuthenticate, getPay.handle);
+paymentRoute.post("/feedback", updateUser.handle);
 
 export { paymentRoute }

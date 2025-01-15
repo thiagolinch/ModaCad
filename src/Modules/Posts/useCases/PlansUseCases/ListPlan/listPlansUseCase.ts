@@ -15,7 +15,7 @@ export class ListPlansUseCase {
         
         // Verifique se você está acessando a propriedade 'price' corretamente
         plans.forEach(plan => {
-            console.log(plan.price); // Isso deve imprimir o valor de price se estiver corretamente mapeado
+            console.log("valores: ", plan.price); // Isso deve imprimir o valor de price se estiver corretamente mapeado
         });
 
         return plans;

@@ -2306,6 +2306,18 @@
     semver "^7.3.5"
     tar "^6.1.11"
 
+"@mercadopago/sdk-js@^0.0.3":
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/@mercadopago/sdk-js/-/sdk-js-0.0.3.tgz#f54eee5faa7d8d7253b5c03b0ef09dcb8229698a"
+  integrity sha512-kO48DNLHdfFAp3on12nuKdqNlEmw1x3+nM6wLd04BdWOXoFcAhkNMQV3AyUIanXdO/bB/dENakdacLT29297EQ==
+
+"@mercadopago/sdk-react@^0.0.22":
+  version "0.0.22"
+  resolved "https://registry.yarnpkg.com/@mercadopago/sdk-react/-/sdk-react-0.0.22.tgz#caf5cb64dc96da1d2d1e7232ab540287bc57bd15"
+  integrity sha512-9ZeAHbLQZYfaPq3UGvVXCescvURFOsu5wOzJhhOm9OPpGfadYTIyo+1IMjBFlSd1dXQ8d45s7CsbBEkAZgnaoQ==
+  dependencies:
+    "@mercadopago/sdk-js" "^0.0.3"
+
 "@nodelib/fs.scandir@2.1.5":
   version "2.1.5"
   resolved "https://registry.npmjs.org/@nodelib/fs.scandir/-/fs.scandir-2.1.5.tgz#7619c2eb21b25483f6d167548b4cfd5a7488c3d5"

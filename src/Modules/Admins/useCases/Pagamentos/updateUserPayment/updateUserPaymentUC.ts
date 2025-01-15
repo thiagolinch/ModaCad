@@ -16,31 +16,15 @@ export class UpdateUserPaymentUseCase {
     ) {}
 
     async execute(
-        user_id: string,
-        live_mode: boolean,
+        live_mode: string,
         type: string,
         action: string,
+        data: string,
+        api_version: string,
+        user_id: string,
+        date_created: string,
         id: string
-    ): Promise<void> {
-        const payment = await this.mpRepo.getPayment(id)
-
-        if(!payment) {
-            throw new Error("Pagamento nao encontrado")
-        }
-
-        if(action == "payment.created") {
-            const userMP = payment.payer.email
-            const user = await this.userRepo.findByEmail(userMP)
-
-            if(!user) {
-                throw new Error("usuario nao encontrado")
-            }
-    
-            await this.userRepo.updatePayment(id, user_id)
-        } 
-        
-        if(action !== "payment.created"){
-            throw new Error("Pagamento nao sucedido.").message
-        }
+    ): Promise<any> {        
+        console.log("useCase: ",live_mode, type, action, data)
     }
 }

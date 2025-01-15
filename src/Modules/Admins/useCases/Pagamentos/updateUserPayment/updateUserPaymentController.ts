@@ -1,23 +1,27 @@
 import { Request, Response } from "express"
-import { container, inject } from "tsyringe"
-import { IMercadoPagoProvider } from "../../../../../Shared/container/providers/PagamentoProvider/IMercadoPagoProvider"
+import { container } from "tsyringe"
 import { UpdateUserPaymentUseCase } from "./updateUserPaymentUC"
 
 
 export class UpdateUserPaymentController {
 
     async handle(req: Request, res: Response): Promise<Response> {
-        const {id} = req.admin
         const {
             live_mode,
             type,
             action,
-            data
+            data,
+            api_version,
+            user_id,
+            date_created,
+            id
         } = req.body
+        console.log("Request body: ",req.body)
         const useCase = container.resolve(UpdateUserPaymentUseCase)
-
+        console.log("controller", live_mode, type, action, data, api_version, user_id, date_created, id)
+        
         try {
-            const payment = await useCase.execute(id, live_mode, type, action, data.id)
+            await useCase.execute(live_mode, type, action, data, api_version, date_created, id, user_id, )  
     
             return res.status(200).send()
         } catch (error) {
