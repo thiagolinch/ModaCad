@@ -269,7 +269,6 @@ class ArticleRepository implements IArticlesRepository {
 
         // Adiciona a ordenação usando o valor validado de `order`
         const validOrder = params.order.toUpperCase() === "ASC" ? "ASC" : "DESC";
-        console.log("validOrder: ", validOrder)
         postQuery.orderBy("p.published_at", validOrder);
 
         // Adiciona a paginação

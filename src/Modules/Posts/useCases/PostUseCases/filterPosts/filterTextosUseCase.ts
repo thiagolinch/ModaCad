@@ -32,7 +32,6 @@ class FilterTextosUseCase {
         order: 'DESC' | 'ASC' = 'DESC'
     ): Promise<IResponse> {
         // Adiciona a lógica de paginação, passando `page` e `limit` ao repositório
-        console.log("order: ", order)
         const texts = await this.articleRepository.findPostByParams({
             type_id,
             page,

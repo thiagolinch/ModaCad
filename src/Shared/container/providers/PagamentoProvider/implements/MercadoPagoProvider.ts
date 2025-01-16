@@ -46,7 +46,7 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
             notification_url: "https://api-modacad-72uqj.ondigitalocean.app/payment/feedback"
         }
         })
-        console.log(data.id)
+        console.log("payment id: ",data.id)
         const payment_url = data.sandbox_init_point;
         return {payment_url}
     }
