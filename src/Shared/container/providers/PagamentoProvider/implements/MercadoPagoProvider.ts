@@ -38,13 +38,15 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
                 name: user_name
             },
             back_urls: {
-                "success": "http://localhost:5002/payment/feedback/",
-                "failure": "http://localhost:5002/payment/feedback/",
-                "pending": "http://localhost:5002/payment/feedback/"
+                "success": "lobster-app-n6jep.ondigitalocean.app",
+                "failure": "lobster-app-n6jep.ondigitalocean.app",
+                "pending": "lobster-app-n6jep.ondigitalocean.app"
             },
-            auto_return: "approved"
+            auto_return: "approved",
+            notification_url: "https://api-modacad-72uqj.ondigitalocean.app/payment/feedback"
         }
         })
+        console.log(data.id)
         const payment_url = data.sandbox_init_point;
         return {payment_url}
     }
