@@ -18,10 +18,12 @@ export class PlanRepository implements IPlansRepository {
         description,
         frequency,
         frequency_type,
-        transaction_amount,
         currency_id,
-        repetitions
-    }: IPlansRepositoryDTO): Promise<void> {
+        repetitions,
+        isRecurrence,
+        mp_url,
+        mp_id
+    }: IPlansRepositoryDTO): Promise<Plans> {
         const plan = this.repository.create({
             title,
             topics,
@@ -30,11 +32,17 @@ export class PlanRepository implements IPlansRepository {
             description,
             frequency,
             frequency_type,
-            transaction_amount,
             currency_id,
-            repetitions
+            repetitions,
+            isRecurrence,
+            mp_url,
+            mp_id
         })
-        await this.repository.save(plan)
+        console.log("repository", plan)
+        
+       const plano = await this.repository.save(plan)
+
+       return plano
     }
     async update({
         id,
@@ -45,7 +53,6 @@ export class PlanRepository implements IPlansRepository {
         description,
         frequency,
         frequency_type,
-        transaction_amount,
         currency_id,
         repetitions
     }: IPlansRepositoryDTO): Promise<Plans> {

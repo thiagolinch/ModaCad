@@ -35,14 +35,13 @@ interface IMercadoPagoProvider {
     ): Promise<IResponse>;
 
     createPlan(
-        reason: string,
+        title: string,
         frequency: number,
         frequency_type: string,
         transaction_amount: number,
         currency_id: string,
         repetitions: number,
-        back_url: string,
-        email: string
+        back_url: string
     ): Promise<any>;
 
     getPayment(id: string): Promise<any>;

@@ -21,7 +21,7 @@ class Plans {
     price: number;
 
     @Column()
-    frequency: string;
+    frequency: number;
 
     @Column()
     frequency_type: string;
@@ -34,6 +34,15 @@ class Plans {
 
     @Column()
     repetitions: number;
+
+    @Column()
+    isRecurrence: boolean;
+
+    @Column()
+    mp_url: string;
+
+    @Column()
+    mp_id: string;
 
     @Column()
     sort: number;

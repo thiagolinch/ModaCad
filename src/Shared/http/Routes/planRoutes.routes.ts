@@ -18,7 +18,7 @@ const deleteController = new DeletePlanController();
 const viewPlan = new ViewPlanController();
 
 // CREATE NEW PLAN
-planRoute.post("/create", ensureAdminAuhenticate, ensureAdministrador, create.handle)
+planRoute.post("/", ensureAdminAuhenticate, create.handle)
 
 // UPDATE PLAN
 planRoute.patch("/update/:id", ensureAdminAuhenticate, ensureAdministrador, update.handle)

@@ -5,7 +5,7 @@ interface IUpdatePlanRequest {
     id: string,
     title: string,
     topics: string[],
-    price: string,
+    price: number,
     sort: number
 }
 

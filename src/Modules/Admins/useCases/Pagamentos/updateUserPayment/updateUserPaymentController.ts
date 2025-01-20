@@ -7,21 +7,32 @@ export class UpdateUserPaymentController {
 
     async handle(req: Request, res: Response): Promise<Response> {
         const {
+            live_mode, // se foi um pagamento real ou de teste
+            type, // tipo de pagamento: pagamento normal ou pagamento de plano e assinaturas
+            action, // criou um novo pagamento ou apenas atualizou
+            data, 
+            api_version,
+            user_id, // id do vendedor dentro do mercado pago;
+            date_created, // data de pagamento ou atualização de pagamento;
+            id // id deste registro;
+        } = req.body
+        console.log("Request body: ",req.body)
+        const useCase = container.resolve(UpdateUserPaymentUseCase);
+
+        const paymentData = {
             live_mode,
             type,
             action,
-            data,
+            payment_id: data.id, // ID do pagamento dentro de `data`
             api_version,
             user_id,
             date_created,
-            id
-        } = req.body
-        console.log("Request body: ",req.body)
-        const useCase = container.resolve(UpdateUserPaymentUseCase)
-        console.log("controller", live_mode, type, action, data, api_version, user_id, date_created, id)
+            event_id: id, // ID do registro deste evento
+          };
+      
         
         try {
-            await useCase.execute(live_mode, type, action, data, api_version, date_created, id, user_id, )  
+            await useCase.execute(paymentData)  
     
             return res.status(200).send()
         } catch (error) {

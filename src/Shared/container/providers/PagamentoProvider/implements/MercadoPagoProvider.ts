@@ -1,5 +1,5 @@
 import 'dotenv/config';
-import MercadoPagoConfig, { Preference } from "mercadopago";
+import MercadoPagoConfig, { Payment, PreApproval, PreApprovalPlan, Preference } from "mercadopago";
 import { IMercadoPagoProvider } from "../IMercadoPagoProvider";
 
 interface IResponse {
@@ -19,7 +19,7 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         payment_method_id?: string,
         mp_plan_id?: string
     ): Promise<IResponse> {
-        const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN_TEST });
+        const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
         const preference = new Preference(client);
 
         const data = await preference.create({
@@ -51,11 +51,48 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         return {payment_url}
     }
 
-    createPlan(reason: string, frequency: number, frequency_type: string, transaction_amount: number, currency_id: string, repetitions: number, back_url: string, email: string): Promise<any> {
-        throw new Error('Method not implemented.');
+    async createPlan(
+        title: string,
+        frequency: number,
+        frequency_type: string,
+        transaction_amount: number,
+        currency_id: string,
+        repetitions: number,
+        back_url: string
+    ): Promise<any> {
+        try {
+            const preApprovalPlan = new PreApprovalPlan({ accessToken: process.env.MP_ACCESS_TOKEN });
+            const body = {
+                reason: title,
+                auto_recurring: {
+                    frequency,
+                    frequency_type,
+                    transaction_amount,
+                    currency_id,
+                    repetitions,
+                },
+                back_url
+            };             
+              
+
+            const data = await preApprovalPlan.create({ body });
+
+            console.log(data)
+            return data
+        } catch (error) {
+            console.error("Error creating plan:", error);
+            throw new Error(`Error creating plan: ${error.message}`);
+        }
     }
 
-    getPayment(id: string): Promise<any> {
-        throw new Error('Method not implemented.');
+    async getPayment(id: string): Promise<any> {
+        console.log("provider")
+        const client = new MercadoPagoConfig({ accessToken: "APP_USR-1863938077755588-011614-cf7d8b013569e82c642e1beb6f658e1c-231121661" });
+        const payment = new Payment(client);
+
+        const data = await payment.get({ id })
+        console.log("data", data)
+
+        return data
     }    
 }

@@ -13,15 +13,16 @@ export class CreatePlanController {
             description,
             frequency,
             frequency_type,
-            transaction_amount,
             currency_id,
             repetitions,
+            isRecurrence
         } = req.body;
+
         const useCase = container.resolve(CreatePlanUseCase)
 
         try {
-            await useCase.execute({title, topics, price, sort, description, frequency, frequency_type, transaction_amount, currency_id, repetitions})
-            return res.status(200).send()
+            const data = await useCase.execute({title, topics, price, sort, description, frequency, frequency_type, currency_id, repetitions, isRecurrence})
+            return res.status(200).json({ data })
         } catch (error) {
             return res.status(400).json(error)
         }

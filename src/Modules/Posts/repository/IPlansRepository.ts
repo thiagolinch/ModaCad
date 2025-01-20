@@ -8,11 +8,14 @@ interface IPlansRepositoryDTO {
     price: number;
     sort: number; // Presumindo que sort é do tipo number
     description: string;
-    frequency: string;
+    frequency: number;
     frequency_type: string;
-    transaction_amount: number;
     currency_id: string;
-    repetitions: number
+    repetitions: number;
+    isRecurrence: boolean;
+    mp_url?: string;
+    mp_id?: string;
+    back_url?: string;
 }
 
 interface IPlansRepository {
@@ -24,10 +27,13 @@ interface IPlansRepository {
         description,
         frequency,
         frequency_type,
-        transaction_amount,
         currency_id,
-        repetitions
-    }: IPlansRepositoryDTO): Promise<void>;
+        repetitions,
+        isRecurrence,
+        mp_url,
+        mp_id
+    }: IPlansRepositoryDTO): Promise<Plans>;
+
     update({
         id,
         title,
@@ -37,7 +43,6 @@ interface IPlansRepository {
         description,
         frequency,
         frequency_type,
-        transaction_amount,
         currency_id,
         repetitions
     }: IPlansRepositoryDTO): Promise<Plans>;
