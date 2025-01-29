@@ -6,75 +6,90 @@ import { ArticleRepository } from "../../../Modules/Posts/repository/implements/
 interface IPayload {
     subject: string;
     role: string;
+    access: string;
 }
 
 async function userCanAccess(request: Request, response: Response, next: NextFunction) {
-    const authHeader = request.headers.authorization;
+    const authHeader = request.headers.authorization || undefined;
     const postId = request.params;
-
-    if (!authHeader) {
-        return response.status(401).json({ message: "Token missing" });
-    }
-
-    const [, token] = authHeader.split(" ");
+    let auth = null;
 
     try {
+        const postRepo = new ArticleRepository()
+        const post = await postRepo.findById(postId.id)
+
+        if (!post) {
+            return response.status(404).json({ message: "Post não encontrado" });
+        }
+
+        if(post.visibility === "public") {
+            request.post = post
+            next();
+        }
+
+        const formatedPost = {
+            title: post.title,
+            description: post.description,
+            feature_image: post.feature_image,
+            type: post.type,
+            content: post.content.slice(0, 300) + "...", // Apenas um trecho do conteúdo
+            status: post.status,
+            visibility: post.visibility,
+            slug: post.slug,
+            paintext: post.plaintext,
+            mobiledoc: post.mobiledoc,
+            featured: post.featured,
+            cannonicalUrl: post.canonicalUrl,
+            published_at: post.published_at,
+            admins: post.admins,
+            editors: post.editors,
+            curadors: post.curadors,
+            tags: post.tags,
+            subjects: post.subjects,
+            meta: post.meta
+        }
+
+        if(post.visibility !== "public" && !authHeader) {
+            request.post = formatedPost
+            next();
+        }
+
+        if(!authHeader) {
+            request.post = formatedPost
+            next();
+        };
+        
+        const [, token] = authHeader.split(" ");
         const { subject: admin_id } = verify(token, "88f1c14bd2a14b42fad21d64739889e9") as IPayload;
 
         const adminRepo = new AdminRepository();
         const admin = await adminRepo.findById(admin_id);
 
-        if (!admin) {
-            return response.status(404).json({ message: "Administrador não encontrado" });
-        }
+        // Define se o usuário tem acesso completo
+        const hasFullAccess =
+            admin.role === "administrador" ||
+            admin.role === "editor" ||
+            admin.role === "colaborador" ||
+            admin.role === "autor" ||
+            (post.visibility === "public") ||
+            (post.visibility === admin.role && admin.payment_id !== null) // melhorar a parte de verificar o pagamento
+        ;
 
-        const access = admin.role;
-        
-        const postRepo = new ArticleRepository()
-        const post = await postRepo.findById(postId.id)
+        // Formata o post com base no nível de acesso
+        request.post = hasFullAccess
+            ? post // Retorna o post completo
+            : formatedPost // Retorna o post formatado
+        ;
 
-        if(admin.role === 'administrador'||'editor'||'colaborador'||'autor') {
-            request.admin = {
-                id: admin.id,
-                role: admin.role
-            };
-
-            return next();
-        }
-
-        if(post.visibility === 'publico') {
-            request.admin = {
-                id: admin.id,
-                role: admin.role
-            };
-
-            return next();
-        }
-
-
-        const payd = admin.payment_id !== null
-
-        if(post.visibility === access && payd === true) {
-            request.admin = {
-                id: admin.id,
-                role: admin.role
-            };
-
-            return next();
-        } else {
-            throw new Error("Para visualizar este post mude para o plano Pago. Caso já seja um assinante verifique se seu pagamento está em dia.").message
-        }
-
-
-
+        next();
     } catch (error) {
         console.error("Erro no middleware de autenticação:", error);
 
         if (error instanceof Error && error.name === "JsonWebTokenError") {
-            return response.status(401).json({ message: "Token inválido" });
+            return response.status(401).json({ message: error.message });
         }
 
-        return response.status(500).json({ message: error});
+        return response.status(500).json({ message: error.message });
     }
 }
 

@@ -45,6 +45,7 @@ interface IMercadoPagoProvider {
     ): Promise<any>;
 
     getPayment(id: string): Promise<any>;
+    getPlanPayment(id: string): Promise<any>;
 }
 
 export { IMercadoPagoProvider }

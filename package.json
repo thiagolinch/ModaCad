@@ -9,7 +9,10 @@
     "typeorm": "ts-node-dev node_modules/typeorm/cli",
     "start": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn ./src/Shared/http/server.ts",
     "test": "jest --runInBand --detectOpenHandles",
-    "build": "esbuild src/Shared/http/server.ts --platform=node --outfile=dist/index.js --target=node16"
+    "build": "esbuild src/Shared/http/server.ts --platform=node --outfile=dist/index.js --target=node16",
+    "docker-build": "sudo docker build -t api-moda .",
+    "docker-tag": "sudo docker tag api-moda:latest thiagolinch/apimodacad:latest",
+    "docker-push": "sudo docker push thiagolinch/apimodacad:latest "
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",

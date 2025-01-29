@@ -364,7 +364,8 @@ class ArticleRepository implements IArticlesRepository {
             "p.post_id",
             "p.title", // Seleciona todos os campos da tabela articles
             "p.description",
-            "p.feature_image"
+            "p.feature_image",
+            "p.visibility"
         ])
         .where("p.published_at IS NOT NULL") // Garante que só considere posts publicados
         .andWhere("p.type = :type", { type: "texto"})

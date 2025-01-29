@@ -8,9 +8,15 @@ interface IRequest {
     action: string;
     payment_id: string;
     api_version: string;
+    data: string;
     user_id: string;
     date_created: string;
     event_id: string;
+    date: string;
+    application_id: string;
+    entity: string;
+    version: string;
+    id: string;
 }
 
 @injectable()
@@ -26,7 +32,7 @@ export class UpdateUserPaymentUseCase {
         console.log("payment id", paymentData.payment_id)
         
         const payment = await this.mpRepo.getPayment(paymentData.payment_id)
-
-        console.log("payment", payment)
+        // const user = await this.userRepo.findByEmail()
+        console.log("payment useCase", payment)
     }
 }

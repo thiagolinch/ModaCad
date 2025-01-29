@@ -13,7 +13,11 @@ export class UpdateUserPaymentController {
             data, 
             api_version,
             user_id, // id do vendedor dentro do mercado pago;
-            date_created, // data de pagamento ou atualização de pagamento;
+            date_created, // data de pagamento ou atualização de pagamento
+            date,
+            application_id,
+            entity,
+            version,
             id // id deste registro;
         } = req.body
         console.log("Request body: ",req.body)
@@ -28,6 +32,12 @@ export class UpdateUserPaymentController {
             user_id,
             date_created,
             event_id: id, // ID do registro deste evento
+            date,
+            application_id,
+            entity,
+            version,
+            id,
+            data
           };
       
         

@@ -87,12 +87,21 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
 
     async getPayment(id: string): Promise<any> {
         console.log("provider")
-        const client = new MercadoPagoConfig({ accessToken: "APP_USR-1863938077755588-011614-cf7d8b013569e82c642e1beb6f658e1c-231121661" });
+        const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
         const payment = new Payment(client);
 
         const data = await payment.get({ id })
         console.log("data", data)
 
         return data
-    }    
+    }
+
+    async getPlanPayment(id: string): Promise<any> {
+        const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
+        const preApproval = new PreApproval(client);
+
+        const data = await preApproval.search({ options: {id} })
+
+        return data
+    }
 }

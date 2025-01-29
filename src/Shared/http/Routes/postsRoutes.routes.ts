@@ -26,6 +26,7 @@ import { SearchPostController } from "../../../Modules/Posts/useCases/PostUseCas
 import { validatePostPermissions } from "../middlewares/validatePostPermissions";
 import { validatePostEditionPermissions } from "../middlewares/validatePostEditionPermissions";
 import { validadeUserPermission } from "../middlewares/validadeUserPermissions";
+import { userCanAccess } from "../middlewares/userCanAccess";
 
 
 const postRoute = Router()
@@ -67,7 +68,7 @@ postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, delete
 postRoute.put("/:id", ensureAdminAuhenticate, validatePostPermissions, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:id", validadeUserPermission, getTexto.handle)
+postRoute.get("/:id", userCanAccess, getTexto.handle)
 
 // GET TEXTO PELA URL
 postRoute.get("/blog/:url", textoByUrl.handle)
