@@ -55,8 +55,7 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
         }
 
         if(!authHeader) {
-            request.post = formatedPost
-            next();
+            return response.status(404).json({ message: "Para acessar o post precisa de login" });
         };
         
         const [, token] = authHeader.split(" ");

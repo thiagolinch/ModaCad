@@ -11,8 +11,6 @@ import multer from "multer";
 import { UploadArticleImageController } from "../../../Modules/Posts/useCases/PostUseCases/uploadImage/uploadArticleImageController";
 import { GetImagesController } from "../../../Modules/Posts/useCases/PostUseCases/getImages/getImagesController";
 import { DeletePostController } from "../../../Modules/Posts/useCases/PostUseCases/deletepost/deletePostController";
-import { ensureAdminCanPost } from "../middlewares/ensureCanPost";
-import { ensurCanDelete } from "../middlewares/ensurCanDelete";
 import { UpdatePostController } from "../../../Modules/Posts/useCases/PostUseCases/updatePost/updatePostController";
 
 import { TextoMdcController } from "../../../Modules/Posts/useCases/PostUseCases/getTextoById/textoMdcController";
@@ -24,8 +22,6 @@ import { LastPostController } from "../../../Modules/Posts/useCases/PostUseCases
 import { GetTextoByUrlController } from "../../../Modules/Posts/useCases/PostUseCases/getTextoByUrl/getTextoByUrlController";
 import { SearchPostController } from "../../../Modules/Posts/useCases/PostUseCases/searchByTerm/SearchByTermController";
 import { validatePostPermissions } from "../middlewares/validatePostPermissions";
-import { validatePostEditionPermissions } from "../middlewares/validatePostEditionPermissions";
-import { validadeUserPermission } from "../middlewares/validadeUserPermissions";
 import { userCanAccess } from "../middlewares/userCanAccess";
 
 
@@ -68,7 +64,7 @@ postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, delete
 postRoute.put("/:id", ensureAdminAuhenticate, validatePostPermissions, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:id", userCanAccess, getTexto.handle)
+postRoute.get("/:id", getTexto.handle)
 
 // GET TEXTO PELA URL
 postRoute.get("/blog/:url", textoByUrl.handle)

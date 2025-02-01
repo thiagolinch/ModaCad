@@ -6,21 +6,20 @@ import { TextoModacadUseCase } from "./textoMdcUseCase";
 class TextoMdcController {
 
     async handle(request: Request, response: Response): Promise<Response> {
+        const {id} = request.params;
         const post = request.post; // O post já está formatado no middleware
-        console.log(post)
+        console.log(post);
 
-        const useCase = container.resolve(TextoModacadUseCase)
-        // let data = null;
+        const useCase = container.resolve(TextoModacadUseCase);
 
         try {
-            // const texto = await useCase.execute(id.toString())
-            // post == undefined ? data = texto : data = post;
+            const texto = await useCase.execute(id);
 
-            return response.status(200).json(post)
+            return response.status(200).json(texto);
         } catch (error) {
-            return response.status(404).json(error)
-        }
-    }
-}
+            return response.status(404).json(error);
+        };
+    };
+};
 
-export { TextoMdcController }
+export { TextoMdcController };

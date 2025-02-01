@@ -9,18 +9,16 @@ import { S3StorageProvider } from "../../../../../Shared/container/providers/Sto
 class TextoModacadUseCase {
     constructor(
         @inject("ArticleRepository")
-        private articleRepo: IArticlesRepository,
-        @inject("ArticleImageRepository")
-        private articleImageRepo: IArticleImageRepository
+        private articleRepo: IArticlesRepository
     ) {}
 
     async execute(id: string): Promise<Articles> {
-        const postId = await this.articleRepo.findById(id)
-        const post_id = postId.post_id
+        const postId = await this.articleRepo.findById(id);
+        const post_id = postId.post_id;
 
-        const post = await this.articleRepo.findByPostId(post_id)
+        const post = await this.articleRepo.findByPostId(post_id);
         
-        return post
+        return post;
     }
 }
 
