@@ -1,9 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IArticlesRepository } from "../../../repository/IArticlesRepository";
 import { Articles } from "../../../entity/Articles";
-import { IArticleImageRepository } from "../../../repository/IArticlesImage";
-import { S3StorageProvider } from "../../../../../Shared/container/providers/StorageProvider/Implements/S3StorageProvider";
-
 
 @injectable()
 class TextoModacadUseCase {
@@ -12,13 +9,39 @@ class TextoModacadUseCase {
         private articleRepo: IArticlesRepository
     ) {}
 
-    async execute(id: string): Promise<Articles> {
+    async execute(id: string, isFormated: boolean): Promise<Articles> {
         const postId = await this.articleRepo.findById(id);
         const post_id = postId.post_id;
 
-        const post = await this.articleRepo.findByPostId(post_id);
+        let data = null;
+
+        const postData = await this.articleRepo.findByPostId(post_id);
+    
+        const formatedPost = {
+            title: postData.title,
+            description: postData.description,
+            feature_image: postData.feature_image,
+            type: postData.type,
+            content: postData.content.slice(0, 300) + "...", // Apenas um trecho do conteúdo
+            status: postData.status,
+            visibility: postData.visibility,
+            slug: postData.slug,
+            paintext: postData.plaintext,
+            mobiledoc: postData.mobiledoc,
+            featured: postData.featured,
+            cannonicalUrl: postData.canonicalUrl,
+            published_at: postData.published_at,
+            admins: postData.admins,
+            editors: postData.editors,
+            curadors: postData.curadors,
+            tags: postData.tags,
+            subjects: postData.subjects,
+            meta: postData.meta
+        }
+
+        isFormated === true ? data = formatedPost : data = postData;
         
-        return post;
+        return data
     }
 }
 

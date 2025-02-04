@@ -23,39 +23,17 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
         }
 
         if(post.visibility === "public") {
-            request.post = post
+            request.post = false
             next();
-        }
-
-        const formatedPost = {
-            title: post.title,
-            description: post.description,
-            feature_image: post.feature_image,
-            type: post.type,
-            content: post.content.slice(0, 300) + "...", // Apenas um trecho do conteúdo
-            status: post.status,
-            visibility: post.visibility,
-            slug: post.slug,
-            paintext: post.plaintext,
-            mobiledoc: post.mobiledoc,
-            featured: post.featured,
-            cannonicalUrl: post.canonicalUrl,
-            published_at: post.published_at,
-            admins: post.admins,
-            editors: post.editors,
-            curadors: post.curadors,
-            tags: post.tags,
-            subjects: post.subjects,
-            meta: post.meta
         }
 
         if(post.visibility !== "public" && !authHeader) {
-            request.post = formatedPost
-            next();
+            request.post = true
+            return next();
         }
 
         if(!authHeader) {
-            return response.status(404).json({ message: "Para acessar o post precisa de login" });
+            return response.status(403).json({ message: "Para acessar o post precisa de login" });
         };
         
         const [, token] = authHeader.split(" ");
@@ -76,8 +54,8 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
 
         // Formata o post com base no nível de acesso
         request.post = hasFullAccess
-            ? post // Retorna o post completo
-            : formatedPost // Retorna o post formatado
+            ? false // Retorna o post completo
+            : true // Retorna o post formatado
         ;
 
         next();

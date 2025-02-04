@@ -5,7 +5,7 @@ declare global {
         export interface Request {
             user: Record<string,any>,
             admin: Record<string,any>,
-            post: any;
+            post: boolean;
             postStatus?: string,
         }
     }
