@@ -343,13 +343,11 @@ class AdminRepository implements IAdminsRepository {
         .execute();
     }
 
-    async updatePlan(user: IAdminsRepositoryDTO, role: string, plan_id: string): Promise<void> {
-        const data = await this.repository.findOne(user.id)
-        
-        data.role = role
-        data.plan = plan_id
-
-        await this.repository.save(data)
+    async updatePlan(user: IAdminsRepositoryDTO): Promise<void> {
+        await this.repository.update(user.id, {
+            plan: user.plan, // Atualiza o plano
+            role: user.role, // Atualiza o papel
+        });
         
     }
 

@@ -4,9 +4,8 @@ import { IMercadoPagoProvider } from "../../../../../Shared/container/providers/
 import { IPlansRepository } from "../../../../Posts/repository/IPlansRepository";
 
 interface IResponse {
-
+    url: string
 }
-
 
 @injectable()
 export class CreatepaymenteUseCase {
@@ -27,15 +26,12 @@ export class CreatepaymenteUseCase {
         const plan = await this.planRepo.findById(plan_id)
 
         const response = await this.mpRepo.create(
-            plan.price,
-            plan.description,
-            user.email,
-            user.name,
-            1,
-            plan.title,
-            plan.id
+            user,
+            plan
         )
 
-        return response
+        return {
+            url: response.init_point
+        }
     }
 }

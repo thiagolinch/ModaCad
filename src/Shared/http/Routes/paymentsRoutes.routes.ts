@@ -3,7 +3,7 @@ import { ensureAuthenticate } from "../middlewares/ensureAuthenticate";
 import { CreatePaymentController } from "../../../Modules/Admins/useCases/Pagamentos/createPayment/createPaymentController";
 import { CreatePlanMPController } from "../../../Modules/Admins/useCases/Pagamentos/criarRecorrencia/createPlanMPController";
 import { GetPaymentController } from "../../../Modules/Admins/useCases/Pagamentos/getPayment/getPaymentController";
-import { UpdateUserPaymentController } from "../../../Modules/Admins/useCases/Pagamentos/updateUserPayment/updateUserPaymentController";
+import { UpdateUserPaymentController } from "../../../Modules/Admins/useCases/Pagamentos/webhook/webHookController";
 
 
 

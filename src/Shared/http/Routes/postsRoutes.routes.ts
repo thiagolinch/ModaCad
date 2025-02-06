@@ -64,7 +64,7 @@ postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, delete
 postRoute.put("/:id", ensureAdminAuhenticate, validatePostPermissions, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:id", userCanAccess, getTexto.handle)
+postRoute.get("/:id", getTexto.handle)
 
 // GET TEXTO PELA URL
 postRoute.get("/blog/:url", textoByUrl.handle)

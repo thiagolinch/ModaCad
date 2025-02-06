@@ -52,7 +52,7 @@ class UpdatePostController {
                 description,
                 content,
                 visibility,
-                status,
+                status: postStatus,
                 type,
                 tags,
                 subjects,

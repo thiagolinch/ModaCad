@@ -1,24 +1,16 @@
 import 'dotenv/config';
 import MercadoPagoConfig, { Payment, PreApproval, PreApprovalPlan, Preference } from "mercadopago";
 import { IMercadoPagoProvider } from "../IMercadoPagoProvider";
+import { Plans } from '../../../../../Modules/Posts/entity/Plans'
+import { Admins } from '../../../../../Modules/Admins/entity/Admins';
+import { PreferenceResponse } from 'mercadopago/dist/clients/preference/commonTypes';
 
-interface IResponse {
-    // id: string;
-    payment_url: string;
-    // outros campos relevantes
-}
 export class MercadoPagoProvider implements IMercadoPagoProvider {
 
     async create(
-        transaction_amount: number,
-        description: string,
-		email: string,
-        user_name: string,
-        quantity?: number,
-        title?: string,
-        payment_method_id?: string,
-        mp_plan_id?: string
-    ): Promise<IResponse> {
+        user: Admins,
+        plan: Plans,
+    ): Promise<PreferenceResponse> {
         const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
         const preference = new Preference(client);
 
@@ -26,16 +18,17 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         body: {
             items: [
             {
-                title: title,
-                quantity: quantity,
-                unit_price: transaction_amount,
-                id: mp_plan_id, // plan_id do mercado pago
-                description: description
+                title: plan.title,
+                quantity: 1,
+                unit_price: plan.price,
+                id: plan.mp_id, // plan_id do mercado pago
+                description: plan.description,
+                currency_id: "BRL"
             }
             ],
             payer: {
-                email: email,
-                name: user_name
+                name: user.name,
+                email: user.email
             },
             back_urls: {
                 "success": "lobster-app-n6jep.ondigitalocean.app",
@@ -43,12 +36,12 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
                 "pending": "lobster-app-n6jep.ondigitalocean.app"
             },
             auto_return: "approved",
-            notification_url: "https://api-modacad-72uqj.ondigitalocean.app/payment/feedback"
+            notification_url: "https://api-modacad-72uqj.ondigitalocean.app/payment/feedback",
+            external_reference: JSON.stringify({user_id: user.id, plan_id: plan.id}),
         }
         })
         console.log("payment id: ",data.id)
-        const payment_url = data.sandbox_init_point;
-        return {payment_url}
+        return data
     }
 
     async createPlan(
@@ -72,7 +65,7 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
                     repetitions,
                 },
                 back_url
-            };             
+            };
               
 
             const data = await preApprovalPlan.create({ body });
@@ -86,14 +79,12 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
     }
 
     async getPayment(id: string): Promise<any> {
-        console.log("provider")
         const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
         const payment = new Payment(client);
 
         const data = await payment.get({ id })
-        console.log("data", data)
 
-        return data
+        return data;
     }
 
     async getPlanPayment(id: string): Promise<any> {

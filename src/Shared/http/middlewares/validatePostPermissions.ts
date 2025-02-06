@@ -26,6 +26,7 @@ export async function validatePostPermissions(
     res: Response,
     next: NextFunction
 ) {
+    const body = req.body;
     const authHeader = req.headers.authorization;
     const {id} = req.params;
 
@@ -77,12 +78,12 @@ export async function validatePostPermissions(
             }
 
             if (method === "PUT") {
-                console.log(post.status)
-                if (post.status === "published") {
-                    return res.status(403).json({ message: CONFIG.ERROR_MESSAGES.USER_NOT_ALLOWED });
+                console.log(body.status)
+                if (body.status === "published") {
+                    postStatus = role.name === "autor" ? "pendente: curador" : "pendente: editor";
                 }
 
-                if (post?.status === "draft" || (post?.status === "pendente: curador" && role.name === "curador")) {
+                if (body?.status === "draft" || (post?.status === "pendente: curador" && role.name === "curador")) {
                     next();
                     return;
                 }
@@ -98,7 +99,7 @@ export async function validatePostPermissions(
             }
 
             if (method === "PATCH") {
-                post?.status === 'published' ? postStatus = 'pendente: editor' : postStatus = 'published'
+                ;body?.status === 'published' ? postStatus = 'pendente: editor' : postStatus = 'published'
             }
 
             if (method === "PUT") {
