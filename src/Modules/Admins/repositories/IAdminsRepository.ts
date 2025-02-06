@@ -17,7 +17,7 @@ interface IAdminsRepositoryDTO {
 
 interface IAdminsRepository {
     create(data: IAdminsRepositoryDTO): Promise<Admins>;
-    createStaff(email: string, password: string, role: string): Promise<void>;
+    createStaff(email: string, password: string, role: string, terms_conditions: boolean, newsletter: boolean): Promise<void>;
     update(
         id: string,
         name: string,

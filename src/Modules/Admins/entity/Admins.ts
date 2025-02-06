@@ -68,6 +68,11 @@ class Admins {
     @ManyToMany(() => Articles, article => article.curadors)
     postsAsCurador: Articles[];
 
+    @Column()
+    terms_conditions: boolean;
+
+    @Column()
+    newsletter: boolean;
 
     @CreateDateColumn()
     created_at: Date

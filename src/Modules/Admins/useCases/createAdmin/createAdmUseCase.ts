@@ -35,7 +35,9 @@ class CreateAdmUseCase {
         const admin = await this.adminRepository.createStaff(
             email,
             passwordCrypt,
-            role
+            role,
+            true,
+            true
         )
 
         const variables = {
