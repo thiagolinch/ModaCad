@@ -21,6 +21,9 @@ export class WebhookUseCase {
         const userId = externalReference.user_id;
         const user = await this.userRepo.findById(userId);
 
+        if(!user) {
+            throw new Error("Usuário não encontrado");
+        }
         const planId = externalReference.plan_id;
         const plan = await this.planRepo.findById(planId);
 

@@ -46,6 +46,10 @@ export class UpdateUserPaymentController {
       }
   
       switch (action) {
+        case "updated":
+          console.log("Pagamento de plano: ", data.id)
+          const payPlan = await useCase.execute(data.id);
+        break
         case 'payment.created':
           console.log('Novo pagamento criado:', data.id);
           const newPayment = await useCase.execute(data.id);
