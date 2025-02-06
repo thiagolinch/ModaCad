@@ -398,11 +398,25 @@ class AdminRepository implements IAdminsRepository {
     }
 
     async findByEmail(email: string): Promise<Admins> {
-        return await this.repository.findOne({email})
+        return await this.repository.findOne({
+            where: { email, deletedAt: null },
+        });    
     }
 
     async delete(id: string): Promise<void> {
         await this.repository.delete({id})
+    }
+
+    async deleteStaff(id: string): Promise<void> {
+        await this.repository.softDelete(id);
+
+        console.log("Staff marcado como excluído (soft delete).");
+    }
+
+    async restoreStaff(id: string): Promise<void> {
+        await this.repository.restore(id);
+
+        console.log("Staff restaurado.");
     }
 
 }

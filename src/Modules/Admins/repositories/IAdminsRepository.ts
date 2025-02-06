@@ -70,7 +70,10 @@ interface IAdminsRepository {
         totalExAssinantes: number;
     }>;
     
-    delete(id: string): Promise<void>
+    delete(id: string): Promise<void>;
+    deleteStaff(id: string): Promise<void>;
+    restoreStaff(id: string): Promise<void>;
+
     updateAvatar(data: IAdminsRepositoryDTO): Promise<void>;
 }
 

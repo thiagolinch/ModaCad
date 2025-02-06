@@ -17,12 +17,24 @@ export class MercadoPagoPayment1738786933387 implements MigrationInterface {
                         type: "varchar"
                     },
                     {
+                        name: "status_details",
+                        type: "varchar"
+                    },
+                    {
+                        name: "external_reference",
+                        type: "varchar"
+                    },
+                    {
                         name: "preapproval_plan_id",
                         type: "varchar"
                     },
                     {
                         name: "payment_method",
                         type: "varchar"
+                    },
+                    {
+                        name: "user_id",
+                        type: "uuid"
                     },
                     {
                         name: "payer_id",
@@ -51,6 +63,10 @@ export class MercadoPagoPayment1738786933387 implements MigrationInterface {
                     {
                         name: "subscription_id",
                         type: "varchar"
+                    },
+                    {
+                        name: "date_approved",
+                        type: "timestamp"
                     },
                     {
                         name: "date_created",

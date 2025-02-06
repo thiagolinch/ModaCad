@@ -40,7 +40,7 @@ class CreateAdmUseCase {
             email,
             password: passwordCrypt,
             cellphone,
-            role: userRole
+            role: userRole,
         })
 
         return admin

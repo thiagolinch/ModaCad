@@ -1,5 +1,5 @@
 import { inject, injectable } from "tsyringe";
-import { IAdminsRepository } from "../../repositories/IAdminsRepository";
+import { IAdminsRepository } from "../../../repositories/IAdminsRepository";
 
 
 

@@ -83,6 +83,7 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         const payment = new Payment(client);
 
         const data = await payment.get({ id })
+        console.log(data)
 
         return data;
     }

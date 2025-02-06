@@ -1,4 +1,4 @@
-import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
+import { BeforeInsert, BeforeUpdate, Column, CreateDateColumn, DeleteDateColumn, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, OneToOne, PrimaryColumn, UpdateDateColumn } from "typeorm";
 import { v4 as uuidV4 } from "uuid";
 import { AdminRole } from "./AdminRole";
 import { Plans } from "../../Posts/entity/Plans";
@@ -68,11 +68,14 @@ class Admins {
     @ManyToMany(() => Articles, article => article.curadors)
     postsAsCurador: Articles[];
 
-    @Column()
+    @Column({default: true})
     terms_conditions: boolean;
 
-    @Column()
+    @Column({default: true})
     newsletter: boolean;
+
+    @DeleteDateColumn({ name: "deleted_at" }) // Coluna para soft delete
+    deletedAt: Date;
 
     @CreateDateColumn()
     created_at: Date
@@ -87,8 +90,12 @@ class Admins {
             this.plan = "4da04ec5-ebde-4386-9cf8-43891f839ad1"
             this.status = "180e645d-c5d5-42c4-8bef-61f225050e3a"
             this.subscription_created_at = new Date();
+            this.terms_conditions = true;
+            this.newsletter = true;
         }else {
             this.id = uuidV4()
+            this.terms_conditions = true
+            this.newsletter = true
         }
     }
     

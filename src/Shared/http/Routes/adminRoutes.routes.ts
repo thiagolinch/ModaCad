@@ -15,12 +15,14 @@ import { ensureAdministrador } from "../middlewares/ensureAdministrador"
 import { CreateUserController } from "../../../Modules/Admins/useCases/createUser/createUserController"
 import { CreateAdmController } from "../../../Modules/Admins/useCases/createAdmin/createAdmController"
 import { ListStaffController } from "../../../Modules/Admins/useCases/listStaf/listStafController"
-import { DeleteUserController } from "../../../Modules/Admins/useCases/deleteUser/deleteuserController"
+import { DeleteUserController } from "../../../Modules/Admins/useCases/Delete/deleteUser/deleteuserController"
 import { ensureAuthenticate } from "../middlewares/ensureAuthenticate"
 import { CreatePaymentController } from "../../../Modules/Admins/useCases/Pagamentos/createPayment/createPaymentController"
 import { CreatePlanMPController } from "../../../Modules/Admins/useCases/Pagamentos/criarRecorrencia/createPlanMPController"
 import { UserGetPlanController } from "../../../Modules/Admins/useCases/userGetPlan/userGetPlanController"
 import { GetUserByIdController } from "../../../Modules/Admins/useCases/getUseById/getUseByIdController"
+import { DeleteStaffController } from "../../../Modules/Admins/useCases/Delete/deleteStaff/deleteStaffController"
+import { RestoreStaffController } from "../../../Modules/Admins/useCases/Delete/restorStaff/restoreStaffController"
 
 const adminRoute = Router()
 
@@ -28,8 +30,11 @@ const uploadAvatar = multer(upload)
 
 const createUserController = new CreateUserController()
 const createAdm = new CreateAdmController()
-const updateControler = new UpdateUserController()
+const updateControler = new UpdateUserController();
+
 const deleteuser = new DeleteUserController();
+const deleteStaff = new DeleteStaffController();
+const restoreStaff = new RestoreStaffController();
 
 const getUserById = new GetUserByIdController();
 
@@ -73,6 +78,11 @@ adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAuthenticate, up
 
 // LIST ADMINS
 adminRoute.get("/users", ensureAdminAuhenticate, listUsers.handle );
+
+// DELETE STAFF
+adminRoute.delete("/staff/delete/:id", ensureAdminAuhenticate, ensureAdministrador, deleteStaff.handle)
+// RESOTRE STAFF
+adminRoute.patch("/staff/restore/:id", ensureAdminAuhenticate, ensureAdministrador, restoreStaff.handle)
 
 
 export  { adminRoute };
