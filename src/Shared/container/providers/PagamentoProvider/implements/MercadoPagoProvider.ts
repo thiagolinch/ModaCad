@@ -17,7 +17,7 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
 
         const data = await preApproval.create({
             body: {
-                payer_email: "test_user_415232887@testuser.com",
+                payer_email: user.email,
                 back_url: "https://lobster-app-n6jep.ondigitalocean.app",
                 reason: plan.title,
                 external_reference: JSON.stringify({user_id: user.id, plan_id: plan.id}),
