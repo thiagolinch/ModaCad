@@ -6,7 +6,10 @@ interface IUpdatePlanRequest {
     title: string,
     topics: string[],
     price: number,
-    sort: number
+    sort: number,
+    description: string,
+    frequency: number,
+    frequency_type: string
 }
 
 @injectable()
@@ -21,7 +24,10 @@ export class UpdatePlanUseCase {
         title,
         topics,
         price,
-        sort
+        sort,
+        description,
+        frequency,
+        frequency_type
     }: IUpdatePlanRequest): Promise<void> {
         const plan = await this.repository.findById(id)
 
@@ -29,6 +35,9 @@ export class UpdatePlanUseCase {
         plan.topics = topics;
         plan.sort = sort;
         plan.price = price;
+        plan.description = description,
+        plan.frequency = frequency,
+        plan.frequency_type = frequency_type
 
         await this.repository.update(plan)
         

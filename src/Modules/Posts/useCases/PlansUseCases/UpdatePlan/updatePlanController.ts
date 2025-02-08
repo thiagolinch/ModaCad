@@ -12,7 +12,10 @@ export class UpdatePlanController {
             title,
             topics,
             price,
-            sort
+            sort,
+            description,
+            frequency,
+            frequency_type
         } = req.body;
         const useCase = container.resolve(UpdatePlanUseCase)
 
@@ -22,7 +25,10 @@ export class UpdatePlanController {
                 title,
                 topics,
                 price,
-                sort
+                sort,
+                description,
+                frequency,
+                frequency_type
             })
 
             return res.status(200).send()
