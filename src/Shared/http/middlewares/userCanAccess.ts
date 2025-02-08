@@ -22,14 +22,9 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
             return response.status(404).json({ message: "Post não encontrado" });
         }
 
-        if(post.visibility === "public") {
+        if(post.visibility === "publico") {
             request.post = false
             next();
-        }
-
-        if(post.visibility !== "public" && !authHeader) {
-            request.post = true
-            return next();
         }
 
         if(!authHeader) {
@@ -41,6 +36,11 @@ async function userCanAccess(request: Request, response: Response, next: NextFun
 
         const adminRepo = new AdminRepository();
         const admin = await adminRepo.findById(admin_id);
+
+        if(post.visibility === "membro" && !authHeader) {
+            request.post = true
+            next();
+        }
 
         // Define se o usuário tem acesso completo
         const hasFullAccess =

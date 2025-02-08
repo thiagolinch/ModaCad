@@ -14,9 +14,10 @@ export class WebhookUseCase {
         private planRepo: IPlansRepository
     ) {}
 
-    async execute(id: string): Promise<any> {        
+    async execute(id: string): Promise<void> {        
         const payment = await this.mpRepo.getPayment(id);
         const externalReference = JSON.parse(payment.external_reference);
+        console.log("Reference Use Case: ", externalReference);
 
         const userId = externalReference.user_id;
         const user = await this.userRepo.findById(userId);
@@ -24,11 +25,13 @@ export class WebhookUseCase {
         if(!user) {
             throw new Error("Usuário não encontrado");
         }
+
         const planId = externalReference.plan_id;
         const plan = await this.planRepo.findById(planId);
 
-        const plans = await this.planRepo.list();
-        const basicPlan = plans.find(plan => plan.price < 1);
+        if(!plan) {
+            throw new Error("Plano não encontrado");
+        }
 
         switch (payment.status) {
             case "approved": 
@@ -38,8 +41,10 @@ export class WebhookUseCase {
             break;
         
             case "rejected":
-                user.role = "membro";
-                user.plan = basicPlan.id;
+                
+                user.role = user.role === "assinante" ? user.role = "ex-assinante" : user.role = "membro";
+                user.plan = null;
+
                 await this.userRepo.updatePlan(user);
             break;
         }

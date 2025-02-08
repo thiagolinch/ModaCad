@@ -13,34 +13,23 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
     ): Promise<PreferenceResponse> {
         const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
         const preference = new Preference(client);
+        const preApproval = new PreApproval(client);
 
-        const data = await preference.create({
-        body: {
-            items: [
-            {
-                title: plan.title,
-                quantity: 1,
-                unit_price: plan.price,
-                id: plan.mp_id, // plan_id do mercado pago
-                description: plan.description,
-                currency_id: "BRL"
+        const data = await preApproval.create({
+            body: {
+                payer_email: "test_user_415232887@testuser.com",
+                back_url: "https://lobster-app-n6jep.ondigitalocean.app",
+                reason: plan.title,
+                external_reference: JSON.stringify({user_id: user.id, plan_id: plan.id}),
+                auto_recurring: {
+                    frequency: 1,
+                    frequency_type: "months",
+                    transaction_amount: plan.price,
+                    currency_id: "BRL"
+                }
             }
-            ],
-            payer: {
-                name: user.name,
-                email: user.email
-            },
-            back_urls: {
-                "success": "lobster-app-n6jep.ondigitalocean.app",
-                "failure": "lobster-app-n6jep.ondigitalocean.app",
-                "pending": "lobster-app-n6jep.ondigitalocean.app"
-            },
-            auto_return: "approved",
-            notification_url: "https://api-modacad-72uqj.ondigitalocean.app/payment/feedback",
-            external_reference: JSON.stringify({user_id: user.id, plan_id: plan.id}),
-        }
-        })
-        console.log("payment id: ",data.id)
+        });
+        console.log("payment id: ",data)
         return data
     }
 

@@ -1,5 +1,4 @@
 import { Request, Response } from 'express';
-import { MercadoPagoConfig, Payment } from 'mercadopago';
 import 'dotenv/config';
 import { container } from 'tsyringe';
 import { CreatepaymenteUseCase } from './createPaymentUseCase';

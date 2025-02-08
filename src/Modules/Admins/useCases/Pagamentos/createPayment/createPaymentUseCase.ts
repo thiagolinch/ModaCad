@@ -29,6 +29,9 @@ export class CreatepaymenteUseCase {
             user,
             plan
         )
+        user.payment_id = response.id;
+
+        await this.admRepo.updatePlan(user);
 
         return {
             url: response.init_point
