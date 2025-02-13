@@ -6,13 +6,12 @@ import { TextoModacadUseCase } from "./textoMdcUseCase";
 class TextoMdcController {
 
     async handle(request: Request, response: Response): Promise<Response> {
-        const {id} = request.params;
-        const isFormated = request.post
-
+        // const {id} = request.params;
+            const { identifier } = request.params;
         const useCase = container.resolve(TextoModacadUseCase);
 
         try {
-            const data = await useCase.execute(id, isFormated);
+            const data = await useCase.execute(identifier);
 
             return response.status(200).json(data);
         } catch (error) {
