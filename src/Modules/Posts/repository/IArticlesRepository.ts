@@ -117,6 +117,9 @@ interface IArticlesRepository {
 
     delete(id: string): Promise<void>;
 
+
+    maisLidos(ids: string[]): Promise<Articles[]>;
+
 }
 
 export {IArticlesRepository, IArticlesRepositoryDTO, FindPostParamsDTO}

@@ -409,14 +409,10 @@ class AdminRepository implements IAdminsRepository {
 
     async deleteStaff(id: string): Promise<void> {
         await this.repository.softDelete(id);
-
-        console.log("Staff marcado como excluído (soft delete).");
     }
 
     async restoreStaff(id: string): Promise<void> {
         await this.repository.restore(id);
-
-        console.log("Staff restaurado.");
     }
 
 }

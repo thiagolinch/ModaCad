@@ -9,6 +9,9 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
+    async maisLidos(ids: string[]): Promise<Articles[]> {
+        return this.repository.findByIds(ids)
+    }
 
     postBySubject(params: FindPostParamsDTO): Promise<{ posts: Articles[]; currentPage: number; totalPages: number; totalItems: number; pageSize: number; }> {
         throw new Error("Method not implemented.");
@@ -414,7 +417,6 @@ class ArticleRepository implements IArticlesRepository {
 
             await this.repository.save(post)
             const id = post.id
-            console.log("post id after create: ", id)
 
             const data = this.repository.findOne({id})
 

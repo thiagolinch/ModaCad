@@ -12,7 +12,6 @@ class TextoModacadUseCase {
     async execute(id: string, isFormated: boolean): Promise<Articles> {
         const postId = await this.articleRepo.findById(id);
         const post_id = postId.post_id;
-        console.log(isFormated)
 
         let data = null;
 

@@ -23,6 +23,7 @@ import { GetTextoByUrlController } from "../../../Modules/Posts/useCases/PostUse
 import { SearchPostController } from "../../../Modules/Posts/useCases/PostUseCases/searchByTerm/SearchByTermController";
 import { validatePostPermissions } from "../middlewares/validatePostPermissions";
 import { userCanAccess } from "../middlewares/userCanAccess";
+import { MaisLidosController } from "../../../Modules/Posts/useCases/PostUseCases/maisLidos/maisLidosController";
 
 
 const postRoute = Router()
@@ -42,6 +43,8 @@ const uploadFeatureImage = new UploadFeatureImageController();
 const deleteFeatureImage = new DeleteFeatureImageController();
 const getArticleImage = new GetImagesController();
 const createPostSubject = new CreatePostSubjectController();
+
+const maisLidos = new MaisLidosController();
 
 
 // CREATE POST
@@ -94,5 +97,8 @@ postRoute.delete("/images/feature-image/:id", ensureAdminAuhenticate, deleteFeat
 
 // GET IMAGE FROM S3 
 postRoute.get("/images/:id", getArticleImage.handle)
+
+// TEXTOS MAIS LIDOS
+postRoute.get("/list/mais-lidos", maisLidos.handle)
 
 export { postRoute }
