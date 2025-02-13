@@ -94,7 +94,7 @@ class ArticleRepository implements IArticlesRepository {
         const result = await query.getOne();
 
         if (!result) {
-            throw new Error("Article not found");
+            return null
         }
 
         return result;
