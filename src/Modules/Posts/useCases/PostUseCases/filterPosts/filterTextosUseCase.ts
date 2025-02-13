@@ -1,9 +1,6 @@
 import { inject, injectable } from "tsyringe";
 import { IArticlesRepository } from "../../../repository/IArticlesRepository";
 import { Articles } from "../../../entity/Articles";
-import { Tags } from "../../../entity/Tags";
-import { Subjects } from "../../../../Assuntos/entities/Subject";
-import { Admins } from "../../../../Admins/entity/Admins";
 
 interface IResponse {
     posts: Articles[];

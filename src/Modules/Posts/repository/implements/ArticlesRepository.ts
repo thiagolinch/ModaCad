@@ -9,8 +9,62 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
-    async maisLidos(ids: string[]): Promise<Articles[]> {
-        return this.repository.findByIds(ids)
+    async maisLidos(params: FindPostParamsDTO, ids: string[]): Promise<{
+    posts: Articles[];
+    currentPage: number;
+    totalPages: number;
+    totalItems: number;
+    pageSize: number;
+    }> {
+        const offset = (params.page - 1) * params.limit;
+
+        const postQuery = this.repository.createQueryBuilder("p")
+        .select([
+            "p.id",
+            "p.post_id",
+            "p.title",
+            "p.description",
+            "p.feature_image",
+            "p.status",
+            "p.type",
+            "p.visibility",
+            "p.published_at",
+            "admin.id",
+            "admin.name",
+            "admin.role",
+            "tag.id",
+            "tag.name",
+            "subjects",
+            "meta"
+        ])
+        .where("p.id IN (:...ids)", { ids }) // Ajuste para buscar por múltiplos IDs
+        .leftJoin("p.admins", "admin")
+        .leftJoin("p.tags", "tag")
+        .leftJoin("p.subjects", "subjects")
+        .leftJoin("p.meta", "meta");
+        // Obtem o número total de registros (antes da paginação)
+        const totalItems = await postQuery.getCount();
+
+        // Adiciona a ordenação usando o valor validado de `order`
+        const validOrder = "DESC"
+        postQuery.orderBy("p.published_at", validOrder);
+
+        // Adiciona a paginação
+        postQuery.skip(offset).take(params.limit);
+
+        // Obtem os posts paginados
+        const posts = await postQuery.getMany();
+
+        // Calcula o número total de páginas
+        const totalPages = Math.ceil(totalItems / params.limit);
+
+        return {
+            posts,
+            currentPage: params.page,
+            totalPages,
+            totalItems,
+            pageSize: params.limit
+        };
     }
 
     postBySubject(params: FindPostParamsDTO): Promise<{ posts: Articles[]; currentPage: number; totalPages: number; totalItems: number; pageSize: number; }> {

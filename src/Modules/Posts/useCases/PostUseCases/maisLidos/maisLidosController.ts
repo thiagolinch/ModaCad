@@ -23,12 +23,21 @@ export class MaisLidosController {
             "28f5e8a2-de24-47d3-a1d7-298f6e6d36e8",
             "e80cd2c4-4b09-4119-988c-a20a2898f957",
             "b654234e-b1ab-4c7d-87cd-cbd22f9732b7"
-        ]
+        ];
+
+        // Parâmetros de paginação
+        const page = parseInt(req.query.page as string) || 1;
+        const limit = parseInt(req.query.limit as string) || 20;
+
         const useCase = container.resolve(MaisLidosUseCase);
 
         try {
-            const data = await useCase.execute(posts);
-            return res.status(200).json({data})
+            const data = await useCase.execute(
+                posts,
+                page,
+                limit,
+            );
+            return res.status(200).json(data)
         } catch (error) {
             console.log("create post controller: ", error)
             return res.status(400).json({error})
