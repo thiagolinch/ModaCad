@@ -88,7 +88,6 @@ class UpdatePostUseCase {
         editors,
         curadors
     }: IupdateArticleRequest): Promise<void> {
-        console.log("useCase...")
         const post = await this.articleRepo.findById(id)
         const meta = await this.metaRepository.getbyPostId(post.post_id)
 

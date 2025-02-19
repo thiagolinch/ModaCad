@@ -37,7 +37,6 @@ export async function validadeUserPermission( req: Request, res: Response, next:
                 return res.status(404).json({ message: "Post não encontrado" });
             }
             postVisibility = post.visibility;
-            console.log("Visibilidade: ", postVisibility)
         }
 
         // Verificação para usuários padrão
@@ -69,15 +68,13 @@ export async function validadeUserPermission( req: Request, res: Response, next:
 
         if (!role) {
             return res.status(403).json({ message: CONFIG.ERROR_MESSAGES.USER_NOT_ALLOWED });
-        }        
-        console.log("User role: ", role.name)
+        }
 
         // Verificação para Staff
         const staffRoles = ['administrador', 'editor', 'curador', 'autor'];
         if (staffRoles.includes(role.name)) {
             return next();
         }
-        console.log("status: ",user.status_id.name)
 
         if (postVisibility === "assinantes" && user.status_id.name === "ativo") {
             return next(); // Apenas assinantes ativos podem acessar

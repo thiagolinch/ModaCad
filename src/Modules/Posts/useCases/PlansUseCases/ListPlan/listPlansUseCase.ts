@@ -13,11 +13,6 @@ export class ListPlansUseCase {
     async execute(): Promise<Plans[]> {
         const plans = await this.repository.list()
         
-        // Verifique se você está acessando a propriedade 'price' corretamente
-        plans.forEach(plan => {
-            console.log("valores: ", plan.price); // Isso deve imprimir o valor de price se estiver corretamente mapeado
-        });
-
         return plans;
     }
 }

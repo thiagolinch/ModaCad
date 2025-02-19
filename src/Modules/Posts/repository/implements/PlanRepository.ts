@@ -38,7 +38,6 @@ export class PlanRepository implements IPlansRepository {
             mp_url,
             mp_id
         })
-        console.log("repository", plan)
         
        const plano = await this.repository.save(plan)
 

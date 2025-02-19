@@ -59,7 +59,6 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
 
             const data = await preApprovalPlan.create({ body });
 
-            console.log(data)
             return data
         } catch (error) {
             console.error("Error creating plan:", error);
@@ -72,7 +71,6 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
         const payment = new Payment(client);
 
         const data = await payment.get({ id })
-        console.log(data)
 
         return data;
     }

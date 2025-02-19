@@ -117,6 +117,15 @@ interface IArticlesRepository {
 
     delete(id: string): Promise<void>;
 
+
+    maisLidos(params: FindPostParamsDTO, ids: string[]): Promise<{
+        posts: Articles[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }>;
+
 }
 
 export {IArticlesRepository, IArticlesRepositoryDTO, FindPostParamsDTO}

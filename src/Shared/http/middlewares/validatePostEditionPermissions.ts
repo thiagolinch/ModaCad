@@ -44,7 +44,6 @@ export async function validatePostEditionPermissions(
         }
 
         const role = await adminRoleRepo.findByName(admin.role);
-        console.log("role name: ", role.name)
         if (!role) {
             return res.status(404).json({ message: CONFIG.ERROR_MESSAGES.ROLE_NOT_FOUND });
         }
