@@ -22,7 +22,11 @@ export class MaisLidosController {
             "12178b4a-4e24-47f0-a000-129782634bda",
             "28f5e8a2-de24-47d3-a1d7-298f6e6d36e8",
             "e80cd2c4-4b09-4119-988c-a20a2898f957",
-            "b654234e-b1ab-4c7d-87cd-cbd22f9732b7"
+            "b654234e-b1ab-4c7d-87cd-cbd22f9732b7",
+            "30c8f191-2863-4f28-8c2b-7d1e25c9e00a",
+            "1e95f994-e541-464f-9429-3a215840b52c",
+            "61cd5ec1-6ef5-4953-b701-4dfaf05bd141",
+            "0715198c-cea1-4d3a-8809-d3f6df983dfa"
         ];
 
         // Parâmetros de paginação
