@@ -6,13 +6,44 @@ import { Admins } from '../../../../../Modules/Admins/entity/Admins';
 import { PreferenceResponse } from 'mercadopago/dist/clients/preference/commonTypes';
 
 export class MercadoPagoProvider implements IMercadoPagoProvider {
+    
+    async pay(user: Admins, plan: Plans): Promise<PreferenceResponse> {
+        const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
+        const preference = new Preference(client);
 
-    async create(
+        const body = {
+            items: [
+              {
+                id: plan.mp_id,
+                title: plan.title,
+                description: plan.description,
+                quantity: 1,
+                currency_id: 'BRL',
+                unit_price: plan.price,
+              },
+            ],
+            payer: {
+              name: user.name,
+              email: user.email
+            },
+            back_urls: {
+              success: 'https://blog.modacad.com.br',
+              failure: 'https://blog.modacad.com.br',
+              pending: 'https://blog.modacad.com.br',
+            },
+            external_reference: JSON.stringify({user_id: user.id, plan_id: plan.id}),
+            auto_return: 'approved'
+        };
+
+        const data = await preference.create({ body });
+        return data;
+    }
+
+    async payPlan(
         user: Admins,
         plan: Plans,
     ): Promise<PreferenceResponse> {
         const client = new MercadoPagoConfig({ accessToken: process.env.MP_ACCESS_TOKEN });
-        const preference = new Preference(client);
         const preApproval = new PreApproval(client);
 
         const data = await preApproval.create({
@@ -29,7 +60,7 @@ export class MercadoPagoProvider implements IMercadoPagoProvider {
                 }
             }
         });
-        console.log("payment id: ",data)
+        
         return data
     }
 

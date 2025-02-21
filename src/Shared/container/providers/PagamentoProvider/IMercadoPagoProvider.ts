@@ -2,7 +2,13 @@ import { PreferenceResponse } from "mercadopago/dist/clients/preference/commonTy
 import { Admins } from "../../../../Modules/Admins/entity/Admins";
 import { Plans } from "../../../../Modules/Posts/entity/Plans";
 interface IMercadoPagoProvider {
-    create(
+
+    payPlan(
+        user: Admins,
+        plan: Plans,
+    ): Promise<PreferenceResponse>;
+
+    pay(
         user: Admins,
         plan: Plans,
     ): Promise<PreferenceResponse>;
