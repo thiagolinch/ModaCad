@@ -10,7 +10,6 @@ export class UpdateUserPaymentController {
     try {
       //const signature = req.headers['x-signature'];
       const { body } = req;
-      console.log("Requisicao webhook controller: ",body)
       //const generatedSignature = crypto
       //  .createHmac('sha256', process.env.MERCADOPAGO_WEBHOOK_SECRET)
       //  .update(payload)

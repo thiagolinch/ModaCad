@@ -25,7 +25,19 @@ export class CreatepaymenteUseCase {
         const user = await this.admRepo.findById(id)
         const plan = await this.planRepo.findById(plan_id)
 
-        const response = await this.mpRepo.create(
+        if(plan.frequency == 12) {	
+            const response = await this.mpRepo.pay(
+                user,
+                plan
+            )
+            user.payment_id = response.id;
+            await this.admRepo.updatePlan(user);
+            return {
+                url: response.init_point
+            }
+        }
+
+        const response = await this.mpRepo.payPlan(
             user,
             plan
         )

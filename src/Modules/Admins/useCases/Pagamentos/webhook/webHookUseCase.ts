@@ -17,7 +17,6 @@ export class WebhookUseCase {
     async execute(id: string): Promise<void> {        
         const payment = await this.mpRepo.getPayment(id);
         const externalReference = JSON.parse(payment.external_reference);
-        console.log("Reference Use Case: ", externalReference);
 
         const userId = externalReference.user_id;
         const user = await this.userRepo.findById(userId);
