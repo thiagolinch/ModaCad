@@ -278,7 +278,7 @@ class ArticleRepository implements IArticlesRepository {
         pageSize: number;
     }> {
         const offset = (params.page - 1) * params.limit;
-
+    
         const postQuery = this.repository.createQueryBuilder("p")
             .select([
                 "p.id",
@@ -290,6 +290,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.type",
                 "p.visibility",
                 "p.published_at",
+                "p.updated_at",
                 "admin.id", // Seleciona apenas o id do admin
                 "admin.name", // Seleciona apenas o nome do admin
                 "admin.role",
@@ -303,40 +304,42 @@ class ArticleRepository implements IArticlesRepository {
             .leftJoin("p.tags", "tag")
             .leftJoin("p.subjects", "subjects")
             .leftJoin("p.meta", "meta");
-
+    
         // Filtro por status, se fornecido
         if (params.status_id) {
             postQuery.andWhere("p.status = :status_id", { status_id: params.status_id });
         }
-
+    
         // Filtro pelo ID do admin, se fornecido
         if (params.author_id) {
             postQuery.andWhere("admin.id = :author_id", { author_id: params.author_id });
         }
-
+    
         if (params.visibility) {
             postQuery.andWhere("p.visibility = :visibility", { visibility: params.visibility })
         }
-
+    
         if(params.subject_id) {
             postQuery.andWhere("subjects.id = :subject_id", {subject_id: params.subject_id})
         }
-        // Obtem o número total de registros (antes da paginação)
-        const totalItems = await postQuery.getCount();
-
+    
         // Adiciona a ordenação usando o valor validado de `order`
         const validOrder = params.order.toUpperCase() === "ASC" ? "ASC" : "DESC";
-        postQuery.orderBy("p.published_at", validOrder);
-
+        const orderby = params.status_id === "draft" ? "p.updated_at" : "p.published_at";
+        postQuery.orderBy(orderby, validOrder);
+    
+        // Obtem o número total de registros (antes da paginação)
+        const totalItems = await postQuery.getCount();
+    
         // Adiciona a paginação
         postQuery.skip(offset).take(params.limit);
-
+    
         // Obtem os posts paginados
         const posts = await postQuery.getMany();
-
+    
         // Calcula o número total de páginas
         const totalPages = Math.ceil(totalItems / params.limit);
-
+    
         return {
             posts,
             currentPage: params.page,
