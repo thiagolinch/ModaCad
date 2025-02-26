@@ -56,7 +56,7 @@ postRoute.patch("/:id", ensureAdminAuhenticate, validatePostPermissions, functio
 })
 
 // DELETE POST
-postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, deletepost.handle)
+// postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, deletepost.handle)
 
 // CREATE POST SUBJECTS
 // postRoute.post("/subjects/:id", ensureAdminAuhenticate, validatePostPermissions, createPostSubject.handle)

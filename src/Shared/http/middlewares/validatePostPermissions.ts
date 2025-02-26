@@ -96,18 +96,10 @@ export async function validatePostPermissions(
                 postStatus = "draft";
             }
 
-            if (method === "PATCH") {
-                ;body?.status === 'published' ? postStatus = 'pendente: editor' : postStatus = 'published'
-            }
-
             if (method === "PUT") {
+                postStatus = body.status;
                 next();
-                return;
-            }
-
-            if (method === "DELETE" && role.name === "editor") {
-                return res.status(403).json({ message: CONFIG.ERROR_MESSAGES.USER_NOT_ALLOWED });
-            }
+            };
         }
 
         // Substitui o status no body da requisição
