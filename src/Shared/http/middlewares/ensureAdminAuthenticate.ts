@@ -2,6 +2,15 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { AdminRepository } from "../../../Modules/Admins/repositories/implements/AdminsRepository";
 
+const CONFIG = {
+    ERROR_MESSAGES: {
+        TOKEN_MISSING: "Token ausente",
+        TOKEN_INVALID: "Token inválido",
+        USER_NOT_FOUND: "Usuário não encontrado",
+        ROLE_NOT_FOUND: "Função não encontrada",
+        USER_NOT_ALLOWED: "Usuario nao permitido"
+    },
+};
 interface IPayload {
     subject: string;
     role: string;
@@ -23,10 +32,10 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
         const admin = await adminRepo.findById(admin_id);
 
         if (!admin) {
-            return response.status(404).json({ message: "Administrador não encontrado" });
+            throw new Error(CONFIG.ERROR_MESSAGES.TOKEN_MISSING).message;
         }
 
-        if(admin.role === "membro") {
+        if(admin.role === "membro"|| "ex-membro"|| "assinante") {
             throw new Error("Você não é um administrador com permissões.")
         }
 
@@ -39,11 +48,8 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
     } catch (error) {
         console.error("Erro no middleware de autenticação:", error);
 
-        if (error instanceof Error && error.name === "JsonWebTokenError") {
-            return response.status(401).json({ message: error });
-        }
-
-        return response.status(500).json({ message: "Erro interno do servidor" });
+        console.log(error)
+        return response.status(401).json({ message: error });
     }
 }
 

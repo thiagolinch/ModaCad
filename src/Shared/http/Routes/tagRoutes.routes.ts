@@ -6,10 +6,10 @@ import { DeleteTagController } from "../../../Modules/Posts/useCases/TagsUseCase
 import { ListTagsController } from "../../../Modules/Posts/useCases/TagsUseCases/listTags/listTagsController";
 import { UpdateTagController } from "../../../Modules/Posts/useCases/TagsUseCases/updateTag/updateTagController";
 import { GetTagController } from "../../../Modules/Posts/useCases/TagsUseCases/getTag/getTagController";
+import { staffCanWorkTag } from "../middlewares/staffCanWorkTag";
 
 
 const tagsRoute = Router()
-tagsRoute.use(ensureAdminAuhenticate)
 
 const createTagControler = new CreateTagController();
 const deleteTag = new DeleteTagController();
@@ -18,13 +18,13 @@ const getTag = new GetTagController();
 const listTags = new ListTagsController();
 
 // CREATE TAG
-tagsRoute.post("/", ensureAdministrador, createTagControler.handle)
+tagsRoute.post("/", ensureAdminAuhenticate, staffCanWorkTag, createTagControler.handle)
 
 // DELETE TAG
-tagsRoute.delete("/:id", ensureAdministrador, deleteTag.handle)
+tagsRoute.delete("/:id", ensureAdminAuhenticate, ensureAdministrador, deleteTag.handle)
 
 // UPDATE TAG
-tagsRoute.patch("/:id", ensureAdministrador, updateTag.handle)
+tagsRoute.patch("/:id", ensureAdminAuhenticate, staffCanWorkTag, updateTag.handle)
 
 // LIST TAG
 tagsRoute.get("/", listTags.handle)
