@@ -23,6 +23,7 @@ import { SearchPostController } from "../../../Modules/Posts/useCases/PostUseCas
 import { validatePostPermissions } from "../middlewares/validatePostPermissions";
 import { userCanAccess } from "../middlewares/userCanAccess";
 import { MaisLidosController } from "../../../Modules/Posts/useCases/PostUseCases/maisLidos/maisLidosController";
+import { staffCanEdit } from "../middlewares/staffCanEdit";
 
 
 const postRoute = Router()
@@ -62,7 +63,7 @@ postRoute.patch("/:id", ensureAdminAuhenticate, validatePostPermissions, functio
 // postRoute.post("/subjects/:id", ensureAdminAuhenticate, validatePostPermissions, createPostSubject.handle)
 
 // UPDATE POST
-postRoute.put("/:id", ensureAdminAuhenticate, validatePostPermissions, updatePost.handle)
+postRoute.put("/:id", ensureAdminAuhenticate, validatePostPermissions, staffCanEdit, updatePost.handle)
 
 // GET TEXTO PELO ID
 postRoute.get("/:identifier", getTexto.handle)

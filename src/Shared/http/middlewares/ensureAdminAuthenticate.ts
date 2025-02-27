@@ -2,6 +2,13 @@ import { NextFunction, Request, Response } from "express";
 import { verify } from "jsonwebtoken";
 import { AdminRepository } from "../../../Modules/Admins/repositories/implements/AdminsRepository";
 
+enum Role {
+    AUTHOR = "autor",
+    CURATOR = "curador",
+    EDITOR = "editor",
+    ADMIN = "administrador"
+}
+
 const CONFIG = {
     ERROR_MESSAGES: {
         TOKEN_MISSING: "Token ausente",
@@ -30,12 +37,13 @@ async function ensureAdminAuhenticate(request: Request, response: Response, next
 
         const adminRepo = new AdminRepository();
         const admin = await adminRepo.findById(admin_id);
+        const role = admin.role;
 
         if (!admin) {
             throw new Error(CONFIG.ERROR_MESSAGES.TOKEN_MISSING).message;
         }
 
-        if(admin.role === "membro"|| "ex-membro"|| "assinante") {
+        if(role !== Role.ADMIN && role !== Role.EDITOR && role !== Role.CURATOR && role!== Role.AUTHOR) {
             throw new Error("Você não é um administrador com permissões.")
         }
 
