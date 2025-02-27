@@ -7,6 +7,7 @@ declare global {
             admin: Record<string,any>,
             post: boolean;
             postStatus?: string,
+            article: Articles
         }
     }
 }

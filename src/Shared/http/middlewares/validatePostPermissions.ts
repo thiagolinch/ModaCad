@@ -15,11 +15,6 @@ const CONFIG = {
     },
 };
 
-interface IPayload {
-    subject: string;
-    role: string;
-}
-
 export async function validatePostPermissions(
     req: Request,
     res: Response,
@@ -48,11 +43,14 @@ export async function validatePostPermissions(
         if (["autor", "curador"].includes(admin.role)) {
 
             if (method === "POST") {
+                if(body.status === "published")  {
+                    return res.status(403).json({ message: "Usuário não permitido" });
+                }
                 postStatus = "draft"; // Criação sempre como rascunho
             }
 
             if (method === "PUT") {
-                body.status === "published" ? postStatus = "pendente" : postStatus = body.status;
+                body.status === "published" ? postStatus = "pending" : postStatus = body.status;
             }
             
         } else if (["editor", "administrador"].includes(admin.role)) {
@@ -69,6 +67,7 @@ export async function validatePostPermissions(
         // Substitui o status no body da requisição
         req.postStatus = postStatus;
         req.body.userRole = admin.role;
+        req.article = post;
 
         next();
     } catch (error) {
