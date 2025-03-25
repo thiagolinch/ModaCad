@@ -5,7 +5,19 @@ import { UpdateUserUseCase } from "./updateUserUseCase";
 
 class UpdateUserController {
     async handle(request: Request, response: Response): Promise<Response> {
-        const {id} = request.params
+        // Obtém o ID do usuário autenticado (do token)
+        const userIdFromToken = request.admin?.id;
+        
+        // Obtém o ID dos parâmetros da rota
+        const userIdFromParams = request.params.id;
+        
+        // Prioriza o ID do token, mas usa o dos params se não houver no token
+        const userId = userIdFromParams || userIdFromToken;
+
+        if (!userId) {
+            return response.status(400).json({ error: "ID do usuário não fornecido" });
+        }
+
         const {
             name,
             cellphone,
@@ -18,7 +30,7 @@ class UpdateUserController {
 
         try {
             await updateUC.execute(
-                id,
+                userId,
                 name,
                 cellphone,
                 email,
