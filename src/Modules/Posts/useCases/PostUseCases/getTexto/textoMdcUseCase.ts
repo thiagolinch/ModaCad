@@ -18,11 +18,10 @@ class TextoModacadUseCase {
             
             return data;
         } else {
-            const canonicalUrl = `${process.env.FRONT_URL}/${identifier}`.replace(/([^:]\/)\/+/g, '$1');
-            const data = await this.articleRepo.findByCanonicalUrl(canonicalUrl);
+            const data = await this.articleRepo.findByCanonicalUrl(identifier);
 
             if (!data) {
-                const alternativeUrl = `${canonicalUrl}/`;
+                const alternativeUrl = `${identifier}/`;
 
                 const post = await this.articleRepo.findByCanonicalUrl(alternativeUrl);
 

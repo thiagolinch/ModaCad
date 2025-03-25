@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import { container } from "tsyringe";
 import { UpdatePostUseCase } from "./updatePostUseCase";
-import Joi from "joi";
 
 
 class UpdatePostController {

@@ -58,8 +58,11 @@ adminRoute.post("/staff", ensureAdminAuhenticate, ensureAdministrador, createAdm
 // LIST STAFF
 adminRoute.get("/staff", ensureAdminAuhenticate, listStaff.handle)
 
-// UPDATE USER 
-adminRoute.put("/:id", ensureAdminAuhenticate, ensureAdministrador, updateControler.handle)
+// UPDATE STAFF 
+adminRoute.put("/staff/:id", ensureAdminAuhenticate, ensureAdministrador, updateControler.handle)
+
+// UPDATE OWN PROFILE 
+adminRoute.put("/profile", ensureAuthenticate, updateControler.handle)
 
 // GET USER BY ID
 adminRoute.get("/user/:id", ensureAdminAuhenticate, ensureAdministrador, getUserById.handle)
@@ -67,14 +70,14 @@ adminRoute.get("/user/:id", ensureAdminAuhenticate, ensureAdministrador, getUser
 // UPDATE USER PLAN
 adminRoute.put("/new-plan/:id", ensureAuthenticate, updatePlan.handle)
 
-// DELETE ADMIN
+// DELETE USER
 adminRoute.delete("/delete/:id", ensureAdminAuhenticate, ensureAdministrador,  deleteuser.handle)
 
-// ADMIN PROFILE
+// PROFILE
 adminRoute.get("/profile", ensureAuthenticate, profileAdminController.handle);
 
 // ADD AVATAR TO ADMIN
-adminRoute.patch("/avatar",uploadAvatar.single("avatar"), ensureAuthenticate, updateAdminAvatar.handle);
+adminRoute.patch("/profile/avatar",uploadAvatar.single("avatar"), ensureAuthenticate, updateAdminAvatar.handle);
 
 // LIST ADMINS
 adminRoute.get("/users", ensureAdminAuhenticate, listUsers.handle );

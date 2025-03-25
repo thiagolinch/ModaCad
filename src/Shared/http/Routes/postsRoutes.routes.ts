@@ -21,7 +21,6 @@ import { CreatePostSubjectController } from "../../../Modules/Posts/useCases/Sub
 import { LastPostController } from "../../../Modules/Posts/useCases/PostUseCases/lastPost/lastPostController";
 import { SearchPostController } from "../../../Modules/Posts/useCases/PostUseCases/searchByTerm/SearchByTermController";
 import { validatePostPermissions } from "../middlewares/validatePostPermissions";
-import { userCanAccess } from "../middlewares/userCanAccess";
 import { MaisLidosController } from "../../../Modules/Posts/useCases/PostUseCases/maisLidos/maisLidosController";
 import { staffCanEdit } from "../middlewares/staffCanEdit";
 
@@ -57,7 +56,7 @@ postRoute.patch("/:id", ensureAdminAuhenticate, validatePostPermissions, functio
 })
 
 // DELETE POST
-// postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, deletepost.handle)
+postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, deletepost.handle)
 
 // CREATE POST SUBJECTS
 // postRoute.post("/subjects/:id", ensureAdminAuhenticate, validatePostPermissions, createPostSubject.handle)

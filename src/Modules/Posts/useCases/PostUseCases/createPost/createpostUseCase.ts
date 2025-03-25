@@ -1,12 +1,10 @@
 import { inject, injectable } from "tsyringe";
-import { IArticlesRepository, IArticlesRepositoryDTO } from "../../../repository/IArticlesRepository";
+import { IArticlesRepository } from "../../../repository/IArticlesRepository";
 import { Articles } from "../../../entity/Articles";
 import { ITagsRepository } from "../../../repository/ITagsRepository";
 import { ISubjectsRepository } from "../../../../Assuntos/repositories/ISubjectsRepository";
 import { IAdminsRepository } from "../../../../Admins/repositories/IAdminsRepository";
 import { IMetaRepository } from "../../../repository/IMetaRepository";
-import { Meta } from "../../../entity/Meta";
-import { Tags } from "../../../entity/Tags";
 
 interface ICreateArticleRequest {
     admins?: string[];
@@ -97,8 +95,7 @@ class CreatePostUseCase {
         article.status = status || '';
         article.type = type || '';
 
-        const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
-        article.canonicalUrl = cannonical || '';
+        article.canonicalUrl = canonicalUrl || '';
 
         article.published_at = published_at || null;
 

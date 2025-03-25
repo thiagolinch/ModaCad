@@ -98,8 +98,6 @@ class UpdatePostUseCase {
         if(!post) {
             throw new Error("Post dos not exists.")
         }
-        
-        const cannonical = process.env.FRONT_URL +"/"+ canonicalUrl
 
         const foundTags = await this.tagsRepository.findByIds(tags);
         post.tags = foundTags;
@@ -122,7 +120,7 @@ class UpdatePostUseCase {
         post.visibility = visibility
         post.type = type
         
-        post.canonicalUrl = cannonical
+        post.canonicalUrl = canonicalUrl
 
         post.published_at = published_at
 
