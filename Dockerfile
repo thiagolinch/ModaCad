@@ -1,4 +1,4 @@
-FROM node:16
+FROM node:18
 
 # Define o diretório de trabalho
 WORKDIR /api
