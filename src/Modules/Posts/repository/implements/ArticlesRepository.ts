@@ -88,12 +88,12 @@ class ArticleRepository implements IArticlesRepository {
     
         try {
             // Verifica se o resultado está no cache
-            if (redisClient.isOpen) {
-                const cachedResults = await redisClient.get(cacheKey);
-                if (cachedResults) {
-                    return JSON.parse(cachedResults);
-                }
-            }
+            // if (redisClient.isOpen) {
+            //    const cachedResults = await redisClient.get(cacheKey);
+            //    if (cachedResults) {
+            //        return JSON.parse(cachedResults);
+            //    }
+            //}
     
             const validOrder = order.toUpperCase() === "ASC" ? "ASC" : "DESC";
             const offset = (page - 1) * limit;
@@ -145,9 +145,9 @@ class ArticleRepository implements IArticlesRepository {
             };
     
             // Armazena o resultado no cache por 1 hora
-            if (redisClient.isOpen) {
-                await redisClient.set(cacheKey, JSON.stringify(result), { EX: 3600 });
-            };
+           // if (redisClient.isOpen) {
+           //     await redisClient.set(cacheKey, JSON.stringify(result), { EX: 3600 });
+           // };
     
             return result;
         } catch (error) {
