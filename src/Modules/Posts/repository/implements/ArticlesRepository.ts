@@ -36,7 +36,8 @@ class ArticleRepository implements IArticlesRepository {
             "tag.id",
             "tag.name",
             "subjects",
-            "meta"
+            "meta",
+            "p.canonicalUrl"
         ])
         .where("p.id IN (:...ids)", { ids }) // Ajuste para buscar por múltiplos IDs
         .leftJoin("p.admins", "admin")
@@ -70,7 +71,7 @@ class ArticleRepository implements IArticlesRepository {
 
     postBySubject(params: FindPostParamsDTO): Promise<{ posts: Articles[]; currentPage: number; totalPages: number; totalItems: number; pageSize: number; }> {
         throw new Error("Method not implemented.");
-    }
+    } 
 
     async searchPostsByTerm(
         term: string,
@@ -84,7 +85,7 @@ class ArticleRepository implements IArticlesRepository {
         totalItems: number;
         pageSize: number;
     }> {
-        const cacheKey = `search:${term}:${page}:${limit}:${order}`;
+        //const cacheKey = `search:${term}:${page}:${limit}:${order}`;
     
         try {
             // Verifica se o resultado está no cache
@@ -109,7 +110,8 @@ class ArticleRepository implements IArticlesRepository {
                     "p.title",
                     "p.published_at",
                     "p.status",
-                    "p.type"
+                    "p.type",
+                    "p.canonicalUrl",
                 ])
                 .leftJoin("p.tags", "tag")
                 .leftJoin("p.subjects", "subjects")
@@ -322,6 +324,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.feature_image",
                 "p.status",
                 "p.type",
+                "p.canonicalUrl",
                 "p.visibility",
                 "p.published_at",
                 "p.updated_at",
@@ -397,6 +400,7 @@ class ArticleRepository implements IArticlesRepository {
             "editors.name",
             "curators.id",
             "curators.role",
+            "p.canonicalUrl",
             "curators.name",
             "meta.id",
             "meta.meta_title"
@@ -458,6 +462,7 @@ class ArticleRepository implements IArticlesRepository {
             "p.post_id",
             "p.title", // Seleciona todos os campos da tabela articles
             "p.description",
+            "p.canonicalUrl",
             "p.feature_image",
             "p.visibility"
         ])
