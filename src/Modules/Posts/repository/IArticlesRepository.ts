@@ -4,6 +4,7 @@ import { Articles } from "../entity/Articles"
 import { Tags } from "../entity/Tags";
 
 interface FindPostParamsDTO {
+    title?: string;
     type_id?: string;
     page?: number;
     limit?: number;
@@ -113,7 +114,13 @@ interface IArticlesRepository {
     lastPost(): Promise<Articles>;
     findById(id: string): Promise<Articles>;
     findByPostId(post_id: string): Promise<Articles>;
-    findByName(name: string): Promise<Articles>
+    findByName(params: FindPostParamsDTO): Promise<{
+        posts: Articles[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }>
 
     delete(id: string): Promise<void>;
 

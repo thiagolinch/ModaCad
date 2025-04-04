@@ -523,8 +523,54 @@ class ArticleRepository implements IArticlesRepository {
         await this.repository.delete({id})
     }
 
-    async findByName(name: string): Promise<Articles> {
-        return await this.repository.findOne({ title: name})
+    async findByName(params: FindPostParamsDTO): Promise<{
+        posts: Articles[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }> {
+        const offset = (params.page - 1) * params.limit;
+
+        const normalizedSearch = `%${params.title
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()}%`;
+        
+    
+        const postQuery = this.repository.createQueryBuilder("p")
+            .select([
+                "p.id",
+                "p.post_id",
+                "p.title",
+                "p.canonicalUrl",
+                "p.updated_at",
+            ])
+            .where("unaccent(LOWER(p.title)) LIKE unaccent(LOWER(:title))", { 
+            title: `%${params.title.toLowerCase()}%` 
+            })
+
+        const orderby = "p.updated_at";
+        postQuery.orderBy(orderby, "DESC");
+
+        // Obtem o número total de registros (antes da paginação)
+        const totalItems = await postQuery.getCount();
+    
+        // Adiciona a paginação
+        postQuery.skip(offset).take(params.limit);
+    
+        // Obtem os posts paginados
+        const posts = await postQuery.getMany();
+    
+        // Calcula o número total de páginas
+        const totalPages = Math.ceil(totalItems / params.limit);
+    
+        return {
+            posts,
+            currentPage: params.page,
+            totalPages,
+            totalItems,
+            pageSize: params.limit
+        };
     }
 
 }

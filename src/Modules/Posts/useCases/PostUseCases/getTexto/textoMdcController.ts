@@ -7,7 +7,7 @@ class TextoMdcController {
 
     async handle(request: Request, response: Response): Promise<Response> {
         // const {id} = request.params;
-            const { identifier } = request.params;
+        const { identifier } = request.params;
         const useCase = container.resolve(TextoModacadUseCase);
 
         try {
