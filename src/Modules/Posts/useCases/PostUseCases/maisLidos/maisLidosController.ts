@@ -6,7 +6,6 @@ import { MaisLidosUseCase } from "./maisLidosUseCase";
 export class MaisLidosController {
 
     async handle(req: Request, res: Response): Promise<Response> {
-
         // Parâmetros de paginação
         const page = parseInt(req.query.page as string) || 1;
         const limit = parseInt(req.query.limit as string) || 20;

@@ -19,13 +19,13 @@ export class SchedulerService {
   start() {
     // Toda segunda-feira às 3h
     cron.schedule('0 3 * * 1', async () => {
-      console.log('Atualizando visualizações dos posts...');
+      console.log('Iniciando tarefa de atualização de visualizações...');
       try {
         await this.analyticsService.updatePostsViewCount();
-        console.log('Visualizações atualizadas com sucesso!');
+        console.log('Tarefa concluída com sucesso!');
       } catch (error) {
-        console.error('Erro ao atualizar visualizações:', error);
+        console.error('Erro na tarefa de atualização:', error);
       }
-    });
+    });    
   }
 }
