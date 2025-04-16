@@ -150,6 +150,12 @@ class Articles {
     })
     meta: Meta;
 
+    @Column({ name: 'viewCount', default: 0 })
+    viewCount: number;
+
+    @Column({ name: 'ga_path', nullable: true })
+    gaPath: string; // Armazena o path usado no GA (ex: "/posts/meu-post")
+
     // Gera ids automaticamente
     constructor() {
         if (!this.id) {

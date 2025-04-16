@@ -9,7 +9,19 @@ class ArticleRepository implements IArticlesRepository {
     constructor() {
         this.repository = getRepository(Articles)
     }
-    async maisLidos(params: FindPostParamsDTO, ids: string[]): Promise<{
+    
+    async findAllPublished(): Promise<Articles[]> {
+        return this.repository.find({
+            where: { status: 'published' }, // ou o valor correto se não for 'published'
+            select: ['id', 'title'], // pegamos só o que precisamos
+        });
+    }
+    async updateViews(id: string, views: number): Promise<void> {
+        await this.repository.update(id, {
+          viewCount: views,
+        });
+    }      
+    async maisLidos(params: FindPostParamsDTO): Promise<{
     posts: Articles[];
     currentPage: number;
     totalPages: number;
@@ -26,6 +38,7 @@ class ArticleRepository implements IArticlesRepository {
             "p.description",
             "p.feature_image",
             "p.status",
+            "p.viewCount",
             "p.type",
             "p.visibility",
             "p.published_at",
@@ -37,7 +50,7 @@ class ArticleRepository implements IArticlesRepository {
             "subjects",
             "meta"
         ])
-        .where("p.id IN (:...ids)", { ids }) // Ajuste para buscar por múltiplos IDs
+        .where("p.viewCount IS NOT NULL") // Garante que só considere posts publicados
         .leftJoin("p.admins", "admin")
         .leftJoin("p.tags", "tag")
         .leftJoin("p.subjects", "subjects")
@@ -50,7 +63,7 @@ class ArticleRepository implements IArticlesRepository {
         postQuery.orderBy("p.published_at", validOrder);
 
         // Adiciona a paginação
-        postQuery.skip(offset).take(params.limit);
+        postQuery.skip(offset).take(20);
 
         // Obtem os posts paginados
         const posts = await postQuery.getMany();
