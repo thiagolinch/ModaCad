@@ -61,6 +61,7 @@
     "node-cron": "^3.0.3",
     "nodemailer": "^6.9.15",
     "pg": "^8.11.5",
+    "redis": "^4.7.0",
     "reflect-metadata": "^0.2.2",
     "tsx": "^4.7.1",
     "tsyringe": "^4.8.0",

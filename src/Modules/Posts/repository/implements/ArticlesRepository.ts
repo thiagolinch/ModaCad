@@ -1,6 +1,7 @@
 import { Brackets, getRepository, Repository } from "typeorm";
 import { Articles } from "../../entity/Articles";
 import { FindPostParamsDTO, IArticlesRepository, IArticlesRepositoryDTO } from "../IArticlesRepository";
+import redisClient from "../../../../Config/redis";
 
 
 class ArticleRepository implements IArticlesRepository {
@@ -52,7 +53,8 @@ class ArticleRepository implements IArticlesRepository {
             "tag.id",
             "tag.name",
             "subjects",
-            "meta"
+            "meta",
+            "p.canonicalUrl"
         ])
         .where("p.viewCount IS NOT NULL") // Garante que só considere posts publicados
         .leftJoin("p.admins", "admin")
@@ -86,7 +88,7 @@ class ArticleRepository implements IArticlesRepository {
 
     postBySubject(params: FindPostParamsDTO): Promise<{ posts: Articles[]; currentPage: number; totalPages: number; totalItems: number; pageSize: number; }> {
         throw new Error("Method not implemented.");
-    }
+    } 
 
     async searchPostsByTerm(
         term: string,
@@ -100,43 +102,77 @@ class ArticleRepository implements IArticlesRepository {
         totalItems: number;
         pageSize: number;
     }> {
-        const validOrder = order.toUpperCase() === "ASC" ? "ASC" : "DESC";
-        const offset = (page - 1) * limit;
+        //const cacheKey = `search:${term}:${page}:${limit}:${order}`;
     
-        const query = this.repository
-            .createQueryBuilder("p")
-            .select([
-                "p.id",
-                "p.title",
-                "p.published_at",
-                "p.status",
-                "p.type"
-            ])
-            .leftJoin("p.admins", "admin")
-            .leftJoin("p.tags", "tag")
-            .leftJoin("p.subjects", "subjects")
-            .where("p.status = :status", { status: "published" })
-            .andWhere(
+        try {
+            // Verifica se o resultado está no cache
+            // if (redisClient.isOpen) {
+            //    const cachedResults = await redisClient.get(cacheKey);
+            //    if (cachedResults) {
+            //        return JSON.parse(cachedResults);
+            //    }
+            //}
+    
+            const validOrder = order.toUpperCase() === "ASC" ? "ASC" : "DESC";
+            const offset = (page - 1) * limit;
+    
+            // Divide a frase de pesquisa em palavras individuais
+            const keywords = term.split(' ').filter(k => k.trim() !== '');
+    
+            // Cria a query inicial
+            const query = this.repository
+                .createQueryBuilder("p")
+                .select([
+                    "p.id",
+                    "p.title",
+                    "p.published_at",
+                    "p.status",
+                    "p.type",
+                    "p.canonicalUrl",
+                ])
+                .leftJoin("p.tags", "tag")
+                .leftJoin("p.subjects", "subjects")
+                .where("p.status = :status", { status: "published" });
+    
+            // Adiciona condições para cada palavra-chave
+            query.andWhere(
                 new Brackets((qb) => {
-                    qb.where("p.title ILIKE :term", { term: `%${term}%` })
-                        .orWhere("unaccent(p.description) ILIKE unaccent(:term)", { term: `%${term}%` })
-                        .orWhere("unaccent(p.content) ILIKE unaccent(:term)", { term: `%${term}%` })
-                        .orWhere("unaccent(tag.name) ILIKE unaccent(:term)", { term: `%${term}%` })
-                        .orWhere("unaccent(subjects.name) ILIKE unaccent(:term)", { term: `%${term}%` })
+                    keywords.forEach((keyword, index) => {
+                        const paramName = `keyword${index}`; // Nome único para cada parâmetro
+                        qb.orWhere(`unaccent(p.title) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
+                            .orWhere(`unaccent(p.description) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
+                            .orWhere(`unaccent(p.content) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
+                            .orWhere(`unaccent(tag.name) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
+                            .orWhere(`unaccent(subjects.name) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` });
+                    });
                 })
-            )
-            .orderBy("p.published_at", validOrder);
+            );
     
-        const totalItems = await query.getCount();
-        const posts = await query.skip(offset).take(limit).getMany();
+            // Ordena e aplica paginação
+            query.orderBy("p.published_at", validOrder)
+            .skip(offset)
+            .take(limit);
     
-        return {
-            posts,
-            currentPage: page,
-            totalPages: Math.ceil(totalItems / limit),
-            totalItems,
-            pageSize: limit,
-        };
+            const [posts, totalItems] = await query.getManyAndCount();
+    
+            const result = {
+                posts,
+                currentPage: page,
+                totalPages: Math.ceil(totalItems / limit),
+                totalItems,
+                pageSize: limit,
+            };
+    
+            // Armazena o resultado no cache por 1 hora
+           // if (redisClient.isOpen) {
+           //     await redisClient.set(cacheKey, JSON.stringify(result), { EX: 3600 });
+           // };
+    
+            return result;
+        } catch (error) {
+            console.error('Error in searchPostsByTerm:', error);
+            throw error;
+        }
     }
 
     async findByCanonicalUrl(canonicalUrl: string): Promise<Articles> {
@@ -305,6 +341,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.feature_image",
                 "p.status",
                 "p.type",
+                "p.canonicalUrl",
                 "p.visibility",
                 "p.published_at",
                 "p.updated_at",
@@ -380,6 +417,7 @@ class ArticleRepository implements IArticlesRepository {
             "editors.name",
             "curators.id",
             "curators.role",
+            "p.canonicalUrl",
             "curators.name",
             "meta.id",
             "meta.meta_title"
@@ -441,6 +479,7 @@ class ArticleRepository implements IArticlesRepository {
             "p.post_id",
             "p.title", // Seleciona todos os campos da tabela articles
             "p.description",
+            "p.canonicalUrl",
             "p.feature_image",
             "p.visibility"
         ])
@@ -501,8 +540,54 @@ class ArticleRepository implements IArticlesRepository {
         await this.repository.delete({id})
     }
 
-    async findByName(name: string): Promise<Articles> {
-        return await this.repository.findOne({ title: name})
+    async findByName(params: FindPostParamsDTO): Promise<{
+        posts: Articles[];
+        currentPage: number;
+        totalPages: number;
+        totalItems: number;
+        pageSize: number;
+    }> {
+        const offset = (params.page - 1) * params.limit;
+
+        const normalizedSearch = `%${params.title
+            .normalize("NFD").replace(/[\u0300-\u036f]/g, "")
+            .toLowerCase()}%`;
+        
+    
+        const postQuery = this.repository.createQueryBuilder("p")
+            .select([
+                "p.id",
+                "p.post_id",
+                "p.title",
+                "p.canonicalUrl",
+                "p.updated_at",
+            ])
+            .where("unaccent(LOWER(p.title)) LIKE unaccent(LOWER(:title))", { 
+            title: `%${params.title.toLowerCase()}%` 
+            })
+
+        const orderby = "p.updated_at";
+        postQuery.orderBy(orderby, "DESC");
+
+        // Obtem o número total de registros (antes da paginação)
+        const totalItems = await postQuery.getCount();
+    
+        // Adiciona a paginação
+        postQuery.skip(offset).take(params.limit);
+    
+        // Obtem os posts paginados
+        const posts = await postQuery.getMany();
+    
+        // Calcula o número total de páginas
+        const totalPages = Math.ceil(totalItems / params.limit);
+    
+        return {
+            posts,
+            currentPage: params.page,
+            totalPages,
+            totalItems,
+            pageSize: params.limit
+        };
     }
 
 }
