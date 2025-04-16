@@ -11,10 +11,14 @@ class ArticleRepository implements IArticlesRepository {
     }
     
     async findAllPublished(): Promise<Articles[]> {
-        return this.repository.find({
-            where: { status: 'published' }, // ou o valor correto se não for 'published'
-            select: ['id', 'title'], // pegamos só o que precisamos
-        });
+        return this.repository
+            .createQueryBuilder('article')
+            .select(['article.id', 'article.canonicalUrl'])
+            .where('article.status = :status', { status: 'published' })
+            .andWhere('article.canonicalUrl IS NOT NULL')
+            .andWhere('article.canonicalUrl <> \'\'')
+            .getMany();
+
     }
     async updateViews(id: string, views: number): Promise<void> {
         await this.repository.update(id, {
@@ -60,7 +64,7 @@ class ArticleRepository implements IArticlesRepository {
 
         // Adiciona a ordenação usando o valor validado de `order`
         const validOrder = "DESC"
-        postQuery.orderBy("p.published_at", validOrder);
+        postQuery.orderBy("p.viewCount", validOrder);
 
         // Adiciona a paginação
         postQuery.skip(offset).take(20);

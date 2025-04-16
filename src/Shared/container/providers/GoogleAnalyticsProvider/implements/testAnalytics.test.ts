@@ -34,4 +34,4 @@ test("Testa atualização de views", async () => {
   console.timeEnd("⏱️ Tempo total updatePostsViewCount");
 
   console.log("✔️ Atualização finalizada.");
-}, 20000);
+}, 50000);

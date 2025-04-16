@@ -1,13 +1,16 @@
 // src/services/analytics.service.ts
 import { BetaAnalyticsDataClient } from '@google-analytics/data';
-import { Articles } from '../../../../../Modules/Posts/entity/Articles';
+import { protos } from '@google-analytics/data';
+
 import { inject } from 'tsyringe';
 import { IArticlesRepository } from '../../../../../Modules/Posts/repository/IArticlesRepository';
 
 function normalizeTitle(title: string): string {
   return title
-    .replace(/blogModacad/i, '') // remove sufixo
-    .trim();
+    .replace(/\bblogModacad\b/gi, '')       // remove 'blogModacad' (qualquer posição)
+    .replace(/[.!?]+$/, '')                 // remove pontuação no final
+    .replace(/\s{2,}/g, ' ')                // normaliza múltiplos espaços
+    .trim();   
 }
 
 export class AnalyticsService {
@@ -26,7 +29,6 @@ export class AnalyticsService {
 
   async updatePostsViewCount(): Promise<void> {
     const posts = await this.articleRepo.findAllPublished();
-    console.log("propertyId", this.propertyId);
 
     const requestBody = {
       property: `properties/${this.propertyId}`,
@@ -36,42 +38,41 @@ export class AnalyticsService {
           endDate: "today",
         },
       ],
-      dimensions: [
-        {
-          name: "pageTitle",
-        },
-      ],
-      metrics: [
-        {
-          name: "screenPageViews",
-        },
-      ],
-      limit: 30,
+      dimensions: [{ name: 'pagePath' }],
+      metrics: [{ name: 'screenPageViews' }],
       orderBys: [
         {
-          metric: { metricName: "screenPageViews" },
-          desc: true, // <- ordena do mais visto pro menos visto
+          metric: {
+            metricName: 'screenPageViews',
+          },
+          desc: true,
         },
-      ],  
+      ],
+      limit: 100,
     };
 
     const [response] = await this.analyticsClient.runReport(requestBody);
 
     if (response.rows) {
       for (const row of response.rows) {
-        const rawTitle = row.dimensionValues?.[0]?.value;
+        const rawPath = row.dimensionValues?.[0]?.value;
         const views = parseInt(row.metricValues?.[0]?.value || '0');
+        console.log("rawPath", rawPath, "views", views);
 
-        if (!rawTitle) {
-          console.warn("Linha ignorada, sem pageTitle:", row);
+        if (!rawPath) {
+          console.warn("Linha ignorada, sem pagePath:", row);
           continue;
         }
-	console.log(posts)
-        if (rawTitle && views) {
+
+        if (rawPath && views) {
           const matchedPost = posts.find(
-	   (post) => normalizeTitle(post.title || '') === normalizeTitle(rawTitle || '')
+	          (post) =>
+              `/${post.canonicalUrl}` === rawPath ||
+              `/posts/${post.canonicalUrl}` === rawPath
+ 
           );
-		console.log("match: ", matchedPost)
+          console.log("matchedPost", matchedPost);
+
           if (matchedPost) {
             await this.articleRepo.updateViews(matchedPost.id!, views);
           }
