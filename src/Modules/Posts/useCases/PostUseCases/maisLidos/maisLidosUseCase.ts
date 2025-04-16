@@ -17,15 +17,13 @@ export class MaisLidosUseCase {
     ) {}
 
     async execute(
-        ids: string[],
         page: number = 1,
-        limit: number = 10,
-        order: 'DESC' | 'ASC' = 'DESC'
+        limit: number = 10
     ): Promise<IResponse> {
         const data = await this.postRepo.maisLidos({
             page,
             limit
-        }, ids)
+        })
 
         return data;
     }

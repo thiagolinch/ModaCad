@@ -24,6 +24,7 @@ interface IArticlesRepositoryDTO {
     content?: string;
     visibility?: string;
     status?: string;
+    viewsCount?: number;
     published_at?: Date | null;
     type?: string;
     tags?: Tags[]; // IDs das tags
@@ -84,6 +85,7 @@ interface IArticlesRepository {
         editors,
         curadors
     }: IArticlesRepositoryDTO): Promise<Articles>;
+    updateViews(post_id: string, views: number): Promise<void>;
 
     findPostByParams(params: FindPostParamsDTO): Promise<{
         posts: Articles[];
@@ -124,8 +126,8 @@ interface IArticlesRepository {
 
     delete(id: string): Promise<void>;
 
-
-    maisLidos(params: FindPostParamsDTO, ids: string[]): Promise<{
+    findAllPublished(): Promise<Articles[]>;
+    maisLidos(params: FindPostParamsDTO): Promise<{
         posts: Articles[];
         currentPage: number;
         totalPages: number;
