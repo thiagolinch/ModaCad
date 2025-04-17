@@ -1,4 +1,5 @@
 import { inject, injectable } from "tsyringe";
+import slugify from 'slugify';
 import { IArticlesRepository } from "../../../repository/IArticlesRepository";
 import { Articles } from "../../../entity/Articles";
 import { ITagsRepository } from "../../../repository/ITagsRepository";
@@ -84,7 +85,6 @@ class CreatePostUseCase {
         canonicalUrl,
         published_at
     }: ICreateArticleRequest): Promise<string> {
-       
         // 1. Criar o artigo
         const article = new Articles();
         article.title = title || '';
@@ -95,7 +95,12 @@ class CreatePostUseCase {
         article.status = status || '';
         article.type = type || '';
 
-        article.canonicalUrl = canonicalUrl || '';
+        if (!canonicalUrl) {
+            console.log("article title", article.title);
+            const title = article.title|| null;
+            article.canonicalUrl = await this.defaultCanonicalUrl(title);
+            console.log("article canonicalUrl", article.canonicalUrl);
+        } else { article.canonicalUrl = await this.defaultCanonicalUrl(canonicalUrl)};
 
         article.published_at = published_at || null;
 
@@ -140,6 +145,23 @@ class CreatePostUseCase {
         return newArticle.id;
         
     }
+
+    private async defaultCanonicalUrl(title: string | null): Promise<string> {
+        const baseSlug = title
+          ? slugify(title, { lower: true, strict: true })
+          : "sem-canonical";
+    
+        let candidate = baseSlug;
+        let count = 1;
+    
+        while (await this.articleRepository.findByCanonicalUrl(candidate)) {
+          count += 1;
+          candidate = `${baseSlug}-${count}`;
+        }
+    
+        return candidate;
+      }
+    
 }
 
 export { CreatePostUseCase };
