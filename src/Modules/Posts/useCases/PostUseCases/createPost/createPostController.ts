@@ -37,7 +37,6 @@ class CreatePostController {
             curadors
         } = request.body;
         const postStatus = request.postStatus
-
         const createPostUseCase = container.resolve(CreatePostUseCase);
 
         try {
@@ -50,10 +49,9 @@ class CreatePostController {
                 status: postStatus,
                 type,
                 tags,
-                subjects,
-                admins,
-                editors,
-                curadors,
+                subjects,admins: admins ?? [], // garante que seja array
+        editors: editors ?? [],
+        curadors: curadors ?? [],
                 og_image,
                 og_title,
                 og_description,
