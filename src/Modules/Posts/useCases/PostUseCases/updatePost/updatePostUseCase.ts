@@ -1,12 +1,10 @@
-import { inject, injectable } from "tsyringe";
+import { container, inject, injectable } from "tsyringe";
 import { IArticlesRepository } from "../../../repository/IArticlesRepository";
 import { IMetaRepository } from "../../../repository/IMetaRepository";
 import { ITagsRepository } from "../../../repository/ITagsRepository";
 import { ISubjectsRepository } from "../../../../Assuntos/repositories/ISubjectsRepository";
 import { IAdminsRepository } from "../../../../Admins/repositories/IAdminsRepository";
-import { Tags } from "../../../entity/Tags";
-import { Subjects } from "../../../../Assuntos/entities/Subject";
-import { Admins } from "../../../../Admins/entity/Admins";
+import { CanonicalUrlVerify } from "../../../../../Shared/functions/canonicalUrlVerify";
 
 interface IupdateArticleRequest {
     id: string;
@@ -88,6 +86,8 @@ class UpdatePostUseCase {
         editors,
         curadors
     }: IupdateArticleRequest): Promise<void> {
+        const canonicalVerfy = container.resolve(CanonicalUrlVerify);
+
         const post = await this.articleRepo.findById(id)
         const meta = await this.metaRepository.getbyPostId(post.post_id)
 
@@ -120,7 +120,7 @@ class UpdatePostUseCase {
         post.visibility = visibility
         post.type = type
         
-        post.canonicalUrl = canonicalUrl
+        post.canonicalUrl = await canonicalVerfy.defaultCanonicalUrl(canonicalUrl)
 
         post.published_at = published_at
 
