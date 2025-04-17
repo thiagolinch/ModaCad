@@ -102,50 +102,34 @@ class ArticleRepository implements IArticlesRepository {
         totalItems: number;
         pageSize: number;
     }> {
-        //const cacheKey = `search:${term}:${page}:${limit}:${order}`;
     
         try {
-            // Verifica se o resultado está no cache
-            // if (redisClient.isOpen) {
-            //    const cachedResults = await redisClient.get(cacheKey);
-            //    if (cachedResults) {
-            //        return JSON.parse(cachedResults);
-            //    }
-            //}
     
             const validOrder = order.toUpperCase() === "ASC" ? "ASC" : "DESC";
             const offset = (page - 1) * limit;
     
-            // Divide a frase de pesquisa em palavras individuais
-            const keywords = term.split(' ').filter(k => k.trim() !== '');
-    
             // Cria a query inicial
             const query = this.repository
-                .createQueryBuilder("p")
-                .select([
-                    "p.id",
-                    "p.title",
-                    "p.published_at",
-                    "p.status",
-                    "p.type",
-                    "p.canonicalUrl",
-                ])
-                .leftJoin("p.tags", "tag")
-                .leftJoin("p.subjects", "subjects")
-                .where("p.status = :status", { status: "published" });
+            .createQueryBuilder("p")
+            .select([
+                "p.id",
+                "p.title",
+                "p.published_at",
+                "p.status",
+                "p.type",
+                "p.canonicalUrl",
+            ])
+            .leftJoin("p.tags", "tag")
+            .leftJoin("p.subjects", "subjects")
+            .where("p.status = :status", { status: "published" });
     
-            // Adiciona condições para cada palavra-chave
             query.andWhere(
                 new Brackets((qb) => {
-                    keywords.forEach((keyword, index) => {
-                        const paramName = `keyword${index}`; // Nome único para cada parâmetro
-                        qb.orWhere(`unaccent(p.title) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
-                            .orWhere(`unaccent(p.content) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
-                            .orWhere(`unaccent(tag.name) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
-                            .orWhere(`unaccent(subjects.name) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` });
-                    });
+                    qb.orWhere("unaccent(p.title) ILIKE unaccent(:term)", { term: `%${term}%` })
+                      .orWhere("unaccent(tag.name) ILIKE unaccent(:term)", { term: `%${term}%` })
+                      .orWhere("unaccent(subjects.name) ILIKE unaccent(:term)", { term: `%${term}%` });
                 })
-            );
+            );            
     
             // Ordena e aplica paginação
             query.orderBy("p.published_at", validOrder)
@@ -161,11 +145,6 @@ class ArticleRepository implements IArticlesRepository {
                 totalItems,
                 pageSize: limit,
             };
-    
-            // Armazena o resultado no cache por 1 hora
-           // if (redisClient.isOpen) {
-           //     await redisClient.set(cacheKey, JSON.stringify(result), { EX: 3600 });
-           // };
     
             return result;
         } catch (error) {
