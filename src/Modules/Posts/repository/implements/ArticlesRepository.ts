@@ -140,7 +140,6 @@ class ArticleRepository implements IArticlesRepository {
                     keywords.forEach((keyword, index) => {
                         const paramName = `keyword${index}`; // Nome único para cada parâmetro
                         qb.orWhere(`unaccent(p.title) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
-                            .orWhere(`unaccent(p.description) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
                             .orWhere(`unaccent(p.content) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
                             .orWhere(`unaccent(tag.name) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` })
                             .orWhere(`unaccent(subjects.name) ILIKE unaccent(:${paramName})`, { [paramName]: `%${keyword}%` });
