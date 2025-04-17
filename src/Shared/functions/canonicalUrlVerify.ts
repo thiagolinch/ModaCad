@@ -8,19 +8,23 @@ export class CanonicalUrlVerify {
         private articleRepository: IArticlesRepository,
     ) {}
 
-    async defaultCanonicalUrl(title: string | null): Promise<string> {
-        const baseSlug = title
-          ? slugify(title, { lower: true, strict: true })
-          : "sem-canonical";
-    
-        let candidate = baseSlug;
-        let count = 1;
-    
-        while (await this.articleRepository.findByCanonicalUrl(candidate)) {
-          count += 1;
-          candidate = `${baseSlug}-${count}`;
-        }
-    
-        return candidate;
+    async defaultCanonicalUrl(text: string | null, currentCanonicalUrl?: string): Promise<string> {
+      const baseSlug = text
+        ? slugify(text, { lower: true, strict: true })
+        : "sem-canonical";
+  
+      let candidate = baseSlug;
+      let count = 1;
+
+      if (currentCanonicalUrl && candidate === currentCanonicalUrl) {
+        return currentCanonicalUrl
+      }
+  
+      while (await this.articleRepository.findByCanonicalUrl(candidate)) {
+        count += 1;
+        candidate = `${baseSlug}-${count}`;
+      }
+  
+      return candidate;
     }
 }

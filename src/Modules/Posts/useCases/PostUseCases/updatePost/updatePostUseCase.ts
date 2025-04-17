@@ -120,7 +120,7 @@ class UpdatePostUseCase {
         post.visibility = visibility
         post.type = type
         
-        post.canonicalUrl = await canonicalVerfy.defaultCanonicalUrl(canonicalUrl)
+        post.canonicalUrl = await canonicalVerfy.defaultCanonicalUrl(canonicalUrl, post.canonicalUrl)
 
         post.published_at = published_at
 
