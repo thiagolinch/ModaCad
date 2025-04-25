@@ -57,7 +57,6 @@ export class AnalyticsService {
       for (const row of response.rows) {
         const rawPath = row.dimensionValues?.[0]?.value;
         const views = parseInt(row.metricValues?.[0]?.value || '0');
-        console.log("rawPath", rawPath, "views", views);
 
         if (!rawPath) {
           console.warn("Linha ignorada, sem pagePath:", row);
@@ -71,7 +70,6 @@ export class AnalyticsService {
               `/posts/${post.canonicalUrl}` === rawPath
  
           );
-          console.log("matchedPost", matchedPost);
 
           if (matchedPost) {
             await this.articleRepo.updateViews(matchedPost.id!, views);

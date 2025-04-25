@@ -154,7 +154,10 @@ class Articles {
     viewCount: number;
 
     @Column({ name: 'ga_path', nullable: true })
-    gaPath: string; // Armazena o path usado no GA (ex: "/posts/meu-post")
+    gaPath: string;
+
+    @Column({ name: 'clicks_count', default: 0 })
+    clicks_count: number;
 
     // Gera ids automaticamente
     constructor() {
