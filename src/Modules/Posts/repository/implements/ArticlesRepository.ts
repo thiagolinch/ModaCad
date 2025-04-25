@@ -21,11 +21,22 @@ class ArticleRepository implements IArticlesRepository {
             .getMany();
 
     }
-    async updateViews(id: string, views: number): Promise<void> {
-        await this.repository.update(id, {
-          viewCount: views,
-        });
-    }      
+    async updateViews(id: string, views?: number, clicks_count?: number): Promise<void> {
+        const updateData: Partial<Articles> = {};
+
+        if (typeof views === 'number') {
+            updateData.viewCount = views;
+        }
+    
+        if (typeof clicks_count === 'number') {
+            updateData.clicks_count = clicks_count;
+        }
+    
+        if (Object.keys(updateData).length > 0) {
+            await this.repository.update(id, updateData);
+        }
+    } 
+         
     async maisLidos(params: FindPostParamsDTO): Promise<{
     posts: Articles[];
     currentPage: number;

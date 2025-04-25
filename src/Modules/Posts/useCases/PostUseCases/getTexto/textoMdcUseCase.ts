@@ -11,25 +11,31 @@ class TextoModacadUseCase {
     ) {}
 
     async execute( identifier: string ): Promise<Articles> {
+        let post = await this.articleRepo.findById(identifier);
+
+
+        if (post.status === 'published') {        
+            const clicks = post.clicks_count
+            const clicksCount = clicks + 1;
+            await this.articleRepo.updateViews(post.id, post.viewCount, clicksCount);
+        }
 
         if(isUUID(identifier)) {
-            const post = await this.articleRepo.findById(identifier);
-            const data = await this.articleRepo.findByPostId(post.post_id);
             
-            return data;
+            return post;
         } else {
             const data = await this.articleRepo.findByCanonicalUrl(identifier);
 
             if (!data) {
                 const alternativeUrl = `${identifier}/`;
 
-                const post = await this.articleRepo.findByCanonicalUrl(alternativeUrl);
+                const text = await this.articleRepo.findByCanonicalUrl(alternativeUrl);
 
-                if (!post) {
+                if (!text) {
                     throw new Error('Post não encontrado');
                 }
 
-                return post;
+                return text;
             }
             
             return data;

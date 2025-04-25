@@ -12,6 +12,7 @@ interface FindPostParamsDTO {
     subject_id?: string;
     author_id?: string;
     visibility?: string;
+    clicksCount?: number;
     order?: 'ASC' | 'DESC';
 }
 
@@ -25,6 +26,7 @@ interface IArticlesRepositoryDTO {
     visibility?: string;
     status?: string;
     viewsCount?: number;
+    clicksCount?: number;
     published_at?: Date | null;
     type?: string;
     tags?: Tags[]; // IDs das tags
@@ -83,9 +85,10 @@ interface IArticlesRepository {
         admins,
         canonicalUrl,
         editors,
-        curadors
+        curadors,
+        clicksCount
     }: IArticlesRepositoryDTO): Promise<Articles>;
-    updateViews(post_id: string, views: number): Promise<void>;
+    updateViews(post_id: string, views?: number, clicksCount?: number): Promise<void>;
 
     findPostByParams(params: FindPostParamsDTO): Promise<{
         posts: Articles[];
