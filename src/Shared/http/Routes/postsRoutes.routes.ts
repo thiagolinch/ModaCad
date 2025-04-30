@@ -24,6 +24,7 @@ import { validatePostPermissions } from "../middlewares/validatePostPermissions"
 import { MaisLidosController } from "../../../Modules/Posts/useCases/PostUseCases/maisLidos/maisLidosController";
 import { staffCanEdit } from "../middlewares/staffCanEdit";
 import { GetPostByTitleController } from "../../../Modules/Posts/useCases/PostUseCases/getPostByTitle/getPostByTitleController";
+import { countPostViewMiddleware } from "../middlewares/countPostViewMiddleware";
 
 
 const postRoute = Router()
@@ -67,7 +68,7 @@ postRoute.delete("/:id", ensureAdminAuhenticate, validatePostPermissions, delete
 postRoute.put("/:id", ensureAdminAuhenticate, validatePostPermissions, staffCanEdit, updatePost.handle)
 
 // GET TEXTO PELO ID
-postRoute.get("/:identifier", getTexto.handle);
+postRoute.get("/:identifier", countPostViewMiddleware, getTexto.handle);
 
 // GET POST PELO TITLE
 postRoute.get("/search/term", getTextoTitle.handle);

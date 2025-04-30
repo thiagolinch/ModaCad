@@ -11,17 +11,10 @@ class TextoModacadUseCase {
     ) {}
 
     async execute( identifier: string ): Promise<Articles> {
-        let post = await this.articleRepo.findById(identifier);
-
-
-        if (post.status === 'published') {        
-            const clicks = post.clicks_count
-            const clicksCount = clicks + 1;
-            await this.articleRepo.updateViews(post.id, post.viewCount, clicksCount);
-        }
+        
 
         if(isUUID(identifier)) {
-            
+            const post = await this.articleRepo.findById(identifier);
             return post;
         } else {
             const data = await this.articleRepo.findByCanonicalUrl(identifier);
