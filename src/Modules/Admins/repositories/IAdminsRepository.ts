@@ -53,11 +53,11 @@ interface IAdminsRepository {
 
     listUsers(
         role: string,
-        page: number,
         plan_id: string,
         status_id: string, 
         order: string,
-        limit: number
+        page?: number,
+        limit?: number
     ): Promise<{
         users: Admins[];
         currentPage: number;
@@ -69,6 +69,8 @@ interface IAdminsRepository {
         totalAssinantes: number;
         totalExAssinantes: number;
     }>;
+
+    allUsers(): Promise<Admins[]>;
     
     delete(id: string): Promise<void>;
     deleteStaff(id: string): Promise<void>;

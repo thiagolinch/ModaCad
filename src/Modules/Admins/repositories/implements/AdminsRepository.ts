@@ -9,6 +9,18 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
+    async allUsers(): Promise<Admins[]> {
+        const roles = ["membro", "assinante", "ex-assinante"].join(",");
+        const data = await this.repository.find(
+            {
+                where: {
+                    role: roles,
+                },
+            }
+        )
+
+        return data;
+    }
     async createStaff(email: string, password: string, role: string, terms_conditions: boolean, newsletter: boolean): Promise<void> {
         const staff = this.repository.create({
             email,
@@ -147,10 +159,10 @@ class AdminRepository implements IAdminsRepository {
 
     async listUsers(
         role: string,
-        page: number = 1,
         plan_id: string,
         status_id: string,
         order: 'ASC' | 'DESC' = 'ASC',
+        page: number = 1,
         limit: number = 10
     ): Promise<{
         users: Admins[];

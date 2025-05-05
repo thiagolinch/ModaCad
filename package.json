@@ -10,9 +10,9 @@
     "start": "ts-node-dev --inspect --transpile-only --ignore-watch node_modules --respawn ./src/Shared/http/server.ts",
     "test": "jest --runInBand --detectOpenHandles",
     "build": "esbuild src/Shared/http/server.ts --platform=node --outfile=dist/index.js --target=node16",
-    "docker-build": "sudo docker build -t api-moda .",
-    "docker-tag": "sudo docker tag api-moda:latest thiagolinch/apimodacad:latest",
-    "docker-push": "sudo docker push thiagolinch/apimodacad:latest "
+    "docker-build": "docker build -t api-moda .",
+    "docker-tag": "docker tag api-moda:latest thiagolinch/apimodacad:latest",
+    "docker-push": "docker push thiagolinch/apimodacad:latest "
   },
   "devDependencies": {
     "@babel/core": "^7.26.0",
@@ -46,9 +46,11 @@
     "@types/uuid": "^9.0.8",
     "aws-sdk": "^2.1677.0",
     "bcryptjs": "^2.4.3",
+    "buffer": "^6.0.3",
     "cors": "^2.8.5",
     "dayjs": "^1.11.12",
     "esbuild": "0.23.1",
+    "exceljs": "^4.4.0",
     "express": "^4.19.2",
     "googleapis": "^148.0.0",
     "handlebars": "^4.7.8",
