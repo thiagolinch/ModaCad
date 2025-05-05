@@ -23,6 +23,7 @@ import { UserGetPlanController } from "../../../Modules/Admins/useCases/userGetP
 import { GetUserByIdController } from "../../../Modules/Admins/useCases/getUseById/getUseByIdController"
 import { DeleteStaffController } from "../../../Modules/Admins/useCases/Delete/deleteStaff/deleteStaffController"
 import { RestoreStaffController } from "../../../Modules/Admins/useCases/Delete/restorStaff/restoreStaffController"
+import { ExportMembersController } from "../../../Modules/Admins/useCases/exportMembers/exportMembersController"
 
 const adminRoute = Router()
 
@@ -40,6 +41,7 @@ const getUserById = new GetUserByIdController();
 
 const profileAdminController = new AdminProfileController()
 const listUsers = new ListUsersController();
+const exportMembers = new ExportMembersController();
 const listStaff = new ListStaffController();
 const updateAdminAvatar = new UploadAdminAvatarController()
 
@@ -79,8 +81,16 @@ adminRoute.get("/profile", ensureAuthenticate, profileAdminController.handle);
 // ADD AVATAR TO ADMIN
 adminRoute.patch("/profile/avatar",uploadAvatar.single("avatar"), ensureAuthenticate, updateAdminAvatar.handle);
 
-// LIST ADMINS
+// LIST USERS WITH FILTERS
 adminRoute.get("/users", ensureAdminAuhenticate, listUsers.handle );
+
+// EXPORT MEMBERS ROUTE
+adminRoute.get(
+    "/export-members",
+    ensureAdminAuhenticate,
+    ensureAdministrador, // ou o middleware adequado ao seu controle de acesso
+    exportMembers.handle
+);
 
 // DELETE STAFF
 adminRoute.delete("/staff/delete/:id", ensureAdminAuhenticate, ensureAdministrador, deleteStaff.handle)
