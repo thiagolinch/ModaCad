@@ -9,7 +9,7 @@ export class UpdateUserPaymentController {
   async handle(req: Request, res: Response): Promise<any> {
     try {
       //const signature = req.headers['x-signature'];
-      const { body } = req;
+      const { body } = req;  
       //const generatedSignature = crypto
       //  .createHmac('sha256', process.env.MERCADOPAGO_WEBHOOK_SECRET)
       //  .update(payload)

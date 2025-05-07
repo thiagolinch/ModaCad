@@ -21,6 +21,8 @@ export class WebhookUseCase {
         const userId = externalReference.user_id;
         const user = await this.userRepo.findById(userId);
 
+        console.log("Usuario que inciou uma compra: ", user)
+
         if(!user) {
             throw new Error("Usuário não encontrado");
         }
@@ -36,6 +38,8 @@ export class WebhookUseCase {
             case "approved": 
                 plan.price > 0 ? user.role = "assinante" : user.role = "membro";
                 user.plan = plan.id;
+
+                console.log("Pagamento aprovado: ", user.name, payment.status_detail);
                 await this.userRepo.updatePlan(user);
             break;
         
@@ -44,6 +48,7 @@ export class WebhookUseCase {
                 user.role = user.role === "assinante" ? user.role = "ex-assinante" : user.role = "membro";
                 user.plan = null;
 
+                console.log("Erro ao processar pagamento: ", user.name, payment.status_detail);
                 await this.userRepo.updatePlan(user);
             break;
         }

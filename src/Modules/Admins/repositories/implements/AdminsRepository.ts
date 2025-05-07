@@ -1,4 +1,4 @@
-import { getRepository, Repository } from "typeorm";
+import { getRepository, In, Repository } from "typeorm";
 import { Admins } from "../../entity/Admins";
 import { IAdminsRepository, IAdminsRepositoryDTO } from "../IAdminsRepository";
 
@@ -9,18 +9,20 @@ class AdminRepository implements IAdminsRepository {
     constructor() {
         this.repository = getRepository(Admins);
     }
+
     async allUsers(): Promise<Admins[]> {
-        const roles = ["membro", "assinante", "ex-assinante"].join(",");
+        const roles = ["membro", "assinante", "ex-assinante"];
         const data = await this.repository.find(
             {
                 where: {
-                    role: roles,
+                    role: In(roles),
                 },
             }
         )
 
         return data;
     }
+
     async createStaff(email: string, password: string, role: string, terms_conditions: boolean, newsletter: boolean): Promise<void> {
         const staff = this.repository.create({
             email,
