@@ -53,11 +53,11 @@ interface IAdminsRepository {
 
     listUsers(
         role: string,
+        page: number,
         plan_id: string,
         status_id: string, 
         order: string,
-        page?: number,
-        limit?: number
+        limit: number
     ): Promise<{
         users: Admins[];
         currentPage: number;

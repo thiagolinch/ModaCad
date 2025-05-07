@@ -161,10 +161,10 @@ class AdminRepository implements IAdminsRepository {
 
     async listUsers(
         role: string,
+        page: number = 1,
         plan_id: string,
         status_id: string,
         order: 'ASC' | 'DESC' = 'ASC',
-        page: number = 1,
         limit: number = 10
     ): Promise<{
         users: Admins[];
