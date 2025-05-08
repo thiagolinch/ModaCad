@@ -29,6 +29,13 @@ export class ExportMembersUseCase {
             id: user.id,
             name: user.name,
             email: user.email,
+            cellphone: user.cellphone,
+            first_payment: user.payment_created_at,
+            last_payment: user.payment_updated_at,
+            role: user.role,
+            plan: user.plan,
+            subscription: user.subscription_created_at,
+            
             created_at: user.created_at,
         });
         });

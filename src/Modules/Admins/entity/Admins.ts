@@ -92,7 +92,7 @@ class Admins {
             this.subscription_created_at = new Date();
             this.terms_conditions = true;
             this.newsletter = true;
-        }else {
+        } else {
             this.id = uuidV4()
             this.terms_conditions = true
             this.newsletter = true
