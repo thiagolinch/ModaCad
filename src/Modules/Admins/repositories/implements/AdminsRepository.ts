@@ -396,6 +396,7 @@ class AdminRepository implements IAdminsRepository {
             "status.name",
             "u.cellphone",
             "u.payment_id",
+            "u.created_at",
             "u.payment_created_at",
             "u.payment_updated_at",
             "u.subscription_created_at",
