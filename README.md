@@ -1,47 +1,77 @@
-<p align="center">
-  <a href="#-tecnologias">Tecnologias</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-projeto">Projeto</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-  <a href="#-layout">Instalação</a>
-<a href="#-projeto">Rotas</a>&nbsp;&nbsp;&nbsp;|&nbsp;&nbsp;&nbsp;
-</p>
+# ModaCad Backend
 
-<p align="center">
- <img src="https://img.shields.io/static/v1?label=PRs&message=welcome&color=49AA26&labelColor=000000" alt="PRs welcome!" />
-</p>
+## Visão Geral
 
-# 🚀 Tecnologias
+Este projeto é o backend do ModaCad, desenvolvido em Node.js com TypeScript, utilizando Express, TypeORM, autenticação JWT, upload de arquivos, e integração com serviços externos como Google Analytics e pagamentos.
 
-Esse projeto foi desenvolvido com as seguintes tecnologias:
+---
 
-- DayJs
-- uuid
-- Tsyringe
-- Jsonwebtoken
-- Bcryptjs
-- JavaScript
-- NodeJS
-- TypeOrm
-- Express
-- Yarn
+## Estrutura de Pastas
 
-# 💻 Projeto
+```
+src/
+  @types/           # Tipos customizados
+  Config/           # Configurações (auth, redis, upload)
+  Modules/          # Domínios principais (Admins, Assuntos, Posts)
+    Admins/
+    Assuntos/
+    Posts/
+  Shared/
+    container/      # Injeção de dependências
+    functions/      # Funções utilitárias
+    http/           # Servidor, rotas, middlewares
+    TypeOrm/        # Configuração do banco de dados
+  utils/            # Utilitários diversos
+tmp/                # Arquivos temporários (ex: uploads)
+```
 
-Projeto de backend e frontend, sendo um Blog voltado para a moda. Este projeto terá no backend toda a parte de criação, edição, publicação e exclusão de artigos, assim como a parte adiminstrativa com os usuários, níveis de acesso, criação de conta para memrbos e ADMs.
-Frontend em desenvolvimento pela equipe de design da ModaCad...
+---
 
-# 🔖 Instalação
+## Principais Módulos
 
-* Ao receber o arquivo deste sistema é necessário rodar o comando:
-$ yarn
+- **Admins**: Gerenciamento de administradores, staff, perfis, pagamentos e planos.
+- **Assuntos**: CRUD de assuntos (temas) dos posts.
+- **Posts**: CRUD de artigos, imagens, tags, planos e funcionalidades relacionadas.
 
-* Criar o docker em sua máquina
-$ docker build -t modacad .
+---
 
-* Rodar o docker-compose para conexão com o banco de dados
-$ docker-compose up
-$ docker-compose start
+## Rotas Principai
 
+As rotas estão organizadas em Routes:
 
+- **Admin**: `/admin`
+  - Criação, atualização, deleção e listagem de usuários/admins/staff
+  - Upload de avatar
+  - Exportação de membros
+  - Gerenciamento de pagamentos e planos
+  - Recuperação de senhas
+
+- **Assuntos**: `/assuntos`
+  - CRUD de assuntos
+
+- **Posts**: `/posts`
+  - CRUD de posts/artigos
+  - Upload de imagens
+  - Filtros, buscas, visualizações
+
+- **Tags**: `/tags`
+  - CRUD de tags
+
+- **Planos**: `/planos`
+  - CRUD de planos de assinatura
+
+- **Pagamentos**: `/pagamentos`
+  - Criação de pagamentos, planos recorrentes, feedback de pagamento
+
+---
+
+## Middlewares
+
+- **Autenticação**: `ensureAuthenticate`, `ensureAdminAuhenticate`
+- **Autorização**: `ensureAdministrador`, `staffCanWorkTag`, `validatePostPermissions`
+- **Outros**: Upload de arquivos, contagem de visualizações, etc.
+
+---
 
 # :pushpin: Rotas
 
@@ -94,13 +124,13 @@ $ docker-compose start
 
 ---
 
-## 2. **Administração de Usuários (Admins)**
+## 2. **Administração de Usuários**
 
 - **Rota Inicial:** `/admins`
-
+### 2.1 ** Administração de Staffs**
 ### Criar Admin
 - **Método:** `POST`
-- **Endpoint:** `/admins`
+- **Endpoint:** `/staff`
 - **Descrição:** Cria um novo administrador.
 - **Autenticação:** Requer autenticação de administrador.
 
@@ -108,7 +138,38 @@ $ docker-compose start
 
 ### Deletar Admin por ID
 - **Método:** `DELETE`
-- **Endpoint:** `/admins/:id`
+- **Endpoint:** `/staff/delete/:id`
+- **Descrição:** Deleta um administrador pelo ID.
+- **Autenticação:** Requer autenticação de administrador.
+
+---
+
+## RESOTRE STAFF
+- **Método:** `PATCH`
+- **Endpoint:** `/staff/restore/:id`
+- **Descrição:** Restaura um administrador deletado, pelo ID.
+- **Autenticação:** Requer autenticação de administrador.
+---
+
+### Listar Todos os Administradores
+- **Método:** `GET`
+- **Endpoint:** `/staff`
+- **Descrição:** Retorna a lista de todos os administradores.
+
+---
+
+## 2.2 **Administração de membros**
+### Criar Admin
+- **Método:** `POST`
+- **Endpoint:** `/admin`
+- **Descrição:** Cria um novo administrador.
+- **Autenticação:** Requer autenticação de administrador.
+
+---
+
+### Deletar Admin por ID
+- **Método:** `DELETE`
+- **Endpoint:** `/delete/:id`
 - **Descrição:** Deleta um administrador pelo ID.
 - **Autenticação:** Requer autenticação de administrador.
 
@@ -121,14 +182,21 @@ $ docker-compose start
 
 ---
 
-## 3. **Autenticação de Administrador (Admin Session)**
+### Profile do membro
+- **Método:** `GET`
+- **Endpoint:** `/admins/profile`
+- **Descrição:** Retorna o perfil de usuário.
+
+---
+
+## 3. **Autenticação Usuários (Staff e Membros)**
 
 - **Rota Inicial:** `/admin-session`
 
-### Login de Admin
+### Login
 - **Método:** `POST`
 - **Endpoint:** `/admin-session`
-- **Descrição:** Realiza o login de um administrador.
+- **Descrição:** Realiza o login.
 
 ---
 
@@ -140,7 +208,7 @@ $ docker-compose start
 - **Método:** `POST`
 - **Endpoint:** `/post`
 - **Descrição:** Cria um novo post.
-- **Autenticação:** Requer autenticação de administrador.
+- **Autenticação:** Requer autenticação de Staff (administrador, editor, autor, curador).
 
 ---
 
@@ -206,6 +274,7 @@ $ docker-compose start
 - **Método:** `GET`
 - **Endpoint:** `/tags/:id`
 - **Descrição:** Retorna uma tag específica pelo ID.
+- **Autenticação:** Requer autenticação de administrador.
 
 ---
 
@@ -323,9 +392,63 @@ $ docker-compose start
 - **Descrição:** Redefine a senha de um usuário.
 
 ---
+
+## Configurações
+
+- **Banco de Dados**: Configurado via ormconfig.json e data-source.ts
+- **Upload**: Configuração em upload.ts
+- **Variáveis de Ambiente**: .env
+
 ---
 
-Com esses ajustes, a documentação está mais organizada e clara. Se precisar de mais ajustes, estou à disposição!
+## Scripts
+
+Veja o package.json:
+
+- `yarn dev` — Inicia o servidor em modo desenvolvimento
+- `yarn build` — Gera build para produção
+- `yarn test` — Executa testes com Jest
+- Scripts Docker para build, tag e push `yarn docker-build`, `yarn docker-tag`, `yarn docker-push`
+
+---
+
+## Como Rodar
+
+1. Instale dependências:
+   ```sh
+   yarn install
+   ```
+2. Configure o .env e o banco de dados.
+3. Inicie o servidor:
+   ```sh
+   yarn dev
+   ```
+4. Acesse as rotas via Postman ou frontend.
+
+---
+
+## Testes
+
+Os testes estão em testAnalytics.test.ts e podem ser executados com:
+
+```sh
+yarn test
+```
+
+---
+
+## Observações
+
+- O projeto utiliza injeção de dependências, separação de responsabilidades e boas práticas REST.
+- Para detalhes de cada rota, consulte os controllers em Modules.
+
+---
+
+## Autores
+
+- Thiago Linchin
+
+---
 
 ---
 
