@@ -32,8 +32,16 @@ class ArticleRepository implements IArticlesRepository {
             updateData.clicks_count = clicks_count;
         }
     
-        if (Object.keys(updateData).length > 0) {
+        if (Object.keys(updateData).length === 0) {
+            console.warn(`[updateViews] Nenhum dado para atualizar no post ID: ${id}`);
+            return;
+        }
+
+        try {
+            console.log(`[updateViews] Atualizando post ID: ${id} com dados:`, updateData);
             await this.repository.update(id, updateData);
+        } catch (err) {
+            console.error(`[updateViews] Erro ao atualizar post ID: ${id}:`, err);
         }
     } 
          
@@ -129,6 +137,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.status",
                 "p.type",
                 "p.canonicalUrl",
+                "p.viewCount"
             ])
             .leftJoin("p.tags", "tag")
             .leftJoin("p.subjects", "subjects")
@@ -330,6 +339,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.feature_image",
                 "p.status",
                 "p.type",
+                "p.viewCount",
                 "p.canonicalUrl",
                 "p.visibility",
                 "p.published_at",
