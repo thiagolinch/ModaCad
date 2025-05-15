@@ -25,7 +25,7 @@ class ArticleRepository implements IArticlesRepository {
         const updateData: Partial<Articles> = {};
 
         if (typeof views === 'number') {
-            updateData.viewCount = views;
+            updateData.clicks_count = views;
         }
     
         if (typeof clicks_count === 'number') {
@@ -62,7 +62,7 @@ class ArticleRepository implements IArticlesRepository {
             "p.description",
             "p.feature_image",
             "p.status",
-            "p.viewCount",
+            "p.clicks_count",
             "p.type",
             "p.visibility",
             "p.published_at",
@@ -75,7 +75,7 @@ class ArticleRepository implements IArticlesRepository {
             "meta",
             "p.canonicalUrl"
         ])
-        .where("p.viewCount IS NOT NULL") // Garante que só considere posts publicados
+        .where("p.clicks_count IS NOT NULL") // Garante que só considere posts publicados
         .leftJoin("p.admins", "admin")
         .leftJoin("p.tags", "tag")
         .leftJoin("p.subjects", "subjects")
@@ -85,7 +85,7 @@ class ArticleRepository implements IArticlesRepository {
 
         // Adiciona a ordenação usando o valor validado de `order`
         const validOrder = "DESC"
-        postQuery.orderBy("p.viewCount", validOrder);
+        postQuery.orderBy("p.clicks_count", validOrder);
 
         // Adiciona a paginação
         postQuery.skip(offset).take(20);
@@ -137,7 +137,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.status",
                 "p.type",
                 "p.canonicalUrl",
-                "p.viewCount"
+                "p.clicks_count"
             ])
             .leftJoin("p.tags", "tag")
             .leftJoin("p.subjects", "subjects")
@@ -339,7 +339,7 @@ class ArticleRepository implements IArticlesRepository {
                 "p.feature_image",
                 "p.status",
                 "p.type",
-                "p.viewCount",
+                "p.clicks_count",
                 "p.canonicalUrl",
                 "p.visibility",
                 "p.published_at",
