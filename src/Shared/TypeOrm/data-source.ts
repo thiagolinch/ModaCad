@@ -13,7 +13,7 @@ import { Tags } from "../../Modules/Posts/entity/Tags";
 import { Meta } from "../../Modules/Posts/entity/Meta";
 import { Status } from "../../Modules/Posts/entity/Status";
 
-export default async (host = "db-pg-modacad-lws-do-user-1617328-0.c.db.ondigitalocean.com"): Promise<Connection> => {
+export default async (host = ""): Promise<Connection> => {
   const defaultOptions = await getConnectionOptions();
   
   return createConnection(
